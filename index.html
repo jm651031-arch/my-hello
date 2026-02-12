@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
             padding: 50px;
             border-radius: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 300px;
+            width: 320px;
         }
         h1 { font-size: 1.5rem; margin-bottom: 10px; color: #e17055; }
         p { margin-bottom: 30px; font-size: 0.9rem; color: #888; }
@@ -39,6 +39,7 @@
         }
         #playBtn:hover { transform: translateY(-2px); }
         
+        /* 狀態文字，告訴妳發生什麼事 */
         #status { font-weight: bold; color: #636e72; min-height: 1.5em; }
     </style>
 </head>
@@ -60,7 +61,7 @@
         const btn = document.getElementById('playBtn');
         const status = document.getElementById('status');
         
-        // 音量設定為 60%
+        // 🔊 修改：將音量調升至 0.6 (60%)
         music.volume = 0.6;
 
         music.onplay = () => {
