@@ -3,57 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>夥伴的專注空間 🔔</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            font-family: sans-serif;
-            color: #2d3436;
-        }
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 320px;
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
-        #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
-        .controls { display: flex; flex-direction: column; gap: 10px; }
-        .controls button {
-            padding: 12px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 50px;
-            background-color: #6c5ce7;
-            color: white;
-            transition: 0.3s;
-        }
-        .controls button:hover { background-color: #a29bfe; }
-        #testBtn { background-color: #fab1a0; color: #d63031; font-size: 0.8rem; }
-        .status { margin-top: 20px; font-style: italic; color: #636e72; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>專注時刻 ⏳</h1>
-        <div id="timer">00:05</div> <div class="controls">
-            <button id="startBtn">開始專注</button>
-            <button id="testBtn">🔊 測試鈴聲是否正常</button>
-        </div>
-        <p class="status" id="statusMsg">點擊測試按鈕，確保鈴聲已備齊。</p>
-    </div>
-
-    <audio id="bellSound" src="audio id="bellSound" src="https://actions.google.com/sounds/v1/foley/wind_chime_single.ogg" preload="auto"></audio>
-
-    <script>
-        let timeLeft = 25 * 60; 
+<script>
+    let timeLeft = 25 * 60; 
     let timerId = null;
     const timerDisplay = document.getElementById('timer');
     const startBtn = document.getElementById('startBtn');
@@ -73,6 +24,12 @@
     };
 
     startBtn.onclick = () => {
+        // ✨ 秘訣：點擊開始時，先輕輕觸碰播放器，取得授權
+        bell.play().then(() => {
+            bell.pause();
+            bell.currentTime = 0;
+        }).catch(e => console.log("授權預演失敗"));
+
         if (timerId) {
             clearInterval(timerId);
             timerId = null;
@@ -88,11 +45,11 @@
                     clearInterval(timerId);
                     timerId = null;
                     
-                    // ✨ 關鍵修復：確保這裡會播放聲音
-                    bell.play().catch(e => console.log("播放失敗:", e)); 
+                    // 🔔 正式播放鈴聲
+                    bell.play().catch(e => alert("請先點擊頁面，鈴聲才能運作！"));
                     
                     statusMsg.textContent = "✨ 任務完成！妳真棒！ ✨";
-                    alert("時間到！辛苦了，休息五分鐘吧！");
+                    alert("時間到！聽聽看這次有沒有鈴聲？");
                     
                     timeLeft = 25 * 60; 
                     updateDisplay();
@@ -101,6 +58,6 @@
             }, 1000);
         }
     };
-    </script>
+</script>
 </body>
 </html>
