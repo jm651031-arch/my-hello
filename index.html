@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -10,69 +10,85 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
             font-family: "Microsoft JhengHei", sans-serif;
             color: #555;
         }
         .music-box {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 50px;
             border-radius: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             width: 300px;
         }
-        h1 { font-size: 1.5rem; margin-bottom: 10px; color: #6c5ce7; }
+        h1 { font-size: 1.5rem; margin-bottom: 10px; color: #e17055; }
         p { margin-bottom: 30px; font-size: 0.9rem; color: #888; }
         
-        /* 優雅的播放按鈕 */
         #playBtn {
             padding: 15px 40px;
             font-size: 1.2rem;
             cursor: pointer;
             border: none;
             border-radius: 50px;
-            background-color: #6c5ce7;
+            background-color: #e17055;
             color: white;
             transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+            box-shadow: 0 5px 15px rgba(225, 112, 85, 0.3);
+            margin-bottom: 20px;
         }
-        #playBtn:hover { background-color: #a29bfe; transform: translateY(-2px); }
+        #playBtn:hover { transform: translateY(-2px); }
         
-        /* 音量提示 */
-        .volume-hint { margin-top: 20px; font-size: 0.8rem; color: #b2bec3; }
+        #status { font-weight: bold; color: #636e72; min-height: 1.5em; }
     </style>
 </head>
 <body>
     <div class="music-box">
-        <h1>寧靜溪流 🌊</h1>
-        <p>戴上耳機，讓流水帶走焦慮。</p>
+        <h1>森林微風 🍃</h1>
+        <p>確認電腦沒有靜音，點擊下方按鈕</p>
         
-        <button id="playBtn">▶ 播放音樂</button>
-        
-        <div class="volume-hint">已設定為輕柔音量 (20%)</div>
+        <button id="playBtn">▶ 播放聲音</button>
+        <div id="status">等待播放...</div>
     </div>
 
     <audio id="bgMusic" loop>
-        <source src="https://actions.google.com/sounds/v1/water/gentle_stream.ogg" type="audio/ogg">
+        <source src="https://www.soundjay.com/nature/sounds/forest-wind-and-birds-01.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const music = document.getElementById('bgMusic');
         const btn = document.getElementById('playBtn');
+        const status = document.getElementById('status');
         
-        // 🔒 安全鎖：強制將音量設為 0.2 (20%)
-        music.volume = 0.2;
+        // 音量設定為 60%
+        music.volume = 0.6;
+
+        music.onplay = () => {
+            status.textContent = "🎵 聲音正在播放中 (MP3)";
+            status.style.color = "#00b894";
+        };
+
+        music.onerror = () => {
+            status.textContent = "❌ 音樂檔案讀取失敗";
+            status.style.color = "#d63031";
+            alert("讀取失敗，可能是網路阻擋了這個檔案。");
+        };
 
         btn.onclick = () => {
             if (music.paused) {
-                music.play();
-                btn.textContent = "⏸ 暫停音樂";
-                btn.style.backgroundColor = "#ff7675"; // 變成柔和的紅色
+                music.play().then(() => {
+                    btn.textContent = "⏸ 暫停聲音";
+                    btn.style.backgroundColor = "#fab1a0";
+                }).catch(e => {
+                    status.textContent = "⚠️ 瀏覽器阻擋播放";
+                    alert("請先隨意點擊網頁一下，再按播放！");
+                });
             } else {
                 music.pause();
-                btn.textContent = "▶ 播放音樂";
-                btn.style.backgroundColor = "#6c5ce7"; // 變回紫色
+                btn.textContent = "▶ 播放聲音";
+                btn.style.backgroundColor = "#e17055";
+                status.textContent = "聲音已暫停";
+                status.style.color = "#636e72";
             }
         };
     </script>
