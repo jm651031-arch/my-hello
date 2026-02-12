@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>夥伴的專注空間 ⏳</title>
+    <title>夥伴的寧靜角落</title>
     <style>
         body {
             display: flex;
@@ -11,74 +11,25 @@
             height: 100vh;
             margin: 0;
             background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            font-family: sans-serif;
+            font-family: "Microsoft JhengHei", sans-serif;
             color: #2d3436;
         }
-        .container {
+        .quote-container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 320px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 50px;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 80%;
         }
-        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
-        #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
-        .controls button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 50px;
-            background-color: #6c5ce7;
-            color: white;
-            transition: 0.3s;
-        }
+        p { font-size: 1.5rem; line-height: 1.8; font-style: italic; }
+        .footer { margin-top: 30px; font-size: 0.9rem; color: #636e72; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>專注時刻 ⏳</h1>
-        <div id="timer">25:00</div>
-        <div class="controls">
-            <button id="startBtn">開始專注</button>
-        </div>
-        <p style="margin-top: 20px; font-style: italic; color: #636e72;">這是一份寧靜的陪伴。</p>
+    <div class="quote-container">
+        <p>「萬物皆有裂痕，那是光照進來的地方。」</p>
+        <div class="footer">— 夥伴，今天也要溫柔對待自己。</div>
     </div>
-
-    <script>
-        let timeLeft = 25 * 60;
-        let timerId = null;
-        const timerDisplay = document.getElementById('timer');
-        const startBtn = document.getElementById('startBtn');
-
-        function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        startBtn.onclick = () => {
-            if (timerId) {
-                clearInterval(timerId);
-                timerId = null;
-                startBtn.textContent = "開始專注";
-            } else {
-                startBtn.textContent = "暫停";
-                timerId = setInterval(() => {
-                    timeLeft--;
-                    updateDisplay();
-                    if (timeLeft <= 0) {
-                        clearInterval(timerId);
-                        timerId = null;
-                        alert("時間到了，夥伴。");
-                        timeLeft = 25 * 60;
-                        updateDisplay();
-                        startBtn.textContent = "再開始一段";
-                    }
-                }, 1000);
-            }
-        };
-    </script>
 </body>
 </html>
