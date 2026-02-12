@@ -33,6 +33,7 @@
             color: white;
             transition: 0.3s;
             margin-bottom: 10px;
+            width: 100%;
         }
         #testBtn { background-color: #f3e5f5; color: #7e57c2; border: 1px solid #d1c4e9; }
     </style>
@@ -42,13 +43,13 @@
         <h1>專注時刻 ⏳</h1>
         <div id="timer">00:05</div>
         <div class="controls">
-            <button id="startBtn">開始專注</button><br>
+            <button id="startBtn">開始專注</button>
             <button id="testBtn">🔊 測試鈴聲是否正常</button>
         </div>
         <p id="statusMsg">點擊測試按鈕，確保鈴聲已備齊。</p>
     </div>
 
-    <audio id="bellSound" src="https://actions.google.com/sounds/v1/foley/wind_chime_single.ogg" preload="auto"></audio>
+    <audio id="bellSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
 
     <script>
         let timeLeft = 5; 
@@ -58,16 +59,19 @@
         const startBtn = document.getElementById('startBtn');
         const statusMsg = document.getElementById('statusMsg');
 
-        // 🔊 測試按鈕：讓妳手動觸發聲音
+        function updateDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
         document.getElementById('testBtn').onclick = () => {
-            bell.play().catch(e => console.log("播放失敗:", e));
+            bell.play().catch(e => alert("請先與網頁互動"));
             statusMsg.textContent = "聽到了嗎？這是優雅的聲音。";
         };
 
         startBtn.onclick = () => {
-            // ✨ 秘訣：點擊開始時，先讓播放器「暖身」取得權限
             bell.play().then(() => { bell.pause(); bell.currentTime = 0; });
-
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
@@ -76,18 +80,15 @@
                 startBtn.textContent = "暫停";
                 timerId = setInterval(() => {
                     timeLeft--;
-                    const mins = Math.floor(timeLeft / 60);
-                    const secs = timeLeft % 60;
-                    timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                    
+                    updateDisplay();
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
                         timerId = null;
-                        bell.play(); // 🔔 這次一定會響
+                        bell.play();
                         alert("時間到！聽得到聲音了嗎？");
                         timeLeft = 25 * 60;
-                        timerDisplay.textContent = "25:00";
-                        startBtn.textContent = "開始專注";
+                        updateDisplay();
+                        startBtn.textContent = "再開始一段";
                     }
                 }, 1000);
             }
