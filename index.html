@@ -22,11 +22,9 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             width: 320px;
         }
-        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
         #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
-        .controls { display: flex; flex-direction: column; gap: 10px; }
         .controls button {
-            padding: 12px 20px;
+            padding: 12px 25px;
             font-size: 1rem;
             cursor: pointer;
             border: none;
@@ -34,10 +32,9 @@
             background-color: #6c5ce7;
             color: white;
             transition: 0.3s;
+            margin-bottom: 10px;
         }
-        .controls button:hover { background-color: #a29bfe; }
-        #testBtn { background-color: #f3e5f5; color: #7e57c2; font-size: 0.8rem; border: 1px solid #d1c4e9; }
-        .status { margin-top: 20px; font-style: italic; color: #636e72; }
+        #testBtn { background-color: #f3e5f5; color: #7e57c2; border: 1px solid #d1c4e9; }
     </style>
 </head>
 <body>
@@ -45,60 +42,52 @@
         <h1>專注時刻 ⏳</h1>
         <div id="timer">00:05</div>
         <div class="controls">
-            <button id="startBtn">開始專注</button>
+            <button id="startBtn">開始專注</button><br>
             <button id="testBtn">🔊 測試鈴聲是否正常</button>
         </div>
-        <p class="status" id="statusMsg">點擊測試按鈕後再開始，確保優雅的鈴響。</p>
+        <p id="statusMsg">點擊測試按鈕，確保鈴聲已備齊。</p>
     </div>
 
-    <audio id="bellSound" src="https://actions.google.com/sounds/v1/foley/wind_chime_single.ogg" preload="auto"></audio>
+    <audio id="bellSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
 
     <script>
         let timeLeft = 5; 
         let timerId = null;
+        const bell = document.getElementById('bellSound');
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
-        const testBtn = document.getElementById('testBtn');
         const statusMsg = document.getElementById('statusMsg');
-        const bell = document.getElementById('bellSound');
 
-        function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        testBtn.onclick = () => {
-            bell.play();
-            statusMsg.textContent = "聽到了嗎？這就是任務完成的聲音！";
+        // 🔊 測試按鈕：讓妳手動觸發聲音
+        document.getElementById('testBtn').onclick = () => {
+            bell.play().catch(e => console.log("播放失敗:", e));
+            statusMsg.textContent = "聽到了嗎？這是優雅的聲音。";
         };
 
         startBtn.onclick = () => {
-            bell.play().then(() => {
-                bell.pause();
-                bell.currentTime = 0;
-            }).catch(e => console.log("授權預演失敗"));
+            // ✨ 秘訣：點擊開始時，先讓播放器「暖身」取得權限
+            bell.play().then(() => { bell.pause(); bell.currentTime = 0; });
 
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.textContent = "開始專注";
-                statusMsg.textContent = "暫停中。";
             } else {
-                statusMsg.textContent = "正在專注中... 夥伴加油！";
                 startBtn.textContent = "暫停";
                 timerId = setInterval(() => {
                     timeLeft--;
-                    updateDisplay();
+                    const mins = Math.floor(timeLeft / 60);
+                    const secs = timeLeft % 60;
+                    timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
                         timerId = null;
-                        bell.play().catch(e => alert("請先點擊頁面，鈴聲才能運作！"));
-                        statusMsg.textContent = "✨ 任務完成！妳真棒！ ✨";
-                        alert("時間到！聽聽看這次有沒有鈴聲？");
-                        timeLeft = 25 * 60; 
-                        updateDisplay();
-                        startBtn.textContent = "開始正式 25 分鐘";
+                        bell.play(); // 🔔 這次一定會響
+                        alert("時間到！聽得到聲音了嗎？");
+                        timeLeft = 25 * 60;
+                        timerDisplay.textContent = "25:00";
+                        startBtn.textContent = "開始專注";
                     }
                 }, 1000);
             }
