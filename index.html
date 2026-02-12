@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>夥伴的專注空間</title>
+    <title>夥伴的專注空間 🔔</title>
     <style>
         body {
             display: flex;
@@ -20,22 +20,23 @@
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 300px;
+            width: 320px;
         }
         h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
         #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
         .controls button {
-            padding: 10px 25px;
-            font-size: 1rem;
+            padding: 12px 30px;
+            font-size: 1.1rem;
             cursor: pointer;
             border: none;
             border-radius: 50px;
             background-color: #6c5ce7;
             color: white;
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
         }
-        .controls button:hover { background-color: #a29bfe; }
-        .status { margin-top: 20px; font-style: italic; color: #636e72; }
+        .controls button:hover { background-color: #a29bfe; transform: translateY(-2px); }
+        .status { margin-top: 20px; font-style: italic; color: #636e72; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -45,8 +46,10 @@
         <div class="controls">
             <button id="startBtn">開始專注</button>
         </div>
-        <p class="status" id="statusMsg">準備好開始一段優雅的旅程了嗎？</p>
+        <p class="status" id="statusMsg">點擊按鈕，開始一段優雅的旅程。<br>時間到會有鈴聲喔！</p>
     </div>
+
+    <audio id="bellSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
 
     <script>
         let timeLeft = 25 * 60;
@@ -54,6 +57,7 @@
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
         const statusMsg = document.getElementById('statusMsg');
+        const bell = document.getElementById('bellSound');
 
         function updateDisplay() {
             const mins = Math.floor(timeLeft / 60);
@@ -66,7 +70,7 @@
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.textContent = "開始專注";
-                statusMsg.textContent = "暫停中，喝口水吧。";
+                statusMsg.textContent = "暫停中，喝口水休息一下吧。";
             } else {
                 statusMsg.textContent = "正在專注中... 夥伴加油！";
                 startBtn.textContent = "暫停";
@@ -75,9 +79,13 @@
                     updateDisplay();
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
+                        // 播放鈴聲
+                        bell.play();
+                        statusMsg.textContent = "✨ 任務完成！妳真棒！ ✨";
                         alert("時間到！辛苦了，休息五分鐘吧！");
                         timeLeft = 25 * 60;
                         updateDisplay();
+                        startBtn.textContent = "再開始一段";
                     }
                 }, 1000);
             }
