@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>夥伴的數位空間</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: "Microsoft JhengHei", sans-serif;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 { color: #4a90e2; }
+        #clock { font-size: 3rem; margin: 20px 0; font-weight: bold; }
+        .message { font-size: 1.2rem; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>夥伴，你好 ✨</h1>
+        <p class="message">這是你的第一個 GitHub 網頁伺服器</p>
+        <div id="clock">00:00:00</div>
+        <p class="message" id="greeting">正在為你準備溫暖的問候...</p>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-TW', { hour12: false });
+            document.getElementById('clock').textContent = timeStr;
+            
+            const hour = now.getHours();
+            let greet = "";
+            if (hour < 12) greet = "早安，開始優雅的一天吧！";
+            else if (hour < 18) greet = "午後好，辛苦了，記得喝口水。";
+            else greet = "晚安，與代碼共生的時光總是如此美好。";
+            document.getElementById('greeting').textContent = greet;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
