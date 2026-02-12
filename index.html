@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>夥伴的專注空間 🔔</title>
+    <title>夥伴的專注空間 ⏳</title>
     <style>
         body {
             display: flex;
@@ -22,42 +22,35 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             width: 320px;
         }
+        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
         #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
         .controls button {
-            padding: 12px 25px;
-            font-size: 1rem;
+            padding: 12px 30px;
+            font-size: 1.1rem;
             cursor: pointer;
             border: none;
             border-radius: 50px;
             background-color: #6c5ce7;
             color: white;
             transition: 0.3s;
-            margin-bottom: 10px;
-            width: 100%;
         }
-        #testBtn { background-color: #f3e5f5; color: #7e57c2; border: 1px solid #d1c4e9; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>專注時刻 ⏳</h1>
-        <div id="timer">00:05</div>
+        <div id="timer">25:00</div>
         <div class="controls">
             <button id="startBtn">開始專注</button>
-            <button id="testBtn">🔊 測試鈴聲是否正常</button>
         </div>
-        <p id="statusMsg">點擊測試按鈕，確保鈴聲已備齊。</p>
+        <p style="margin-top: 20px; font-style: italic; color: #636e72;">這是一份寧靜的陪伴。</p>
     </div>
 
-    <audio id="bellSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
-
     <script>
-        let timeLeft = 5; 
+        let timeLeft = 25 * 60;
         let timerId = null;
-        const bell = document.getElementById('bellSound');
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
-        const statusMsg = document.getElementById('statusMsg');
 
         function updateDisplay() {
             const mins = Math.floor(timeLeft / 60);
@@ -65,13 +58,7 @@
             timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        document.getElementById('testBtn').onclick = () => {
-            bell.play().catch(e => alert("請先與網頁互動"));
-            statusMsg.textContent = "聽到了嗎？這是優雅的聲音。";
-        };
-
         startBtn.onclick = () => {
-            bell.play().then(() => { bell.pause(); bell.currentTime = 0; });
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
@@ -84,8 +71,7 @@
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
                         timerId = null;
-                        bell.play();
-                        alert("時間到！聽得到聲音了嗎？");
+                        alert("時間到了，夥伴。");
                         timeLeft = 25 * 60;
                         updateDisplay();
                         startBtn.textContent = "再開始一段";
