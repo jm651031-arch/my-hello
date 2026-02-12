@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>夥伴的數位空間</title>
+    <title>夥伴的專注空間</title>
     <style>
         body {
             display: flex;
@@ -10,45 +10,78 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            font-family: "Microsoft JhengHei", sans-serif;
-            color: #333;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            font-family: sans-serif;
+            color: #2d3436;
         }
         .container {
             text-align: center;
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 300px;
         }
-        h1 { color: #4a90e2; }
-        #clock { font-size: 3rem; margin: 20px 0; font-weight: bold; }
-        .message { font-size: 1.2rem; color: #666; }
+        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
+        #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
+        .controls button {
+            padding: 10px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            background-color: #6c5ce7;
+            color: white;
+            transition: 0.3s;
+        }
+        .controls button:hover { background-color: #a29bfe; }
+        .status { margin-top: 20px; font-style: italic; color: #636e72; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>夥伴，你好 ✨</h1>
-        <p class="message">這是你的第一個 GitHub 網頁伺服器</p>
-        <div id="clock">00:00:00</div>
-        <p class="message" id="greeting">正在為你準備溫暖的問候...</p>
+        <h1>專注時刻 ⏳</h1>
+        <div id="timer">25:00</div>
+        <div class="controls">
+            <button id="startBtn">開始專注</button>
+        </div>
+        <p class="status" id="statusMsg">準備好開始一段優雅的旅程了嗎？</p>
     </div>
 
     <script>
-        function updateClock() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('zh-TW', { hour12: false });
-            document.getElementById('clock').textContent = timeStr;
-            
-            const hour = now.getHours();
-            let greet = "";
-            if (hour < 12) greet = "早安，開始優雅的一天吧！";
-            else if (hour < 18) greet = "午後好，辛苦了，記得喝口水。";
-            else greet = "晚安，與代碼共生的時光總是如此美好。";
-            document.getElementById('greeting').textContent = greet;
+        let timeLeft = 25 * 60;
+        let timerId = null;
+        const timerDisplay = document.getElementById('timer');
+        const startBtn = document.getElementById('startBtn');
+        const statusMsg = document.getElementById('statusMsg');
+
+        function updateDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+
+        startBtn.onclick = () => {
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+                startBtn.textContent = "開始專注";
+                statusMsg.textContent = "暫停中，喝口水吧。";
+            } else {
+                statusMsg.textContent = "正在專注中... 夥伴加油！";
+                startBtn.textContent = "暫停";
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerId);
+                        alert("時間到！辛苦了，休息五分鐘吧！");
+                        timeLeft = 25 * 60;
+                        updateDisplay();
+                    }
+                }, 1000);
+            }
+        };
     </script>
 </body>
 </html>
