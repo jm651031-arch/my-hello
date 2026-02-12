@@ -53,50 +53,54 @@
     <audio id="bellSound" src="audio id="bellSound" src="https://actions.google.com/sounds/v1/foley/wind_chime_single.ogg" preload="auto"></audio>
 
     <script>
-        let timeLeft = 5; // 預設 5 秒測試用
-        let timerId = null;
-        const timerDisplay = document.getElementById('timer');
-        const startBtn = document.getElementById('startBtn');
-        const testBtn = document.getElementById('testBtn');
-        const statusMsg = document.getElementById('statusMsg');
-        const bell = document.getElementById('bellSound');
+        let timeLeft = 25 * 60; 
+    let timerId = null;
+    const timerDisplay = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+    const testBtn = document.getElementById('testBtn');
+    const statusMsg = document.getElementById('statusMsg');
+    const bell = document.getElementById('bellSound');
 
-        function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
+    function updateDisplay() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
 
-        // 測試按鈕點擊
-        testBtn.onclick = () => {
-            bell.play();
-            statusMsg.textContent = "聽到了嗎？這就是任務完成的聲音！";
-        };
+    testBtn.onclick = () => {
+        bell.play();
+        statusMsg.textContent = "聽到了嗎？這就是任務完成的聲音！";
+    };
 
-        startBtn.onclick = () => {
-            if (timerId) {
-                clearInterval(timerId);
-                timerId = null;
-                startBtn.textContent = "開始專注";
-                statusMsg.textContent = "暫停中。";
-            } else {
-                statusMsg.textContent = "正在專注中... 3, 2, 1...";
-                startBtn.textContent = "暫停";
-                timerId = setInterval(() => {
-                    timeLeft--;
+    startBtn.onclick = () => {
+        if (timerId) {
+            clearInterval(timerId);
+            timerId = null;
+            startBtn.textContent = "開始專注";
+            statusMsg.textContent = "暫停中。";
+        } else {
+            statusMsg.textContent = "正在專注中... 夥伴加油！";
+            startBtn.textContent = "暫停";
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    timerId = null;
+                    
+                    // ✨ 關鍵修復：確保這裡會播放聲音
+                    bell.play().catch(e => console.log("播放失敗:", e)); 
+                    
+                    statusMsg.textContent = "✨ 任務完成！妳真棒！ ✨";
+                    alert("時間到！辛苦了，休息五分鐘吧！");
+                    
+                    timeLeft = 25 * 60; 
                     updateDisplay();
-                    if (timeLeft <= 0) {
-                        clearInterval(timerId);
-                        bell.play(); // 播放鈴聲
-                        statusMsg.textContent = "✨ 任務完成！ ✨";
-                        alert("時間到！聽得到鈴聲嗎？");
-                        timeLeft = 25 * 60; // 測試完自動恢復為 25 分鐘
-                        updateDisplay();
-                        startBtn.textContent = "開始正式 25 分鐘";
-                    }
-                }, 1000);
-            }
-        };
+                    startBtn.textContent = "再開始一段";
+                }
+            }, 1000);
+        }
+    };
     </script>
 </body>
 </html>
