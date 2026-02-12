@@ -74,7 +74,6 @@
         };
 
         startBtn.onclick = () => {
-            // 先取得播放授權
             bell.play().then(() => {
                 bell.pause();
                 bell.currentTime = 0;
