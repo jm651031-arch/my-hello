@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>夥伴的音樂空間 🌿</title>
+    <title>夥伴的麥塊時光 🟩</title>
     <style>
         body {
             display: flex;
@@ -10,88 +10,56 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            /* 這是麥塊清晨的漸層色 */
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             font-family: "Microsoft JhengHei", sans-serif;
             color: #555;
         }
-        .music-box {
+        .container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 50px;
-            border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 320px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 340px;
         }
-        h1 { font-size: 1.5rem; margin-bottom: 10px; color: #e17055; }
-        p { margin-bottom: 30px; font-size: 0.9rem; color: #888; }
-        
-        #playBtn {
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 50px;
-            background-color: #e17055;
-            color: white;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(225, 112, 85, 0.3);
-            margin-bottom: 20px;
+        h1 { 
+            font-size: 1.4rem; 
+            margin-bottom: 10px; 
+            color: #57606f;
+            letter-spacing: 1px;
         }
-        #playBtn:hover { transform: translateY(-2px); }
+        p { 
+            margin-bottom: 25px; 
+            font-size: 0.9rem; 
+            color: #747d8c; 
+        }
         
-        /* 狀態文字，告訴妳發生什麼事 */
-        #status { font-weight: bold; color: #636e72; min-height: 1.5em; }
+        /* 讓 YouTube 影片有點圓角，看起來像個精緻的螢幕 */
+        iframe {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            height: 200px;
+        }
+
+        .status { margin-top: 20px; font-size: 0.8rem; color: #a4b0be; }
     </style>
 </head>
 <body>
-    <div class="music-box">
-        <h1>森林微風 🍃</h1>
-        <p>確認電腦沒有靜音，點擊下方按鈕</p>
+    <div class="container">
+        <h1>Minecraft 靜謐時光</h1>
+        <p>點擊下方畫面，讓音樂開始流動。</p>
         
-        <button id="playBtn">▶ 播放聲音</button>
-        <div id="status">等待播放...</div>
+        <iframe 
+            src="https://www.youtube.com/embed/r7fuB6odtQM" 
+            title="Minecraft Music" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+
+        <div class="status">C418 - Volume Alpha</div>
     </div>
-
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundjay.com/nature/sounds/forest-wind-and-birds-01.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        const music = document.getElementById('bgMusic');
-        const btn = document.getElementById('playBtn');
-        const status = document.getElementById('status');
-        
-        // 🔊 修改：將音量調升至 0.6 (60%)
-        music.volume = 0.6;
-
-        music.onplay = () => {
-            status.textContent = "🎵 聲音正在播放中 (MP3)";
-            status.style.color = "#00b894";
-        };
-
-        music.onerror = () => {
-            status.textContent = "❌ 音樂檔案讀取失敗";
-            status.style.color = "#d63031";
-            alert("讀取失敗，可能是網路阻擋了這個檔案。");
-        };
-
-        btn.onclick = () => {
-            if (music.paused) {
-                music.play().then(() => {
-                    btn.textContent = "⏸ 暫停聲音";
-                    btn.style.backgroundColor = "#fab1a0";
-                }).catch(e => {
-                    status.textContent = "⚠️ 瀏覽器阻擋播放";
-                    alert("請先隨意點擊網頁一下，再按播放！");
-                });
-            } else {
-                music.pause();
-                btn.textContent = "▶ 播放聲音";
-                btn.style.backgroundColor = "#e17055";
-                status.textContent = "聲音已暫停";
-                status.style.color = "#636e72";
-            }
-        };
-    </script>
 </body>
 </html>
