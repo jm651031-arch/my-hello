@@ -24,38 +24,40 @@
         }
         h1 { font-size: 1.5rem; margin-bottom: 20px; color: #6c5ce7; }
         #timer { font-size: 4rem; font-weight: bold; margin: 20px 0; font-family: monospace; }
+        .controls { display: flex; flex-direction: column; gap: 10px; }
         .controls button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            padding: 12px 20px;
+            font-size: 1rem;
             cursor: pointer;
             border: none;
             border-radius: 50px;
             background-color: #6c5ce7;
             color: white;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
         }
-        .controls button:hover { background-color: #a29bfe; transform: translateY(-2px); }
-        .status { margin-top: 20px; font-style: italic; color: #636e72; line-height: 1.5; }
+        .controls button:hover { background-color: #a29bfe; }
+        #testBtn { background-color: #fab1a0; color: #d63031; font-size: 0.8rem; }
+        .status { margin-top: 20px; font-style: italic; color: #636e72; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>專注時刻 ⏳</h1>
-        <div id="timer">25:00</div>
-        <div class="controls">
+        <div id="timer">00:05</div> <div class="controls">
             <button id="startBtn">開始專注</button>
+            <button id="testBtn">🔊 測試鈴聲是否正常</button>
         </div>
-        <p class="status" id="statusMsg">點擊按鈕，開始一段優雅的旅程。<br>時間到會有鈴聲喔！</p>
+        <p class="status" id="statusMsg">點擊測試按鈕，確保鈴聲已備齊。</p>
     </div>
 
-    <audio id="bellSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+    <audio id="bellSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
 
     <script>
-        let timeLeft = 25 * 60;
+        let timeLeft = 5; // 預設 5 秒測試用
         let timerId = null;
         const timerDisplay = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
+        const testBtn = document.getElementById('testBtn');
         const statusMsg = document.getElementById('statusMsg');
         const bell = document.getElementById('bellSound');
 
@@ -65,27 +67,32 @@
             timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        // 測試按鈕點擊
+        testBtn.onclick = () => {
+            bell.play();
+            statusMsg.textContent = "聽到了嗎？這就是任務完成的聲音！";
+        };
+
         startBtn.onclick = () => {
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.textContent = "開始專注";
-                statusMsg.textContent = "暫停中，喝口水休息一下吧。";
+                statusMsg.textContent = "暫停中。";
             } else {
-                statusMsg.textContent = "正在專注中... 夥伴加油！";
+                statusMsg.textContent = "正在專注中... 3, 2, 1...";
                 startBtn.textContent = "暫停";
                 timerId = setInterval(() => {
                     timeLeft--;
                     updateDisplay();
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
-                        // 播放鈴聲
-                        bell.play();
-                        statusMsg.textContent = "✨ 任務完成！妳真棒！ ✨";
-                        alert("時間到！辛苦了，休息五分鐘吧！");
-                        timeLeft = 25 * 60;
+                        bell.play(); // 播放鈴聲
+                        statusMsg.textContent = "✨ 任務完成！ ✨";
+                        alert("時間到！聽得到鈴聲嗎？");
+                        timeLeft = 25 * 60; // 測試完自動恢復為 25 分鐘
                         updateDisplay();
-                        startBtn.textContent = "再開始一段";
+                        startBtn.textContent = "開始正式 25 分鐘";
                     }
                 }, 1000);
             }
