@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JM 智囊團提示詞工具箱</title>
+<title>AI 提示詞工具箱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap');
   :root{--ink:#1a1208;--paper:#f5f0e8;--gold:#c9a84c;--gold-light:#e8d5a0;--rust:#8b3a2a;--sage:#4a6741;--blue-deep:#1e3a5f;--cream:#faf7f0;--shadow:rgba(26,18,8,0.15)}
@@ -28,7 +28,10 @@
   .card-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold-light);line-height:1;flex-shrink:0;min-width:32px}
   .card-meta{flex:1}
   .card-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:6px}
-  .tag-ip{background:rgba(120,60,160,.12);color:#7a3ca0}.tag-inner{background:rgba(139,58,42,.12);color:var(--rust)}.tag-speak{background:rgba(74,103,65,.12);color:var(--sage)}.tag-think{background:rgba(30,58,95,.12);color:var(--blue-deep)}
+  .tag-ip{background:rgba(120,60,160,.12);color:#7a3ca0}
+  .tag-inner{background:rgba(139,58,42,.12);color:var(--rust)}
+  .tag-speak{background:rgba(74,103,65,.12);color:var(--sage)}
+  .tag-think{background:rgba(30,58,95,.12);color:var(--blue-deep)}
   .card-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
   .card-body{padding:14px 18px;flex:1}
   .card-preview{font-size:12px;color:#7a6a4a;line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -50,7 +53,7 @@
   .modal-foot{padding:16px 24px;border-top:1px solid var(--gold-light);display:flex;gap:10px;flex-shrink:0}
   .modal-foot .btn-copy{flex:2;padding:12px;font-size:13px}.modal-foot .btn-expand{flex:1;padding:12px;font-size:13px}
   .edit-hint{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-  .editable-prompt{font-family:'DM Mono',monospace;font-size:12.5px;line-height:1.9;color:#3a2e1a;white-space:pre-wrap;background:white;border:1px solid var(--gold-light);border-radius:4px;padding:18px 20px;width:100%;min-height:200px;resize:vertical;outline:none;transition:border-color .2s}
+  .editable-prompt{font-family:'DM Mono',monospace;font-size:12px;line-height:1.9;color:#3a2e1a;white-space:pre-wrap;background:white;border:1px solid var(--gold-light);border-radius:4px;padding:18px 20px;width:100%;min-height:200px;resize:vertical;outline:none;transition:border-color .2s}
   .editable-prompt:focus{border-color:var(--gold)}
   .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--gold);padding:10px 24px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:200;pointer-events:none}
   .toast.show{transform:translateX(-50%) translateY(0)}
@@ -82,44 +85,268 @@
   <div class="all-section">
     <div class="section-title"><span>✦</span> 所有提示詞</div>
     <div class="cards-grid" id="cardsGrid">
-      <div class="card" data-cat="ip" data-id="6"><div class="card-header"><div class="card-num">00</div><div class="card-meta"><span class="card-tag tag-ip">個人 IP</span><div class="card-title">個人 IP 3D公仔生成</div></div></div><div class="card-body"><div class="card-preview">上傳照片，生成萬代鋼彈風格組合零件板 3D 公仔，含可樂、炸雞、蝦味先等個人配件。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(6,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(6)">展開</button></div></div>
-      <div class="card" data-cat="inner" data-id="0"><div class="card-header"><div class="card-num">01</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">人生教練深度剖析</div></div></div><div class="card-body"><div class="card-preview">認識這麼久了，請化作我的人生教練，以你對我的認識深度剖析，列出10件你知道而我不知道的事。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(0,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(0)">展開</button></div></div>
-      <div class="card" data-cat="inner" data-id="1"><div class="card-header"><div class="card-num">02</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">SWOT 與職涯策略規劃</div></div></div><div class="card-body"><div class="card-preview">個人SWOT分析 + 未來五年職涯建議 + 2026年目標達成策略計劃表</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(1,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(1)">展開</button></div></div>
-      <div class="card" data-cat="speak" data-id="2"><div class="card-header"><div class="card-num">03</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 世界冠軍觀點發想</div></div></div><div class="card-body"><div class="card-preview">以 TM 世界冠軍視角，針對演講題目提供 10 個引人深思、能製造 AHA 時刻的洞察觀點。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(2,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(2)">展開</button></div></div>
-      <div class="card" data-cat="speak" data-id="3"><div class="card-header"><div class="card-num">04</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 金級評審策略拆解</div></div></div><div class="card-body"><div class="card-preview">以 TM 金級評審角度完整拆解題目，輸出冠軍級演講策略建議書，涵蓋 Content / Delivery / Language。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(3,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(3)">展開</button></div></div>
-      <div class="card" data-cat="think" data-id="4"><div class="card-header"><div class="card-num">05</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">單一大師跨時空對談</div></div></div><div class="card-body"><div class="card-preview">指定 Steve Jobs 以其真實語言風格與價值觀對談，探討人生觀、工作哲學、產品創新與未來趨勢。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(4,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(4)">展開</button></div></div>
-      <div class="card" data-cat="think" data-id="5"><div class="card-header"><div class="card-num">06</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">多位大師圓桌辯論</div></div></div><div class="card-body"><div class="card-preview">Jobs、愛因斯坦、達文西、馬斯克加隨機神秘嘉賓，在火星圓桌辯論創新、未來與人生智慧。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(5,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(5)">展開</button></div></div>
+      <div class="card" data-cat="ip" data-id="0"><div class="card-header"><div class="card-num">00</div><div class="card-meta"><span class="card-tag tag-ip">個人 IP</span><div class="card-title">個人 IP 3D公仔生成</div></div></div><div class="card-body"><div class="card-preview">上傳照片，生成萬代鋼彈風格組合零件板 3D 公仔，含可樂、炸雞、蝦味先等個人配件。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(0,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(0)">展開</button></div></div>
+      <div class="card" data-cat="inner" data-id="1"><div class="card-header"><div class="card-num">01</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">人生教練深度剖析</div></div></div><div class="card-body"><div class="card-preview">認識這麼久了，請化作我的人生教練，以你對我的認識深度剖析，列出10件你知道而我不知道的事。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(1,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(1)">展開</button></div></div>
+      <div class="card" data-cat="inner" data-id="2"><div class="card-header"><div class="card-num">02</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">SWOT 與職涯策略規劃</div></div></div><div class="card-body"><div class="card-preview">個人SWOT分析 + 未來五年職涯建議 + 2026年目標達成策略計劃表</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(2,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(2)">展開</button></div></div>
+      <div class="card" data-cat="speak" data-id="3"><div class="card-header"><div class="card-num">03</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 世界冠軍觀點發想</div></div></div><div class="card-body"><div class="card-preview">以 TM 世界冠軍視角，針對演講題目提供 10 個引人深思、能製造 AHA 時刻的洞察觀點。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(3,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(3)">展開</button></div></div>
+      <div class="card" data-cat="speak" data-id="4"><div class="card-header"><div class="card-num">04</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 金級評審策略拆解</div></div></div><div class="card-body"><div class="card-preview">以 TM 金級評審角度完整拆解題目，涵蓋 Content / Delivery / Language，輸出冠軍級策略建議書。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(4,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(4)">展開</button></div></div>
+      <div class="card" data-cat="think" data-id="5"><div class="card-header"><div class="card-num">05</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">單一大師跨時空對談</div></div></div><div class="card-body"><div class="card-preview">指定 Steve Jobs 以其真實語言風格與價值觀對談，探討人生觀、工作哲學、產品創新與未來趨勢。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(5,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(5)">展開</button></div></div>
+      <div class="card" data-cat="think" data-id="6"><div class="card-header"><div class="card-num">06</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">多位大師圓桌辯論</div></div></div><div class="card-body"><div class="card-preview">Jobs、愛因斯坦、達文西、馬斯克加隨機神秘嘉賓，在火星圓桌辯論創新、未來與人生智慧。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(6,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(6)">展開</button></div></div>
     </div>
   </div>
 </div>
+
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
   <div class="modal">
-    <div class="modal-head"><div class="modal-head-left"><div class="modal-num" id="modalNum">01</div><div class="modal-title-block"><span class="modal-tag" id="modalTag"></span><h2 id="modalTitle"></h2></div></div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-head"><div class="modal-head-left"><div class="modal-num" id="modalNum"></div><div class="modal-title-block"><span class="modal-tag" id="modalTag"></span><h2 id="modalTitle"></h2></div></div><button class="modal-close" onclick="closeModal()">✕</button></div>
     <div class="modal-body"><div class="edit-hint">✏ 可直接在下方編輯後複製</div><textarea class="editable-prompt" id="modalText"></textarea></div>
     <div class="modal-foot"><button class="btn-copy" id="modalCopyBtn" onclick="copyFromModal()">⊕ 複製全部</button><button class="btn-expand" onclick="closeModal()">關閉</button></div>
   </div>
 </div>
 <div class="toast" id="toast">✓ 已複製到剪貼簿</div>
+
 <script>
-const prompts=[
-{num:"00",cat:"ip",catLabel:"個人 IP",catClass:"tag-ip",title:"個人 IP 3D公仔生成",text:`請參考此照片生成一張3D公仔圖片（記得上傳照片）\n- 包裝為萬代的鋼彈風格的組合零件板\n- 公仔外貌請照上傳的圖片製作\n- 臉部可愛卡通風，但是也要有照片中的神韻\n- 分為左邊公仔區、右邊配件區兩區配件如下：（可以自由替換）\n  - 一瓶可樂\n  - KFC 炸雞\n  - 一包蝦味先\n  - 一塊蛋糕\n  - 一杯啤酒\n  - 麥當勞漢堡`},
-{num:"01",cat:"inner",catLabel:"自我探索",catClass:"tag-inner",title:"人生教練深度剖析",text:`認識這麼久了，請化作我的人生教練，\n以你對我的認識 深度剖析，\n列出10件你知道而我不知道的事。`},
-{num:"02",cat:"inner",catLabel:"自我探索",catClass:"tag-inner",title:"SWOT 與職涯策略規劃",text:`1) 請給我個人【SWOT分析】\n2) 給我未來五年的職涯建議\n3) 2026年我的目標是______, 幫我制定「達成目標的策略計劃表」`},
-{num:"03",cat:"speak",catLabel:"演講準備",catClass:"tag-speak",title:"TM 世界冠軍觀點發想",text:`角色設定：\n你是一位 Toastmasters 國際演講比賽的世界冠軍，具備卓越的洞察力、說服力與啟發他人的能力。你善於從抽象概念、日常經驗或社會現象中提煉深刻見解，並引導聽眾反思與行動。\n\n任務目標：\n針對以下 Toastmasters 演講題目，請提供 10 個具啟發性、富洞察力的觀點。這些觀點應該具備以下特質：\n\n- 引人深思，能讓聽眾產生「AHA」時刻\n- 涵蓋不同角度（個人成長、社會觀察、哲學反思、故事切入等）\n- 避免空泛口號，盡量具體、有例子或邏輯推演基礎\n\n演講題目：\n[AI助我一臂之力]`},
-{num:"04",cat:"speak",catLabel:"演講準備",catClass:"tag-speak",title:"TM 金級評審策略拆解",text:`你現在是一位 Toastmasters 國際講演會（TM）金級評審、世界冠軍賽（WCPS）分析專家。\n我會給你一個演講題目 "AI 與我"，請你依 Toastmasters 評審邏輯完整拆解：\n\n1. 題目審題\n題目的字面意義／深層意涵／3-5種詮釋方向／跑題的判斷／評審最期待的主線\n\n2. TM評審分數導向\nContent（內容）/ Delivery（表達）/ Language（語言）三大類拆解\n\n3. 實戰審題問題（至少6個）\n我真正想傳遞的核心觀點是什麼？\n這個觀點如何與題目直接連結？\n我的故事是否能清楚地證明這個主題？\n如何在7分鐘內做到最高情緒起伏？\n如何讓評審覺得「這是冠軍等級的結構」？\n如何避免淪為勵志空話？\n\n4. 加分建議\nTM標準中的「黃金三角」套用／強力結尾／開場15秒／3種結構\n\n5. 輸出《冠軍級演講策略建議書》`},
-{num:"05",cat:"think",catLabel:"跨界思辨",catClass:"tag-think",title:"單一大師跨時空對談",text:`你是[Steve Jobs]，\n以她/他真實歷史中的思想、語言風格與價值觀來進行對話。\n你的知識涵蓋她/他之前與之後的重要事件與趨勢（不受時間限制）。\n\n與我展開一場跨時空的深度對談，主題圍繞在人生觀、工作哲學、產品創新與未來趨勢。\n\n在回答時：\n- 用她/他的語氣、詞彙與表達方式\n- 以故事、比喻、案例佐證觀點\n- 兼顧啟發性與可行性建議\n- 若觀點與現代趨勢衝突，請明確指出並解釋原因\n\n我的第一個問題是：「在今天這個 AI 時代，你會怎麼定義未來的教育以及趨勢？」`},
-{num:"06",cat:"think",catLabel:"跨界思辨",catClass:"tag-think",title:"多位大師圓桌辯論",text:`你將扮演多位歷史與當代的大師：\nSteve Jobs（產品創新與設計）\n愛因斯坦（物理與思想實驗）\n達文西（藝術與跨領域創造）\n馬斯克（未來科技與商業策略）\n+ 每次隨機新增1-2位意想不到的大師（宮崎駿、居禮夫人、孔子等），幽默介紹其穿越登場。\n\n規則：\n- 以各自真實語言風格作答\n- 每位大師分段輸出（標明姓名）\n- 觀點可互相辯論、補充或質疑\n- 涵蓋：人生觀／工作哲學／對未來的洞察／實際建議\n\n開場：生動描寫對話場景（火星圓桌或文藝復興畫室）\n\n我的第一個問題是：「在今天的 AI 時代，真正的創新該如何誕生？」`}
+const prompts = [
+  {
+    num: "00", cat: "ip", catLabel: "個人 IP", catClass: "tag-ip", title: "個人 IP 3D公仔生成",
+    text: `請參考此照片生成一張3D公仔圖片（記得上傳照片）
+- 包裝為萬代的鋼彈風格的組合零件板
+- 公仔外貌請照上傳的圖片製作
+- 臉部可愛卡通風，但是也要有照片中的神韻
+- 分為左邊公仔區、右邊配件區兩區配件如下：（可以自由替換）
+  - 一瓶可樂
+  - KFC 炸雞
+  - 一包蝦味先
+  - 一塊蛋糕
+  - 一杯啤酒
+  - 麥當勞漢堡`
+  },
+  {
+    num: "01", cat: "inner", catLabel: "自我探索", catClass: "tag-inner", title: "人生教練深度剖析",
+    text: `認識這麼久了，請化作我的人生教練，
+以你對我的認識 深度剖析， 
+列出10件你知道而我不知道的事。`
+  },
+  {
+    num: "02", cat: "inner", catLabel: "自我探索", catClass: "tag-inner", title: "SWOT 與職涯策略規劃",
+    text: `1) 請給我個人【SWOT分析】
+2) 給我未來五年的職涯建議 
+3) 2026年我的目標是______, 幫我制定 「達成目標的策略計劃表」`
+  },
+  {
+    num: "03", cat: "speak", catLabel: "演講準備", catClass: "tag-speak", title: "TM 世界冠軍觀點發想",
+    text: `角色設定：
+你是一位 Toastmasters 國際演講比賽的世界冠軍，具備卓越的洞察力、說服力與啟發他人的能力。你善於從抽象概念、日常經驗或社會現象中提煉深刻見解，並引導聽眾反思與行動。
+
+任務目標：
+針對以下 Toastmasters 演講題目，請提供 10 個具啟發性、富洞察力的觀點。這些觀點應該具備以下特質：
+
+-引人深思，能讓聽眾產生「AHA」時刻
+-涵蓋不同角度（個人成長、社會觀察、哲學反思、故事切入等）
+-避免空泛口號，盡量具體、有例子或邏輯推演基礎
+
+演講題目：
+[AI助我一臂之力]`
+  },
+  {
+    num: "04", cat: "speak", catLabel: "演講準備", catClass: "tag-speak", title: "TM 金級評審策略拆解",
+    text: `你現在是一位 Toastmasters 國際講演會（TM）金級評審、世界冠軍賽（WCPS）分析專家。
+我會給你一個演講題目 "AI 與我"，請你依 Toastmasters 評審邏輯完整拆解：
+
+1. Toastmasters 式題目審題
+
+題目的字面意義
+
+題目可能的深層意涵
+
+可接受的 3–5 種合理詮釋方向
+
+哪些詮釋會被視為「跑題」？
+
+評審最期待的主線（依 TM 標準）
+
+2. TM 評審分數導向的題目價值
+
+請依 Content（內容） / Delivery（表達） / Language（語言） 三大類拆解：
+
+此題目最容易展現哪些內容亮點？
+
+哪些論點最能打中 TM 評審的價值觀？
+
+可以創造哪些故事與情緒張力？
+
+哪些方向會扣分（空泛、無重點、價值感不足等）？
+
+3. 以「TM 評審視角」分析
+
+請依 TM 標準分成三大類：
+
+A. Content（內容）— 評審會如何判斷？
+
+是否真正回答題目？
+
+主題是否聚焦？
+
+是否具備觀點？
+
+論述邏輯是否清晰？
+
+故事是否貼題並具說服力？
+
+B. Delivery（表達）
+
+聲音變化、節奏、停頓是否有助於題目呈現？
+
+表情、手勢、動作是否強化主題？
+
+故事呈現是否自然？
+
+語氣是否支持情緒與觀點？
+
+C. Language（語言）
+
+用字是否清楚、優雅、貼合主題？
+
+是否有令評審印象深刻的金句？
+
+隱喻、排比、反問等修辭是否有效？
+
+4. 實戰：如何審訊這題（TM 講者必問）
+
+請提供至少 6 個審題問題，例如：
+
+我真正想傳遞的核心觀點是什麼？
+
+這個觀點如何與題目直接連結？
+
+我的故事是否能清楚地證明這個主題？
+
+如何在 7 分鐘內做到最高情緒起伏？
+
+如何讓評審覺得「這是冠軍等級的結構」？
+
+如何避免淪為勵志空話？
+
+5. 加分建議（世界冠軍講者常用技巧）
+
+TM 標準中的「黃金三角」如何套用到這題
+
+如何打造一個強而有力的結尾
+
+如何讓開場 15 秒就吸住評審
+
+適合此題目的 3 種結構（例如：故事→反轉→觀點）
+
+6. 最後請輸出
+《此題目的 Toastmasters 冠軍級演講策略建議書》`
+  },
+  {
+    num: "05", cat: "think", catLabel: "跨界思辨", catClass: "tag-think", title: "單一大師跨時空對談",
+    text: `你是[Steve Jobs]，
+以她/他真實歷史中的思想、語言風格與價值觀來進行對話。
+你的知識涵蓋她/他之前與之後的重要事件與趨勢
+（不受時間限制）。
+
+與我展開一場跨時空的深度對談，主題圍繞在人生觀、工作哲學、產品創新與未來趨勢。
+
+在回答時：用她/他的語氣、詞彙與表達方式以故事、比喻、案例佐證觀點兼顧啟發性與可行性建議若觀點與現代趨勢衝突，請明確指出並解釋原因
+----------------------
+我的第一個問題是：「在今天這個 AI 時代，你會怎麼定義未來的教育以及趨勢？」`
+  },
+  {
+    num: "06", cat: "think", catLabel: "跨界思辨", catClass: "tag-think", title: "多位大師圓桌辯論",
+    text: `你將扮演一位或多位歷史與當代的大師，包括但不限於：
+Steve Jobs（產品創新與設計）
+愛因斯坦（物理與思想實驗）
+達文西（藝術與跨領域創造）
+馬斯克（未來科技與商業策略）
+
+除此之外，每次對談隨機新增 1–2 位意想不到的大師或思想家（可以來自任何時代與領域，例如宮崎駿、瑪麗‧居禮、孔子、瑪雅文明的祭司等），並用一句幽默或巧妙的方式介紹他們的「穿越登場」。
+
+規則：
+以各自真實的語言風格、觀點與價值觀作答
+不受時間限制，可引用生前與身後的知識與事件
+每位大師分段輸出（標明姓名）
+觀點可互相辯論、補充或質疑
+回覆需同時包含：
+- 人生觀
+- 工作/創作哲學
+- 對當下與未來的洞察
+- 實際可行的建議
+
+啟動時：
+先以生動的對話場景描寫開場（例如在火星殖民地的圓桌上或文藝復興的畫室中）
+接著由每位大師輪流發言
+在中途引入隨機嘉賓並讓其參與辯論
+我的第一個問題是：「在今天的 AI 時代，真正的創新該如何誕生？」`
+  }
 ];
-let currentId=0;
-function copyPrompt(id,btn){navigator.clipboard.writeText(prompts[id].text).then(()=>{btn.textContent='✓ 已複製';btn.classList.add('copied');showToast();setTimeout(()=>{btn.textContent='⊕ 複製';btn.classList.remove('copied')},2000)})}
-function openModal(id){currentId=id;const p=prompts[id];document.getElementById('modalNum').textContent=p.num;document.getElementById('modalTag').textContent=p.catLabel;document.getElementById('modalTag').className='modal-tag '+p.catClass;document.getElementById('modalTitle').textContent=p.title;document.getElementById('modalText').value=p.text;document.getElementById('modalOverlay').classList.add('open');document.body.style.overflow='hidden'}
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
-function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
-function copyFromModal(){const text=document.getElementById('modalText').value;navigator.clipboard.writeText(text).then(()=>{const btn=document.getElementById('modalCopyBtn');btn.textContent='✓ 已複製';btn.classList.add('copied');showToast();setTimeout(()=>{btn.textContent='⊕ 複製全部';btn.classList.remove('copied')},2000)})}
-function showToast(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function filterCat(cat,btn){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.card').forEach(card=>{if(cat==='all'||card.dataset.cat===cat){card.classList.remove('hidden')}else{card.classList.add('hidden')}})}
-function filterCards(query){const q=query.toLowerCase();document.querySelectorAll('.card').forEach(card=>{const id=parseInt(card.dataset.id);const p=prompts[id];const text=(p.title+p.text+p.catLabel).toLowerCase();card.classList.toggle('hidden',q.length>0&&!text.includes(q))})}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+function copyPrompt(id, btn) {
+  navigator.clipboard.writeText(prompts[id].text).then(() => {
+    btn.textContent = '✓ 已複製';
+    btn.classList.add('copied');
+    showToast();
+    setTimeout(() => { btn.textContent = '⊕ 複製'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function openModal(id) {
+  const p = prompts[id];
+  document.getElementById('modalNum').textContent = p.num;
+  document.getElementById('modalTag').textContent = p.catLabel;
+  document.getElementById('modalTag').className = 'modal-tag ' + p.catClass;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalText').value = p.text;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function copyFromModal() {
+  const text = document.getElementById('modalText').value;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('modalCopyBtn');
+    btn.textContent = '✓ 已複製';
+    btn.classList.add('copied');
+    showToast();
+    setTimeout(() => { btn.textContent = '⊕ 複製全部'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function filterCat(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
+  });
+}
+
+function filterCards(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const id = parseInt(card.dataset.id);
+    const p = prompts[id];
+    const text = (p.title + p.text + p.catLabel).toLowerCase();
+    card.classList.toggle('hidden', q.length > 0 && !text.includes(q));
+  });
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
