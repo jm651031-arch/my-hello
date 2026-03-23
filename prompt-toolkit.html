@@ -39,4 +39,134 @@
   .card:hover{transform:translateY(-3px);box-shadow:0 8px 28px var(--shadow)}
   .card.tm-card{border-top-color:#c9a84c}
   .card.biz-pest{border-top-color:#1a6a4a}.card.biz-3c{border-top-color:#1a4a8a}.card.biz-swot{border-top-color:#8a1a4a}.card.biz-bmc{border-top-color:#5a3a8f}.card.biz-jtbd{border-top-color:#8a6a1a}.card.biz-price{border-top-color:#1a6a6a}.card.biz-grow{border-top-color:#4a8a1a}.card.biz-task{border-top-color:#8a4a1a}.card.biz-eval{border-top-color:#1a4a8a}.card.biz-report{border-top-color:#6a1a6a}
-  .card-head{padding:18px 20px 14px;border-bottom:1px solid #f0f2f8;display:flex;align-items:flex​​​​​​​​​​​​​​​​
+  .card-head{padding:18px 20px 14px;border-bottom:1px solid #f0f2f8;display:flex;align-items:flex-start;gap:14px}
+  .card-icon{font-size:26px;line-height:1;flex-shrink:0;margin-top:2px}
+  .card-meta{flex:1}
+  .card-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:6px}
+  .tag-ip{background:rgba(120,60,160,.12);color:#7a3ca0}.tag-inner{background:rgba(139,58,42,.12);color:#8b3a2a}.tag-speak{background:rgba(74,103,65,.12);color:#3a6741}.tag-think{background:rgba(30,58,95,.12);color:#1e3a5f}.tag-market{background:rgba(26,106,74,.12);color:#1a6a4a}.tag-strategy{background:rgba(26,74,138,.12);color:#1a4a8a}.tag-design{background:rgba(90,58,143,.12);color:#5a3a8f}.tag-action{background:rgba(138,74,26,.12);color:#8a4a1a}
+  .card-title{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}
+  .card-purpose{font-size:13px;color:var(--biz-accent);font-weight:600;margin-top:4px}
+  .card-body{padding:14px 20px;flex:1}
+  .card-preview{font-size:14px;color:#5a6a8a;line-height:1.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .card-foot{padding:14px 20px;display:flex;gap:10px;border-top:1px solid #f0f2f8}
+  .btn-copy,.btn-expand{flex:1;padding:12px 14px;border:none;border-radius:6px;font-family:'Noto Sans TC',sans-serif;font-size:15px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500}
+  .btn-copy{background:var(--biz-dark);color:white}.btn-copy:hover{background:#1a3a6a}.btn-copy.copied{background:var(--sage)}
+  .tm-card .btn-copy{background:#2d200a}.tm-card .btn-copy:hover{background:#1a1208}
+  .btn-expand{background:var(--biz-light);color:var(--biz-blue);border:1px solid #c8d8f0}.btn-expand:hover{background:#dce8f8}
+  .modal-overlay{position:fixed;inset:0;background:rgba(15,31,61,.75);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.open{display:flex}
+  .modal{background:white;border-radius:14px;max-width:700px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(15,31,61,.4);overflow:hidden}
+  .modal-head{padding:22px 26px 18px;border-bottom:1px solid #e8edf5;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--biz-light)}
+  .modal-head-left{display:flex;align-items:center;gap:14px}
+  .modal-icon{font-size:32px}
+  .modal-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:4px;display:block;color:var(--biz-blue)}
+  .modal-title{font-size:18px;font-weight:700;color:var(--ink)}
+  .modal-purpose{font-size:13px;color:var(--biz-accent);font-weight:600;margin-top:2px}
+  .modal-close{background:white;border:1px solid #c8d8f0;border-radius:6px;width:36px;height:36px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;color:#5a6a8a}
+  .modal-close:hover{background:var(--biz-dark);color:white;border-color:var(--biz-dark)}
+  .modal-body{padding:22px 26px;overflow-y:auto;flex:1}
+  .edit-hint{font-size:13px;color:var(--biz-accent);font-family:'DM Mono',monospace;margin-bottom:10px}
+  .editable-prompt{font-family:'Noto Sans TC',sans-serif;font-size:15px;line-height:2;color:#2a3a5a;background:#f8faff;border:2px solid #c8d8f0;border-radius:8px;padding:20px 22px;width:100%;min-height:220px;resize:vertical;outline:none;transition:border-color .2s}
+  .editable-prompt:focus{border-color:var(--biz-blue)}
+  .modal-foot{padding:18px 26px;border-top:1px solid #e8edf5;display:flex;gap:12px;flex-shrink:0}
+  .modal-foot .btn-copy{flex:2;padding:14px;font-size:16px}.modal-foot .btn-expand{flex:1;padding:14px;font-size:16px}
+  .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--biz-dark);color:var(--biz-accent);padding:12px 28px;border-radius:30px;font-size:15px;font-weight:600;transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:300;pointer-events:none;box-shadow:0 8px 24px rgba(15,31,61,.3)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .card.hidden{display:none}.group-section.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="top-banner">中華民國健言社 第37屆 · 3/22 AI網路營 · <span>竹北健言社 整理分享</span></div>
+<div class="section-header tm" id="header-tm">
+  <div class="section-tag">Toastmasters · 個人成長</div>
+  <h1>🎤 健言社 AI 提示詞工具箱</h1>
+  <p>個人探索 · 演講準備 · 跨界思辨 · 點選即可複製</p>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="搜尋提示詞..." oninput="filterCards(this.value)"></div>
+</div>
+<div class="section-header biz" id="header-biz" style="display:none">
+  <div class="section-tag">Business Strategy · AI Tools</div>
+  <h1>📊 商業策略 AI 工具組</h1>
+  <p>市場分析 · 競品研究 · 策略規劃 · 點選即可複製</p>
+</div>
+<div class="tabs-wrap">
+  <button class="tab-btn active-tm" onclick="switchSection('all',this)">全部 (17)</button>
+  <button class="tab-btn" onclick="switchSection('ip',this)">✦ 個人IP</button>
+  <button class="tab-btn" onclick="switchSection('inner',this)">🧭 自我探索</button>
+  <button class="tab-btn" onclick="switchSection('speak',this)">🎤 演講準備</button>
+  <button class="tab-btn" onclick="switchSection('think',this)">🧠 跨界思辨</button>
+  <button class="tab-btn" onclick="switchSection('market',this)">📈 市場分析</button>
+  <button class="tab-btn" onclick="switchSection('strategy',this)">♟ 策略規劃</button>
+  <button class="tab-btn" onclick="switchSection('design',this)">💡 商業設計</button>
+  <button class="tab-btn" onclick="switchSection('action',this)">🚀 行動落地</button>
+</div>
+<div class="container">
+  <div class="group-section" data-group="tm">
+    <div class="group-label tm-label">✦ 健言社提示詞 · Toastmasters</div>
+    <div class="cards-grid">
+      <div class="card tm-card" data-cat="ip" data-id="0"><div class="card-head"><div class="card-icon">🎨</div><div class="card-meta"><span class="card-tag tag-ip">個人 IP</span><div class="card-title">個人 IP 3D公仔生成</div></div></div><div class="card-body"><div class="card-preview">上傳照片，生成萬代鋼彈風格組合零件板 3D 公仔，含可樂、炸雞、蝦味先等個人配件。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(0,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(0)">展開</button></div></div>
+      <div class="card tm-card" data-cat="inner" data-id="1"><div class="card-head"><div class="card-icon">🧭</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">人生教練深度剖析</div></div></div><div class="card-body"><div class="card-preview">認識這麼久了，請化作我的人生教練，以你對我的認識深度剖析，列出10件你知道而我不知道的事。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(1,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(1)">展開</button></div></div>
+      <div class="card tm-card" data-cat="inner" data-id="2"><div class="card-head"><div class="card-icon">📋</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">SWOT 與職涯策略規劃</div></div></div><div class="card-body"><div class="card-preview">個人SWOT分析 + 未來五年職涯建議 + 2026年目標達成策略計劃表</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(2,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(2)">展開</button></div></div>
+      <div class="card tm-card" data-cat="speak" data-id="3"><div class="card-head"><div class="card-icon">🏆</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 世界冠軍觀點發想</div></div></div><div class="card-body"><div class="card-preview">以 TM 世界冠軍視角，針對演講題目提供 10 個引人深思、能製造 AHA 時刻的洞察觀點。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(3,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(3)">展開</button></div></div>
+      <div class="card tm-card" data-cat="speak" data-id="4"><div class="card-head"><div class="card-icon">⚖️</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 金級評審策略拆解</div></div></div><div class="card-body"><div class="card-preview">以 TM 金級評審角度完整拆解題目，涵蓋 Content / Delivery / Language，輸出冠軍級策略建議書。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(4,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(4)">展開</button></div></div>
+      <div class="card tm-card" data-cat="think" data-id="5"><div class="card-head"><div class="card-icon">💬</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">單一大師跨時空對談</div></div></div><div class="card-body"><div class="card-preview">指定 Steve Jobs 以其真實語言風格與價值觀對談，探討人生觀、工作哲學、產品創新與未來趨勢。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(5,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(5)">展開</button></div></div>
+      <div class="card tm-card" data-cat="think" data-id="6"><div class="card-head"><div class="card-icon">🌐</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">多位大師圓桌辯論</div></div></div><div class="card-body"><div class="card-preview">Jobs、愛因斯坦、達文西、馬斯克加隨機神秘嘉賓，在火星圓桌辯論創新、未來與人生智慧。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(6,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(6)">展開</button></div></div>
+    </div>
+  </div>
+  <div class="group-section" data-group="biz">
+    <div class="group-label biz-label">📊 商業策略 AI 工具組 · Business Strategy</div>
+    <div class="cards-grid">
+      <div class="card biz-pest" data-cat="market" data-id="7"><div class="card-head"><div class="card-icon">🌍</div><div class="card-meta"><span class="card-tag tag-market">市場分析</span><div class="card-title">Tool 1｜市場洞察引擎（PEST AI）</div><div class="card-purpose">🎯 3分鐘看懂一個市場</div></div></div><div class="card-body"><div class="card-preview">PEST分析 + 未來3年趨勢 + 三大機會 + 三大風險 + 建議切入策略</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(7,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(7)">展開</button></div></div>
+      <div class="card biz-3c" data-cat="market" data-id="8"><div class="card-head"><div class="card-icon">🔍</div><div class="card-meta"><span class="card-tag tag-market">市場分析</span><div class="card-title">Tool 2｜競品解剖器（3C + Benchmark）</div><div class="card-purpose">🎯 快速找到市場差異</div></div></div><div class="card-body"><div class="card-preview">3C架構分析 + 競品比較表 + 差異化機會 + 建議市場定位</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(8,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(8)">展開</button></div></div>
+      <div class="card biz-swot" data-cat="strategy" data-id="9"><div class="card-head"><div class="card-icon">♟</div><div class="card-meta"><span class="card-tag tag-strategy">策略規劃</span><div class="card-title">Tool 3｜SWOT → 策略轉換器</div><div class="card-purpose">🎯 讓學員「會想策略」</div></div></div><div class="card-body"><div class="card-preview">SWOT分析 + SO/ST/WO/WT策略轉換 + 三個優先策略 + 行動建議</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(9,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(9)">展開</button></div></div>
+      <div class="card biz-bmc" data-cat="design" data-id="10"><div class="card-head"><div class="card-icon">🏗️</div><div class="card-meta"><span class="card-tag tag-design">商業設計</span><div class="card-title">Tool 4｜商業模式設計器（BMC）</div><div class="card-purpose">🎯 建立完整商業邏輯</div></div></div><div class="card-body"><div class="card-preview">商業模式畫布 + 核心價值主張 + 收入來源 + 成本結構 + 風險優化</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(10,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(10)">展開</button></div></div>
+      <div class="card biz-jtbd" data-cat="design" data-id="11"><div class="card-head"><div class="card-icon">🎯</div><div class="card-meta"><span class="card-tag tag-design">商業設計</span><div class="card-title">Tool 5｜需求洞察（JTBD）</div><div class="card-purpose">🎯 避免做錯產品</div></div></div><div class="card-body"><div class="card-preview">功能需求 + 情感需求 + 社會需求 + 三個未被滿足的痛點與機會</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(11,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(11)">展開</button></div></div>
+      <div class="card biz-price" data-cat="strategy" data-id="12"><div class="card-head"><div class="card-icon">💰</div><div class="card-meta"><span class="card-tag tag-strategy">策略規劃</span><div class="card-title">Tool 6｜定價策略設計器</div><div class="card-purpose">🎯 理解「價值＝價格」</div></div></div><div class="card-body"><div class="card-preview">競品定價分析 + 建議定價策略 + 價值支撐邏輯 + 提高願付價格方法</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(12,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(12)">展開</button></div></div>
+      <div class="card biz-grow" data-cat="strategy" data-id="13"><div class="card-head"><div class="card-icon">📈</div><div class="card-meta"><span class="card-tag tag-strategy">策略規劃</span><div class="card-title">Tool 7｜成長策略規劃器</div><div class="card-purpose">🎯 找成長路徑</div></div></div><div class="card-body"><div class="card-preview">市場擴展 + 產品擴展 + 商業模式創新 + 三條成長路徑 + 風險與條件</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(13,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(13)">展開</button></div></div>
+      <div class="card biz-task" data-cat="action" data-id="14"><div class="card-head"><div class="card-icon">🚀</div><div class="card-meta"><span class="card-tag tag-action">行動落地</span><div class="card-title">Tool 8｜策略行動化引擎（Task Chain）</div><div class="card-purpose">🎯 讓策略「落地」</div></div></div><div class="card-body"><div class="card-preview">任務清單 + KPI + 優先順序 + 90 天行動計畫</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(14,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(14)">展開</button></div></div>
+      <div class="card biz-eval" data-cat="action" data-id="15"><div class="card-head"><div class="card-icon">✅</div><div class="card-meta"><span class="card-tag tag-action">行動落地</span><div class="card-title">Tool 9｜新產品評估器（Go / No-Go）</div><div class="card-purpose">🎯 做決策判斷</div></div></div><div class="card-body"><div class="card-preview">市場需求 + 競爭 + 商業模式 + 可行性評分 + Go/No-Go建議</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(15,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(15)">展開</button></div></div>
+      <div class="card biz-report" data-cat="action" data-id="16"><div class="card-head"><div class="card-icon">📄</div><div class="card-meta"><span class="card-tag tag-action">行動落地</span><div class="card-title">Tool 10｜一頁式策略輸出器（高階）</div><div class="card-purpose">🎯 產出「能交付的成果」</div></div></div><div class="card-body"><div class="card-preview">問題 + 洞察 + 策略 + 行動 + 成果 → 一頁式策略報告</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(16,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(16)">展開</button></div></div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-head-left"><div class="modal-icon" id="modalIcon"></div><div><span class="modal-tag" id="modalTag"></span><div class="modal-title" id="modalTitle"></div><div class="modal-purpose" id="modalPurpose"></div></div></div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body"><div class="edit-hint">✏ 可直接在下方編輯後複製</div><textarea class="editable-prompt" id="modalText"></textarea></div>
+    <div class="modal-foot"><button class="btn-copy" id="modalCopyBtn" onclick="copyFromModal()">⊕ 複製全部</button><button class="btn-expand" onclick="closeModal()">關閉</button></div>
+  </div>
+</div>
+<div class="toast" id="toast">✓ 已複製到剪貼簿</div>
+<script>
+const prompts=[
+{id:0,cat:"ip",icon:"🎨",tag:"個人 IP",purpose:"",title:"個人 IP 3D公仔生成",text:`請參考此照片生成一張3D公仔圖片（記得上傳照片）\n- 包裝為萬代的鋼彈風格的組合零件板\n- 公仔外貌請照上傳的圖片製作\n- 臉部可愛卡通風，但是也要有照片中的神韻\n- 分為左邊公仔區、右邊配件區兩區配件如下：（可以自由替換）\n  - 一瓶可樂\n  - KFC 炸雞\n  - 一包蝦味先\n  - 一塊蛋糕\n  - 一杯啤酒\n  - 麥當勞漢堡`},
+{id:1,cat:"inner",icon:"🧭",tag:"自我探索",purpose:"",title:"人生教練深度剖析",text:`認識這麼久了，請化作我的人生教練，\n以你對我的認識 深度剖析， \n列出10件你知道而我不知道的事。`},
+{id:2,cat:"inner",icon:"📋",tag:"自我探索",purpose:"",title:"SWOT 與職涯策略規劃",text:`1) 請給我個人【SWOT分析】\n2) 給我未來五年的職涯建議 \n3) 2026年我的目標是______, 幫我制定 「達成目標的策略計劃表」`},
+{id:3,cat:"speak",icon:"🏆",tag:"演講準備",purpose:"",title:"TM 世界冠軍觀點發想",text:`角色設定：\n你是一位 Toastmasters 國際演講比賽的世界冠軍，具備卓越的洞察力、說服力與啟發他人的能力。你善於從抽象概念、日常經驗或社會現象中提煉深刻見解，並引導聽眾反思與行動。\n\n任務目標：\n針對以下 Toastmasters 演講題目，請提供 10 個具啟發性、富洞察力的觀點。這些觀點應該具備以下特質：\n\n-引人深思，能讓聽眾產生「AHA」時刻\n-涵蓋不同角度（個人成長、社會觀察、哲學反思、故事切入等）\n-避免空泛口號，盡量具體、有例子或邏輯推演基礎\n\n演講題目：\n[AI助我一臂之力]`},
+{id:4,cat:"speak",icon:"⚖️",tag:"演講準備",purpose:"",title:"TM 金級評審策略拆解",text:`你現在是一位 Toastmasters 國際講演會（TM）金級評審、世界冠軍賽（WCPS）分析專家。\n我會給你一個演講題目 "AI 與我"，請你依 Toastmasters 評審邏輯完整拆解：\n\n1. Toastmasters 式題目審題\n\n題目的字面意義\n\n題目可能的深層意涵\n\n可接受的 3–5 種合理詮釋方向\n\n哪些詮釋會被視為「跑題」？\n\n評審最期待的主線（依 TM 標準）\n\n2. TM 評審分數導向的題目價值\n\n請依 Content（內容） / Delivery（表達） / Language（語言） 三大類拆解：\n\n此題目最容易展現哪些內容亮點？\n\n哪些論點最能打中 TM 評審的價值觀？\n\n可以創造哪些故事與情緒張力？\n\n哪些方向會扣分（空泛、無重點、價值感不足等）？\n\n3. 以「TM 評審視角」分析\n\nA. Content（內容）— 評審會如何判斷？\n是否真正回答題目？\n主題是否聚焦？\n是否具備觀點？\n論述邏輯是否清晰？\n故事是否貼題並具說服力？\n\nB. Delivery（表達）\n聲音變化、節奏、停頓是否有助於題目呈現？\n表情、手勢、動作是否強化主題？\n故事呈現是否自然？\n語氣是否支持情緒與觀點？\n\nC. Language（語言）\n用字是否清楚、優雅、貼合主題？\n是否有令評審印象深刻的金句？\n隱喻、排比、反問等修辭是否有效？\n\n4. 實戰：如何審訊這題（TM 講者必問）\n\n請提供至少 6 個審題問題，例如：\n我真正想傳遞的核心觀點是什麼？\n這個觀點如何與題目直接連結？\n我的故事是否能清楚地證明這個主題？\n如何在 7 分鐘內做到最高情緒起伏？\n如何讓評審覺得「這是冠軍等級的結構」？\n如何避免淪為勵志空話？\n\n5. 加分建議（世界冠軍講者常用技巧）\n\nTM 標準中的「黃金三角」如何套用到這題\n如何打造一個強而有力的結尾\n如何讓開場 15 秒就吸住評審\n適合此題目的 3 種結構（例如：故事→反轉→觀點）\n\n6. 最後請輸出\n《此題目的 Toastmasters 冠軍級演講策略建議書》`},
+{id:5,cat:"think",icon:"💬",tag:"跨界思辨",purpose:"",title:"單一大師跨時空對談",text:`你是[Steve Jobs]，\n以她/他真實歷史中的思想、語言風格與價值觀來進行對話。\n你的知識涵蓋她/他之前與之後的重要事件與趨勢\n（不受時間限制）。\n\n與我展開一場跨時空的深度對談，主題圍繞在人生觀、工作哲學、產品創新與未來趨勢。\n\n在回答時：用她/他的語氣、詞彙與表達方式以故事、比喻、案例佐證觀點兼顧啟發性與可行性建議若觀點與現代趨勢衝突，請明確指出並解釋原因\n----------------------\n我的第一個問題是：「在今天這個 AI 時代，你會怎麼定義未來的教育以及趨勢？」`},
+{id:6,cat:"think",icon:"🌐",tag:"跨界思辨",purpose:"",title:"多位大師圓桌辯論",text:`你將扮演一位或多位歷史與當代的大師，包括但不限於：\nSteve Jobs（產品創新與設計）\n愛因斯坦（物理與思想實驗）\n達文西（藝術與跨領域創造）\n馬斯克（未來科技與商業策略）\n\n除此之外，每次對談隨機新增 1–2 位意想不到的大師或思想家（可以來自任何時代與領域，例如宮崎駿、瑪麗‧居禮、孔子、瑪雅文明的祭司等），並用一句幽默或巧妙的方式介紹他們的「穿越登場」。\n\n規則：\n以各自真實的語言風格、觀點與價值觀作答\n不受時間限制，可引用生前與身後的知識與事件\n每位大師分段輸出（標明姓名）\n觀點可互相辯論、補充或質疑\n回覆需同時包含：\n- 人生觀\n- 工作/創作哲學\n- 對當下與未來的洞察\n- 實際可行的建議\n\n啟動時：\n先以生動的對話場景描寫開場（例如在火星殖民地的圓桌上或文藝復興的畫室中）\n接著由每位大師輪流發言\n在中途引入隨機嘉賓並讓其參與辯論\n我的第一個問題是：「在今天的 AI 時代，真正的創新該如何誕生？」`},
+{id:7,cat:"market",icon:"🌍",tag:"市場分析",purpose:"🎯 3分鐘看懂一個市場",title:"Tool 1｜市場洞察引擎（PEST AI）",text:`你是一位策略顧問，請針對【產業/產品】進行 PEST 分析，\n並延伸未來 3 年趨勢。\n\n請用以下格式輸出：\n1. PEST 分析（條列）\n2. 三大關鍵趨勢（附說明）\n3. 三大市場機會\n4. 三大潛在風險\n5. 建議切入策略（具體）\n\n💡 課堂任務\n每人分析一個產業（例如：AI 教育 / 電動車 / 健康管理）`},
+{id:8,cat:"market",icon:"🔍",tag:"市場分析",purpose:"🎯 快速找到市場差異",title:"Tool 2｜競品解剖器（3C + Benchmark）",text:`請用 3C 架構分析【產品/公司】，\n並列出 3–5 個主要競品比較：\n\n請輸出表格：\n- 功能\n- 價格\n- 目標客群\n- 核心優勢\n- 弱點\n\n最後請提出：\n1. 差異化機會\n2. 建議市場定位\n\n💡 課堂任務\n找一個你熟悉的產品（例如：iPhone vs Android）`},
+{id:9,cat:"strategy",icon:"♟",tag:"策略規劃",purpose:"🎯 讓學員「會想策略」",title:"Tool 3｜SWOT → 策略轉換器",text:`請對【公司/產品】做 SWOT 分析，\n並轉換為 SO / ST / WO / WT 策略。\n\n最後輸出：\n1. 三個優先策略\n2. 每個策略的行動建議\n\n💡 重點\n👉 不只是分析，要「轉行動」`},
+{id:10,cat:"design",icon:"🏗️",tag:"商業設計",purpose:"🎯 建立完整商業邏輯",title:"Tool 4｜商業模式設計器（BMC）",text:`請為【產品/服務】建立商業模式畫布（BMC），\n並補充：\n\n1. 核心價值主張\n2. 收入來源\n3. 成本結構\n4. 風險與優化建議\n\n💡 教學技巧\n👉 可以讓學生「創業題目實作」`},
+{id:11,cat:"design",icon:"🎯",tag:"商業設計",purpose:"🎯 避免做錯產品",title:"Tool 5｜需求洞察（JTBD）",text:`請用 JTBD 分析【目標客群】的需求：\n\n1. 功能需求\n2. 情感需求\n3. 社會需求\n\n最後請找出：\n三個未被滿足的痛點與機會`},
+{id:12,cat:"strategy",icon:"💰",tag:"策略規劃",purpose:"🎯 理解「價值＝價格」",title:"Tool 6｜定價策略設計器",text:`請分析【產品】的定價策略，\n並比較競品。\n\n請提出：\n1. 建議定價策略\n2. 價值支撐邏輯\n3. 提高願付價格的方法`},
+{id:13,cat:"strategy",icon:"📈",tag:"策略規劃",purpose:"🎯 找成長路徑",title:"Tool 7｜成長策略規劃器",text:`請設計【產品/公司】的成長策略，\n包含：\n\n- 市場擴展\n- 產品擴展\n- 商業模式創新\n\n輸出：\n1. 三條成長路徑\n2. 風險與條件`},
+{id:14,cat:"action",icon:"🚀",tag:"行動落地",purpose:"🎯 讓策略「落地」",title:"Tool 8｜策略行動化引擎（Task Chain）",text:`請將以下策略轉為可執行任務：\n【策略】\n\n輸出：\n1. 任務清單\n2. KPI\n3. 優先順序\n4. 90 天行動計畫`},
+{id:15,cat:"action",icon:"✅",tag:"行動落地",purpose:"🎯 做決策判斷",title:"Tool 9｜新產品評估器（Go / No-Go）",text:`請評估以下產品構想：\n【產品】\n\n分析：\n- 市場需求\n- 競爭\n- 商業模式\n- 風險\n\n輸出：\n1. 可行性評分（1–10）\n2. 建議（Go / No-Go）\n3. 優化方向`},
+{id:16,cat:"action",icon:"📄",tag:"行動落地",purpose:"🎯 產出「能交付的成果」",title:"Tool 10｜一頁式策略輸出器（高階）",text:`請整理為一頁式策略報告：\n\n包含：\n1. 問題\n2. 洞察\n3. 策略\n4. 行動\n5. 成果`}
+];
+function copyPrompt(id,btn){navigator.clipboard.writeText(prompts[id].text).then(()=>{btn.textContent='✓ 已複製';btn.classList.add('copied');showToast();setTimeout(()=>{btn.textContent='⊕ 複製';btn.classList.remove('copied')},2000)})}
+function openModal(id){const p=prompts[id];document.getElementById('modalIcon').textContent=p.icon;document.getElementById('modalTag').textContent=p.tag;document.getElementById('modalTitle').textContent=p.title;document.getElementById('modalPurpose').textContent=p.purpose||'';document.getElementById('modalText').value=p.text;document.getElementById('modalOverlay').classList.add('open');document.body.style.overflow='hidden'}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
+function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
+function copyFromModal(){const text=document.getElementById('modalText').value;navigator.clipboard.writeText(text).then(()=>{const btn=document.getElementById('modalCopyBtn');btn.textContent='✓ 已複製';btn.classList.add('copied');showToast();setTimeout(()=>{btn.textContent='⊕ 複製全部';btn.classList.remove('copied')},2000)})}
+function showToast(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+const bizCats=['market','strategy','design','action'];
+const tmCats=['ip','inner','speak','think'];
+function switchSection(cat,btn){document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active-tm','active-biz'));btn.classList.add(bizCats.includes(cat)?'active-biz':'active-tm');const hTm=document.getElementById('header-tm');const hBiz=document.getElementById('header-biz');document.querySelectorAll('.card').forEach(card=>{card.classList.toggle('hidden',cat!=='all'&&card.dataset.cat!==cat)});document.querySelectorAll('.group-section').forEach(g=>{const grp=g.dataset.group;if(cat==='all'){g.classList.remove('hidden');hTm.style.display='';hBiz.style.display='';}else if(tmCats.includes(cat)){g.classList.toggle('hidden',grp!=='tm');hTm.style.display='';hBiz.style.display='none';}else{g.classList.toggle('hidden',grp!=='biz');hTm.style.display='none';hBiz.style.display=''}})}
+function filterCards(q){q=q.toLowerCase();document.querySelectorAll('.card').forEach(card=>{const id=parseInt(card.dataset.id);const p=prompts[id];const t=(p.title+p.text+p.tag).toLowerCase();card.classList.toggle('hidden',q.length>0&&!t.includes(q))})}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+</body>
+</html>
