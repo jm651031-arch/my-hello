@@ -5,348 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 提示詞工具箱</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap');
-  :root{--ink:#1a1208;--paper:#f5f0e8;--gold:#c9a84c;--gold-light:#e8d5a0;--rust:#8b3a2a;--sage:#4a6741;--blue-deep:#1e3a5f;--cream:#faf7f0;--shadow:rgba(26,18,8,0.15)}
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Noto+Sans+TC:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  :root{--ink:#1a1a2e;--bg:#f8f9fc;--white:#fff;--gold:#c9a84c;--gold-light:#f0e0a8;--rust:#8b3a2a;--sage:#3a6b5a;--blue:#1e3a6f;--biz-dark:#0f1f3d;--biz-blue:#1a4a8a;--biz-accent:#e8a020;--biz-light:#eef2f9;--shadow:rgba(15,31,61,.12);--radius:10px}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--paper);color:var(--ink);font-family:'Noto Serif TC',serif;min-height:100vh;background-image:radial-gradient(ellipse at 20% 20%,rgba(201,168,76,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(30,58,95,.06) 0%,transparent 50%)}
-  header{text-align:center;padding:48px 24px 32px;border-bottom:1px solid var(--gold-light);position:relative}
-  header::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--rust),var(--gold),var(--sage),var(--blue-deep))}
-  .header-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
-  header h1{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);color:var(--ink);line-height:1.2;margin-bottom:8px}
-  header p{font-size:13px;color:#6b5a3a;letter-spacing:.5px}
-  .categories{display:flex;justify-content:center;gap:0;padding:32px 24px 0;flex-wrap:wrap}
-  .cat-btn{padding:10px 20px;border:1px solid var(--gold-light);background:transparent;cursor:pointer;font-family:'Noto Serif TC',serif;font-size:13px;color:#6b5a3a;transition:all .2s}
-  .cat-btn:first-child{border-radius:4px 0 0 4px}.cat-btn:last-child{border-radius:0 4px 4px 0}.cat-btn:not(:first-child){border-left:none}
-  .cat-btn.active{background:var(--ink);color:var(--gold);border-color:var(--ink)}
-  .cat-btn:hover:not(.active){background:var(--gold-light);color:var(--ink)}
-  .container{max-width:960px;margin:0 auto;padding:32px 24px 60px}
-  .section-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid var(--gold-light);display:flex;align-items:center;gap:12px}
-  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:40px}
-  .card{background:var(--cream);border:1px solid var(--gold-light);border-radius:6px;overflow:hidden;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
-  .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--shadow)}
-  .card-header{padding:16px 18px 12px;border-bottom:1px solid var(--gold-light);display:flex;align-items:flex-start;gap:12px}
-  .card-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold-light);line-height:1;flex-shrink:0;min-width:32px}
-  .card-meta{flex:1}
-  .card-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:6px}
-  .tag-ip{background:rgba(120,60,160,.12);color:#7a3ca0}
-  .tag-inner{background:rgba(139,58,42,.12);color:var(--rust)}
-  .tag-speak{background:rgba(74,103,65,.12);color:var(--sage)}
-  .tag-think{background:rgba(30,58,95,.12);color:var(--blue-deep)}
-  .card-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
-  .card-body{padding:14px 18px;flex:1}
-  .card-preview{font-size:12px;color:#7a6a4a;line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .card-footer{padding:12px 18px;display:flex;gap:8px;border-top:1px solid var(--gold-light)}
-  .btn-copy,.btn-expand{flex:1;padding:8px 12px;border:none;border-radius:3px;font-family:'Noto Serif TC',serif;font-size:12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
-  .btn-copy{background:var(--ink);color:var(--gold)}.btn-copy:hover{background:#2d2010}.btn-copy.copied{background:var(--sage);color:white}
-  .btn-expand{background:transparent;border:1px solid var(--gold-light);color:#7a6a4a}.btn-expand:hover{background:var(--gold-light);color:var(--ink)}
-  .modal-overlay{position:fixed;inset:0;background:rgba(26,18,8,.7);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-  .modal-overlay.open{display:flex}
-  .modal{background:var(--cream);border:1px solid var(--gold);border-radius:8px;max-width:680px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(26,18,8,.4)}
-  .modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--gold-light);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-  .modal-head-left{display:flex;align-items:center;gap:14px}
-  .modal-num{font-family:'Playfair Display',serif;font-size:36px;color:var(--gold-light);line-height:1}
-  .modal-title-block .modal-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;display:block}
-  .modal-title-block h2{font-size:16px;color:var(--ink)}
-  .modal-close{background:none;border:1px solid var(--gold-light);border-radius:3px;width:32px;height:32px;cursor:pointer;color:#7a6a4a;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-  .modal-close:hover{background:var(--ink);color:var(--gold);border-color:var(--ink)}
-  .modal-body{padding:20px 24px;overflow-y:auto;flex:1}
-  .modal-foot{padding:16px 24px;border-top:1px solid var(--gold-light);display:flex;gap:10px;flex-shrink:0}
-  .modal-foot .btn-copy{flex:2;padding:12px;font-size:13px}.modal-foot .btn-expand{flex:1;padding:12px;font-size:13px}
-  .edit-hint{font-size:11px;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-  .editable-prompt{font-family:'DM Mono',monospace;font-size:12px;line-height:1.9;color:#3a2e1a;white-space:pre-wrap;background:white;border:1px solid var(--gold-light);border-radius:4px;padding:18px 20px;width:100%;min-height:200px;resize:vertical;outline:none;transition:border-color .2s}
-  .editable-prompt:focus{border-color:var(--gold)}
-  .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--gold);padding:10px 24px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:200;pointer-events:none}
-  .toast.show{transform:translateX(-50%) translateY(0)}
-  .card.hidden{display:none}
-  .search-bar{max-width:400px;margin:24px auto 0;position:relative}
-  .search-bar input{width:100%;padding:10px 16px 10px 38px;border:1px solid var(--gold-light);border-radius:4px;background:var(--cream);font-family:'Noto Serif TC',serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .2s}
-  .search-bar input:focus{border-color:var(--gold)}.search-bar input::placeholder{color:#b0a080}
-  .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#b0a080;font-size:14px;pointer-events:none}
-  .all-section{margin-top:8px}
-</style>
-</head>
-<body>
-<header>
-  <div class="header-label">中華民國健言社 第37屆 · 3/22 AI網路營</div>
-  <h1>七大提示詞工具箱</h1>
-  <p>點選即可複製 · 隨手調用 · 即刻啟動 · 由竹北健言社整理分享</p>
-  <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="搜尋提示詞..." oninput="filterCards(this.value)"></div>
-</header>
-<div style="display:flex;justify-content:center;padding:24px 24px 0;">
-  <div class="categories">
-    <button class="cat-btn active" onclick="filterCat('all',this)">全部</button>
-    <button class="cat-btn" onclick="filterCat('ip',this)">✦ 個人IP</button>
-    <button class="cat-btn" onclick="filterCat('inner',this)">🧭 自我探索</button>
-    <button class="cat-btn" onclick="filterCat('speak',this)">🎤 演講準備</button>
-    <button class="cat-btn" onclick="filterCat('think',this)">🧠 跨界思辨</button>
-  </div>
-</div>
-<div class="container">
-  <div class="all-section">
-    <div class="section-title"><span>✦</span> 所有提示詞</div>
-    <div class="cards-grid" id="cardsGrid">
-      <div class="card" data-cat="ip" data-id="0"><div class="card-header"><div class="card-num">00</div><div class="card-meta"><span class="card-tag tag-ip">個人 IP</span><div class="card-title">個人 IP 3D公仔生成</div></div></div><div class="card-body"><div class="card-preview">上傳照片，生成萬代鋼彈風格組合零件板 3D 公仔，含可樂、炸雞、蝦味先等個人配件。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(0,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(0)">展開</button></div></div>
-      <div class="card" data-cat="inner" data-id="1"><div class="card-header"><div class="card-num">01</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">人生教練深度剖析</div></div></div><div class="card-body"><div class="card-preview">認識這麼久了，請化作我的人生教練，以你對我的認識深度剖析，列出10件你知道而我不知道的事。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(1,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(1)">展開</button></div></div>
-      <div class="card" data-cat="inner" data-id="2"><div class="card-header"><div class="card-num">02</div><div class="card-meta"><span class="card-tag tag-inner">自我探索</span><div class="card-title">SWOT 與職涯策略規劃</div></div></div><div class="card-body"><div class="card-preview">個人SWOT分析 + 未來五年職涯建議 + 2026年目標達成策略計劃表</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(2,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(2)">展開</button></div></div>
-      <div class="card" data-cat="speak" data-id="3"><div class="card-header"><div class="card-num">03</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 世界冠軍觀點發想</div></div></div><div class="card-body"><div class="card-preview">以 TM 世界冠軍視角，針對演講題目提供 10 個引人深思、能製造 AHA 時刻的洞察觀點。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(3,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(3)">展開</button></div></div>
-      <div class="card" data-cat="speak" data-id="4"><div class="card-header"><div class="card-num">04</div><div class="card-meta"><span class="card-tag tag-speak">演講準備</span><div class="card-title">TM 金級評審策略拆解</div></div></div><div class="card-body"><div class="card-preview">以 TM 金級評審角度完整拆解題目，涵蓋 Content / Delivery / Language，輸出冠軍級策略建議書。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(4,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(4)">展開</button></div></div>
-      <div class="card" data-cat="think" data-id="5"><div class="card-header"><div class="card-num">05</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">單一大師跨時空對談</div></div></div><div class="card-body"><div class="card-preview">指定 Steve Jobs 以其真實語言風格與價值觀對談，探討人生觀、工作哲學、產品創新與未來趨勢。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(5,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(5)">展開</button></div></div>
-      <div class="card" data-cat="think" data-id="6"><div class="card-header"><div class="card-num">06</div><div class="card-meta"><span class="card-tag tag-think">跨界思辨</span><div class="card-title">多位大師圓桌辯論</div></div></div><div class="card-body"><div class="card-preview">Jobs、愛因斯坦、達文西、馬斯克加隨機神秘嘉賓，在火星圓桌辯論創新、未來與人生智慧。</div></div><div class="card-footer"><button class="btn-copy" onclick="copyPrompt(6,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(6)">展開</button></div></div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-head"><div class="modal-head-left"><div class="modal-num" id="modalNum"></div><div class="modal-title-block"><span class="modal-tag" id="modalTag"></span><h2 id="modalTitle"></h2></div></div><button class="modal-close" onclick="closeModal()">✕</button></div>
-    <div class="modal-body"><div class="edit-hint">✏ 可直接在下方編輯後複製</div><textarea class="editable-prompt" id="modalText"></textarea></div>
-    <div class="modal-foot"><button class="btn-copy" id="modalCopyBtn" onclick="copyFromModal()">⊕ 複製全部</button><button class="btn-expand" onclick="closeModal()">關閉</button></div>
-  </div>
-</div>
-<div class="toast" id="toast">✓ 已複製到剪貼簿</div>
-
-<script>
-const prompts = [
-  {
-    num: "00", cat: "ip", catLabel: "個人 IP", catClass: "tag-ip", title: "個人 IP 3D公仔生成",
-    text: `請參考此照片生成一張3D公仔圖片（記得上傳照片）
-- 包裝為萬代的鋼彈風格的組合零件板
-- 公仔外貌請照上傳的圖片製作
-- 臉部可愛卡通風，但是也要有照片中的神韻
-- 分為左邊公仔區、右邊配件區兩區配件如下：（可以自由替換）
-  - 一瓶可樂
-  - KFC 炸雞
-  - 一包蝦味先
-  - 一塊蛋糕
-  - 一杯啤酒
-  - 麥當勞漢堡`
-  },
-  {
-    num: "01", cat: "inner", catLabel: "自我探索", catClass: "tag-inner", title: "人生教練深度剖析",
-    text: `認識這麼久了，請化作我的人生教練，
-以你對我的認識 深度剖析， 
-列出10件你知道而我不知道的事。`
-  },
-  {
-    num: "02", cat: "inner", catLabel: "自我探索", catClass: "tag-inner", title: "SWOT 與職涯策略規劃",
-    text: `1) 請給我個人【SWOT分析】
-2) 給我未來五年的職涯建議 
-3) 2026年我的目標是______, 幫我制定 「達成目標的策略計劃表」`
-  },
-  {
-    num: "03", cat: "speak", catLabel: "演講準備", catClass: "tag-speak", title: "TM 世界冠軍觀點發想",
-    text: `角色設定：
-你是一位 Toastmasters 國際演講比賽的世界冠軍，具備卓越的洞察力、說服力與啟發他人的能力。你善於從抽象概念、日常經驗或社會現象中提煉深刻見解，並引導聽眾反思與行動。
-
-任務目標：
-針對以下 Toastmasters 演講題目，請提供 10 個具啟發性、富洞察力的觀點。這些觀點應該具備以下特質：
-
--引人深思，能讓聽眾產生「AHA」時刻
--涵蓋不同角度（個人成長、社會觀察、哲學反思、故事切入等）
--避免空泛口號，盡量具體、有例子或邏輯推演基礎
-
-演講題目：
-[AI助我一臂之力]`
-  },
-  {
-    num: "04", cat: "speak", catLabel: "演講準備", catClass: "tag-speak", title: "TM 金級評審策略拆解",
-    text: `你現在是一位 Toastmasters 國際講演會（TM）金級評審、世界冠軍賽（WCPS）分析專家。
-我會給你一個演講題目 "AI 與我"，請你依 Toastmasters 評審邏輯完整拆解：
-
-1. Toastmasters 式題目審題
-
-題目的字面意義
-
-題目可能的深層意涵
-
-可接受的 3–5 種合理詮釋方向
-
-哪些詮釋會被視為「跑題」？
-
-評審最期待的主線（依 TM 標準）
-
-2. TM 評審分數導向的題目價值
-
-請依 Content（內容） / Delivery（表達） / Language（語言） 三大類拆解：
-
-此題目最容易展現哪些內容亮點？
-
-哪些論點最能打中 TM 評審的價值觀？
-
-可以創造哪些故事與情緒張力？
-
-哪些方向會扣分（空泛、無重點、價值感不足等）？
-
-3. 以「TM 評審視角」分析
-
-請依 TM 標準分成三大類：
-
-A. Content（內容）— 評審會如何判斷？
-
-是否真正回答題目？
-
-主題是否聚焦？
-
-是否具備觀點？
-
-論述邏輯是否清晰？
-
-故事是否貼題並具說服力？
-
-B. Delivery（表達）
-
-聲音變化、節奏、停頓是否有助於題目呈現？
-
-表情、手勢、動作是否強化主題？
-
-故事呈現是否自然？
-
-語氣是否支持情緒與觀點？
-
-C. Language（語言）
-
-用字是否清楚、優雅、貼合主題？
-
-是否有令評審印象深刻的金句？
-
-隱喻、排比、反問等修辭是否有效？
-
-4. 實戰：如何審訊這題（TM 講者必問）
-
-請提供至少 6 個審題問題，例如：
-
-我真正想傳遞的核心觀點是什麼？
-
-這個觀點如何與題目直接連結？
-
-我的故事是否能清楚地證明這個主題？
-
-如何在 7 分鐘內做到最高情緒起伏？
-
-如何讓評審覺得「這是冠軍等級的結構」？
-
-如何避免淪為勵志空話？
-
-5. 加分建議（世界冠軍講者常用技巧）
-
-TM 標準中的「黃金三角」如何套用到這題
-
-如何打造一個強而有力的結尾
-
-如何讓開場 15 秒就吸住評審
-
-適合此題目的 3 種結構（例如：故事→反轉→觀點）
-
-6. 最後請輸出
-《此題目的 Toastmasters 冠軍級演講策略建議書》`
-  },
-  {
-    num: "05", cat: "think", catLabel: "跨界思辨", catClass: "tag-think", title: "單一大師跨時空對談",
-    text: `你是[Steve Jobs]，
-以她/他真實歷史中的思想、語言風格與價值觀來進行對話。
-你的知識涵蓋她/他之前與之後的重要事件與趨勢
-（不受時間限制）。
-
-與我展開一場跨時空的深度對談，主題圍繞在人生觀、工作哲學、產品創新與未來趨勢。
-
-在回答時：用她/他的語氣、詞彙與表達方式以故事、比喻、案例佐證觀點兼顧啟發性與可行性建議若觀點與現代趨勢衝突，請明確指出並解釋原因
-----------------------
-我的第一個問題是：「在今天這個 AI 時代，你會怎麼定義未來的教育以及趨勢？」`
-  },
-  {
-    num: "06", cat: "think", catLabel: "跨界思辨", catClass: "tag-think", title: "多位大師圓桌辯論",
-    text: `你將扮演一位或多位歷史與當代的大師，包括但不限於：
-Steve Jobs（產品創新與設計）
-愛因斯坦（物理與思想實驗）
-達文西（藝術與跨領域創造）
-馬斯克（未來科技與商業策略）
-
-除此之外，每次對談隨機新增 1–2 位意想不到的大師或思想家（可以來自任何時代與領域，例如宮崎駿、瑪麗‧居禮、孔子、瑪雅文明的祭司等），並用一句幽默或巧妙的方式介紹他們的「穿越登場」。
-
-規則：
-以各自真實的語言風格、觀點與價值觀作答
-不受時間限制，可引用生前與身後的知識與事件
-每位大師分段輸出（標明姓名）
-觀點可互相辯論、補充或質疑
-回覆需同時包含：
-- 人生觀
-- 工作/創作哲學
-- 對當下與未來的洞察
-- 實際可行的建議
-
-啟動時：
-先以生動的對話場景描寫開場（例如在火星殖民地的圓桌上或文藝復興的畫室中）
-接著由每位大師輪流發言
-在中途引入隨機嘉賓並讓其參與辯論
-我的第一個問題是：「在今天的 AI 時代，真正的創新該如何誕生？」`
-  }
-];
-
-function copyPrompt(id, btn) {
-  navigator.clipboard.writeText(prompts[id].text).then(() => {
-    btn.textContent = '✓ 已複製';
-    btn.classList.add('copied');
-    showToast();
-    setTimeout(() => { btn.textContent = '⊕ 複製'; btn.classList.remove('copied'); }, 2000);
-  });
-}
-
-function openModal(id) {
-  const p = prompts[id];
-  document.getElementById('modalNum').textContent = p.num;
-  document.getElementById('modalTag').textContent = p.catLabel;
-  document.getElementById('modalTag').className = 'modal-tag ' + p.catClass;
-  document.getElementById('modalTitle').textContent = p.title;
-  document.getElementById('modalText').value = p.text;
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function closeModalOnOverlay(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
-
-function copyFromModal() {
-  const text = document.getElementById('modalText').value;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('modalCopyBtn');
-    btn.textContent = '✓ 已複製';
-    btn.classList.add('copied');
-    showToast();
-    setTimeout(() => { btn.textContent = '⊕ 複製全部'; btn.classList.remove('copied'); }, 2000);
-  });
-}
-
-function showToast() {
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-function filterCat(cat, btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.card').forEach(card => {
-    card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
-  });
-}
-
-function filterCards(query) {
-  const q = query.toLowerCase();
-  document.querySelectorAll('.card').forEach(card => {
-    const id = parseInt(card.dataset.id);
-    const p = prompts[id];
-    const text = (p.title + p.text + p.catLabel).toLowerCase();
-    card.classList.toggle('hidden', q.length > 0 && !text.includes(q));
-  });
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-</script>
-</body>
-</html>
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Sans TC',sans-serif;font-size:17px;line-height:1.8;min-height:100vh}
+  .top-banner{background:var(--biz-dark);color:#aab8d0;text-align:center;padding:10px 16px;font-size:13px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top-banner span{color:var(--biz-accent);font-weight:700}
+  .section-header{padding:40px 24px 28px;text-align:center;position:relative}
+  .section-header.tm{background:linear-gradient(135deg,#1a1208 0%,#2d200a 100%);color:#f5f0e8}
+  .section-header.biz{background:linear-gradient(135deg,var(--biz-dark) 0%,#1a3a6a 100%);color:white}
+  .section-header::before{content:'';position:absolute;top:0;left:0;right:0;height:5px}
+  .section-header.tm::before{background:linear-gradient(90deg,#8b3a2a,#c9a84c,#4a6741,#1e3a5f)}
+  .section-header.biz::before{background:linear-gradient(90deg,#1a4a8a,#e8a020,#1a6a4a,#5a3a8f)}
+  .section-tag{display:inline-block;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:12px;font-family:'DM Mono',monospace}
+  .tm .section-tag{background:rgba(201,168,76,.2);color:#c9a84c;border:1px solid rgba(201,168,76,.3)}
+  .biz .section-tag{background:rgba(232,160,32,.2);color:#e8a020;border:1px solid rgba(232,160,32,.3)}
+  .section-header h1{font-family:'Noto Serif TC',serif;font-size:clamp(22px,4vw,36px);font-weight:700;line-height:1.3;margin-bottom:8px}
+  .section-header p{font-size:15px;opacity:.75}
+  .search-wrap{max-width:480px;margin:20px auto 0;position:relative}
+  .search-wrap input{width:100%;padding:13px 20px 13px 46px;border-radius:30px;border:none;font-size:16px;font-family:'Noto Sans TC',sans-serif;outline:none;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+  .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
+  .tabs-wrap{background:white;border-bottom:2px solid #e8edf5;padding:0 16px;display:flex;justify-content:center;flex-wrap:wrap;gap:4px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .tab-btn{padding:14px 16px;border:none;background:transparent;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:#6b7a9a;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+  .tab-btn:hover{color:var(--ink)}
+  .tab-btn.active-tm{color:#8b3a2a;border-bottom-color:#c9a84c;font-weight:700}
+  .tab-btn.active-biz{color:var(--biz-blue);border-bottom-color:var(--biz-accent);font-weight:700}
+  .container{max-width:1000px;margin:0 auto;padding:32px 20px 60px}
+  .group-label{font-size:13px;letter-spacing:3px;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid;display:flex;align-items:center;gap:10px}
+  .group-label.tm-label{color:#8b3a2a;border-color:#e8d5a0}
+  .group-label.biz-label{color:var(--biz-blue);border-color:#c8d8f0}
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-bottom:48px}
+  .card{background:white;border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 10px var(--shadow);transition:transform .2s,box-shadow .2s;border-top:4px solid transparent}
+  .card:hover{transform:translateY(-3px);box-shadow:0 8px 28px var(--shadow)}
+  .card.tm-card{border-top-color:#c9a84c}
+  .card.biz-pest{border-top-color:#1a6a4a}.card.biz-3c{border-top-color:#1a4a8a}.card.biz-swot{border-top-color:#8a1a4a}.card.biz-bmc{border-top-color:#5a3a8f}.card.biz-jtbd{border-top-color:#8a6a1a}.card.biz-price{border-top-color:#1a6a6a}.card.biz-grow{border-top-color:#4a8a1a}.card.biz-task{border-top-color:#8a4a1a}.card.biz-eval{border-top-color:#1a4a8a}.card.biz-report{border-top-color:#6a1a6a}
+  .card-head{padding:18px 20px 14px;border-bottom:1px solid #f0f2f8;display:flex;align-items:flex​​​​​​​​​​​​​​​​
