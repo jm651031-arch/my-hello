@@ -6,619 +6,453 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>明曜晶光顯科技 | LCD顯示方案與光學膜材</title>
 <style>
-:root {
-  --bg: #060e1c;
-  --navy: #091525;
-  --panel: #0c1e32;
-  --cyan: #00d4ff;
-  --blue: #0a84ff;
-  --gold: #c8a84b;
-  --white: #e8f0f8;
-  --muted: #4a6a8a;
-  --border: rgba(0,212,255,0.12);
-  --bar-h: 56px;
-  --nav-h: 62px;
+:root{
+  --bg:#111;--nav:#1a1a1a;--card:#1a1a1a;--card2:#1e1e1e;
+  --cyan:#00c8ff;--blue:#0a84ff;--gold:#c8a84b;
+  --white:#fff;--gray:#aaa;--lgray:#ddd;--border:#333;
+  --bar:60px;--nav-h:64px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--white);
-  font-family:'PingFang TC','Microsoft JhengHei','Noto Sans TC',sans-serif;
-  font-weight:300;
-  overflow-x:hidden;
-  padding-bottom:var(--bar-h);
-}
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(0,212,255,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,212,255,0.025) 1px,transparent 1px);
-  background-size:48px 48px;
-  pointer-events:none;z-index:0;
-}
+body{background:var(--bg);color:var(--white);font-family:'PingFang TC','Microsoft JhengHei',sans-serif;overflow-x:hidden;padding-bottom:var(--bar);}
 
 /* NAV */
-nav{
-position:fixed;top:0;left:0;right:0;z-index:500;
-height:var(–nav-h);
-display:flex;align-items:center;justify-content:space-between;
-padding:0 18px;
-background:rgba(6,14,28,0.99);
-backdrop-filter:blur(12px);
--webkit-backdrop-filter:blur(12px);
-border-bottom:1px solid var(–border);
-}
-.nav-brand{display:flex;flex-direction:column;gap:1px;}
-.nav-brand-cn{font-size:16px;font-weight:700;letter-spacing:3px;color:var(–white);}
-.nav-brand-en{font-size:9px;letter-spacing:3px;color:var(–cyan);text-transform:uppercase;}
-.hamburger{
-width:44px;height:44px;
-border:1px solid var(–border);border-radius:50%;
-display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-cursor:pointer;background:transparent;flex-shrink:0;
-}
-.hamburger span{display:block;width:18px;height:1.5px;background:var(–white);transition:all .3s;transform-origin:center;}
-.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(–nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(–nav);border-bottom:1px solid var(–border);}
+.nb-cn{font-size:18px;font-weight:700;letter-spacing:2px;}
+.nb-en{font-size:10px;letter-spacing:3px;color:var(–cyan);text-transform:uppercase;margin-top:2px;}
+#hmb{width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:none;border:none;}
+#hmb span{display:block;width:24px;height:2px;background:#fff;transition:all .3s;transform-origin:center;}
+#hmb.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+#hmb.open span:nth-child(2){opacity:0;}
+#hmb.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
 
 /* DRAWER */
-.drawer{
-position:fixed;top:var(–nav-h);left:0;right:0;bottom:var(–bar-h);
-z-index:490;
-background:rgba(6,14,28,0.99);
-transform:translateX(100%);
-transition:transform .35s cubic-bezier(.4,0,.2,1);
-overflow-y:auto;
-}
-.drawer.open{transform:translateX(0);}
-.drawer-menu{list-style:none;padding:8px 0;}
-.drawer-item{border-bottom:1px solid var(–border);}
-.drawer-btn{
-width:100%;display:flex;align-items:center;justify-content:space-between;
-padding:18px 24px;background:none;border:none;
-color:var(–white);font-size:15px;cursor:pointer;text-align:left;
-}
-.drawer-btn .icon{font-size:20px;color:var(–muted);transition:transform .3s,color .3s;line-height:1;}
-.drawer-btn.active .icon{transform:rotate(45deg);color:var(–cyan);}
-.sub-menu{list-style:none;max-height:0;overflow:hidden;transition:max-height .35s ease;background:rgba(9,21,37,0.8);}
-.sub-menu.open{max-height:400px;}
-.sub-menu li a{display:block;padding:13px 24px 13px 40px;font-size:13px;color:var(–muted);text-decoration:none;border-bottom:1px solid rgba(0,212,255,0.04);}
+#drawer{position:fixed;top:var(–nav-h);left:0;right:0;bottom:var(–bar);z-index:490;background:#1a1a1a;transform:translateX(100%);transition:transform .3s ease;overflow-y:auto;}
+#drawer.open{transform:translateX(0);}
+.dmenu{list-style:none;}
+.ditem{border-bottom:1px solid var(–border);}
+.dbtn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:none;border:none;color:#fff;font-size:17px;cursor:pointer;text-align:left;font-family:‘PingFang TC’,‘Microsoft JhengHei’,sans-serif;}
+.dbtn .ic{font-size:20px;color:var(–gray);transition:transform .3s,color .3s;font-style:normal;line-height:1;}
+.dbtn.open .ic{transform:rotate(45deg);color:var(–cyan);}
+.smenu{list-style:none;max-height:0;overflow:hidden;transition:max-height .35s ease;background:#222;}
+.smenu.open{max-height:500px;}
+.smenu li a{display:block;padding:15px 24px 15px 44px;font-size:14px;color:var(–gray);text-decoration:none;border-bottom:1px solid #2a2a2a;font-family:‘PingFang TC’,‘Microsoft JhengHei’,sans-serif;}
 
 /* HERO */
-.hero{
-position:relative;min-height:100vh;
-display:flex;flex-direction:column;justify-content:center;
-padding:calc(var(–nav-h) + 48px) 20px 80px;
-z-index:1;
-}
-.hero-orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0;}
-.orb1{width:280px;height:280px;top:-40px;right:-60px;background:radial-gradient(circle,rgba(0,212,255,0.14) 0%,transparent 70%);animation:pulse 8s ease-in-out infinite;}
-.orb2{width:220px;height:220px;bottom:100px;left:-40px;background:radial-gradient(circle,rgba(10,132,255,0.1) 0%,transparent 70%);animation:pulse 12s ease-in-out infinite reverse;}
-@keyframes pulse{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.15);}}
-.hero-content{position:relative;z-index:2;}
-.hero-tag{font-size:10px;letter-spacing:4px;color:var(–cyan);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-.hero-tag::before{content:’’;display:inline-block;width:28px;height:1px;background:var(–cyan);}
-.hero-title{font-size:clamp(34px,9vw,60px);font-weight:700;line-height:1.2;margin-bottom:10px;letter-spacing:.04em;}
-.hero-title .hl{color:var(–cyan);}
-.hero-sub{font-size:12px;letter-spacing:3px;color:var(–muted);margin-bottom:20px;text-transform:uppercase;}
-.hero-desc{font-size:14px;line-height:2;color:rgba(168,196,224,0.85);margin-bottom:28px;}
-.hero-stats{display:flex;gap:28px;margin-bottom:32px;}
-.stat-n{font-size:30px;font-weight:700;color:var(–white);line-height:1;}
-.stat-n small{font-size:18px;color:var(–cyan);}
-.stat-l{font-size:10px;letter-spacing:1.5px;color:var(–muted);text-transform:uppercase;margin-top:3px;}
-.hero-cta{
-display:inline-flex;align-items:center;gap:10px;
-padding:14px 28px;border:1px solid var(–cyan);
-color:var(–cyan);text-decoration:none;font-size:12px;letter-spacing:3px;text-transform:uppercase;
-}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:calc(var(–nav-h) + 48px) 24px 60px;background:#0d1520;overflow:hidden;}
+.hero::before{content:’’;position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,255,0.15) 0%,transparent 70%);pointer-events:none;}
+.htag{font-size:11px;letter-spacing:4px;color:var(–cyan);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.htag::before{content:’’;display:inline-block;width:32px;height:1px;background:var(–cyan);}
+.htitle{font-size:42px;font-weight:700;line-height:1.2;margin-bottom:12px;color:#fff;}
+.htitle .hl{color:var(–cyan);}
+.hsub{font-size:11px;letter-spacing:3px;color:var(–gray);margin-bottom:24px;text-transform:uppercase;}
+.hdesc{font-size:15px;line-height:2;color:var(–lgray);margin-bottom:32px;}
+.hstats{display:flex;gap:32px;margin-bottom:36px;}
+.sn{font-size:32px;font-weight:700;color:#fff;line-height:1;}
+.sn small{font-size:20px;color:var(–cyan);}
+.sl{font-size:11px;color:var(–gray);margin-top:4px;}
+.hcta{display:inline-block;padding:14px 32px;border:2px solid var(–cyan);color:var(–cyan);text-decoration:none;font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:500;}
 
 /* SECTIONS */
-section{position:relative;z-index:1;padding:56px 20px;}
-.sec-tag{font-size:10px;letter-spacing:4px;color:var(–cyan);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
-.sec-tag::before{content:’’;display:inline-block;width:24px;height:1px;background:var(–cyan);}
-.sec-title{font-size:clamp(22px,5vw,30px);font-weight:700;letter-spacing:.04em;margin-bottom:28px;}
+section{padding:52px 24px;background:var(–bg);}
+.stag{font-size:10px;letter-spacing:4px;color:var(–cyan);text-transform:uppercase;margin-bottom:8px;}
+.stitle{font-size:26px;font-weight:700;margin-bottom:28px;color:#fff;}
+.div{height:1px;background:var(–border);}
 
 /* ABOUT */
-.about-desc{font-size:14px;line-height:2.2;color:rgba(168,196,224,0.85);margin-bottom:20px;}
-.info-cards{display:flex;flex-direction:column;gap:12px;}
-.icard{padding:14px 18px;border-left:2px solid var(–cyan);background:rgba(0,212,255,0.04);}
-.icard-label{font-size:9px;letter-spacing:2px;color:var(–muted);text-transform:uppercase;margin-bottom:5px;}
-.icard-val{font-size:13px;color:var(–white);line-height:1.6;}
+.adesc{font-size:15px;line-height:2.1;color:var(–lgray);margin-bottom:20px;}
+.icard{padding:16px 20px;border-left:3px solid var(–cyan);background:var(–card2);margin-bottom:12px;}
+.ilabel{font-size:10px;letter-spacing:2px;color:var(–gray);text-transform:uppercase;margin-bottom:5px;}
+.ival{font-size:14px;color:#fff;line-height:1.6;}
 
 /* BUSINESS */
-.biz-cards{display:flex;flex-direction:column;gap:2px;}
-.biz-card{background:var(–navy);padding:28px 20px;border-bottom:2px solid transparent;}
-.biz-num{font-size:48px;font-weight:700;color:rgba(10,132,255,0.1);line-height:1;margin-bottom:10px;}
-.biz-title{font-size:17px;font-weight:700;margin-bottom:14px;}
-.biz-list{list-style:none;}
-.biz-list li{font-size:13px;color:var(–muted);line-height:1.9;padding-left:14px;position:relative;}
-.biz-list li::before{content:’—’;position:absolute;left:0;color:var(–cyan);}
+.bcard{background:var(–card);padding:28px 22px;margin-bottom:2px;}
+.bcard:first-of-type{border-left:3px solid var(–cyan);}
+.bcard:last-of-type{border-left:3px solid var(–blue);}
+.bnum{font-size:44px;font-weight:700;color:rgba(0,200,255,0.1);line-height:1;margin-bottom:10px;}
+.btitle{font-size:18px;font-weight:700;margin-bottom:16px;color:#fff;}
+.blist{list-style:none;}
+.blist li{font-size:14px;color:var(–lgray);line-height:1.9;padding-left:16px;position:relative;}
+.blist li::before{content:’—’;position:absolute;left:0;color:var(–cyan);}
 
 /* APPS */
-.app-grid{display:flex;flex-direction:column;gap:14px;}
-.app-card{border:1px solid var(–border);padding:24px 18px;background:var(–navy);display:flex;gap:14px;align-items:flex-start;}
-.app-icon{font-size:26px;flex-shrink:0;}
-.app-title{font-size:15px;font-weight:700;margin-bottom:7px;}
-.app-desc{font-size:12px;color:var(–muted);line-height:1.9;}
+.acard{border:1px solid var(–border);padding:22px 18px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;background:var(–card);}
+.aicon{font-size:28px;flex-shrink:0;}
+.atitle{font-size:16px;font-weight:700;margin-bottom:8px;color:#fff;}
+.adesc2{font-size:13px;color:var(–lgray);line-height:1.9;}
 
 /* FILMS */
-.film-list{display:flex;flex-direction:column;gap:14px;}
-.film-card{background:var(–panel);border:1px solid var(–border);padding:18px;display:flex;gap:14px;align-items:flex-start;}
-.film-dot{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(–cyan),var(–blue));display:flex;align-items:center;justify-content:center;font-size:17px;}
-.film-name{color:var(–cyan);font-size:14px;font-weight:700;margin-bottom:6px;}
-.film-desc{font-size:12px;color:var(–muted);line-height:1.8;margin-bottom:8px;}
-.film-tags{display:flex;flex-wrap:wrap;gap:6px;}
-.ftag{font-size:9px;letter-spacing:1.5px;padding:3px 8px;border:1px solid var(–blue);color:var(–blue);text-transform:uppercase;}
+.fcard{background:var(–card);border:1px solid var(–border);padding:20px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;}
+.fdot{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(–cyan),var(–blue));display:flex;align-items:center;justify-content:center;font-size:18px;}
+.fname{color:var(–cyan);font-size:15px;font-weight:700;margin-bottom:6px;}
+.fdesc{font-size:13px;color:var(–lgray);line-height:1.8;margin-bottom:10px;}
+.ftags{display:flex;flex-wrap:wrap;gap:6px;}
+.ftag{font-size:10px;letter-spacing:1px;padding:4px 10px;border:1px solid var(–blue);color:var(–blue);text-transform:uppercase;}
 
 /* CASES */
-.cases-section{background:var(–navy);}
-.search-bar{width:100%;padding:12px 16px;background:var(–panel);border:1px solid var(–border);color:var(–white);font-size:14px;outline:none;margin-bottom:16px;}
-.search-bar::placeholder{color:var(–muted);}
-.case-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
-.case-tab{padding:6px 14px;border:1px solid var(–border);background:none;color:var(–muted);font-size:12px;cursor:pointer;}
-.case-tab.active{border-color:var(–cyan);color:var(–cyan);}
-.case-grid{display:flex;flex-direction:column;gap:14px;}
-.case-card{border:1px solid var(–border);background:var(–panel);overflow:hidden;}
-.case-img{width:100%;height:140px;background:linear-gradient(135deg,var(–navy),var(–panel));display:flex;align-items:center;justify-content:center;font-size:38px;border-bottom:1px solid var(–border);}
-.case-body{padding:14px;}
-.case-cat{font-size:9px;letter-spacing:2px;color:var(–cyan);text-transform:uppercase;margin-bottom:5px;}
-.case-name{font-size:14px;font-weight:700;margin-bottom:5px;}
-.case-desc{font-size:12px;color:var(–muted);line-height:1.8;}
+.sbar{width:100%;padding:13px 16px;background:var(–card);border:1px solid var(–border);color:#fff;font-size:14px;outline:none;margin-bottom:16px;font-family:‘PingFang TC’,‘Microsoft JhengHei’,sans-serif;}
+.sbar::placeholder{color:var(–gray);}
+.sbar:focus{border-color:var(–cyan);}
+.ctabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.ctab{padding:8px 18px;border:1px solid var(–border);background:none;color:var(–gray);font-size:13px;cursor:pointer;font-family:‘PingFang TC’,‘Microsoft JhengHei’,sans-serif;}
+.ctab.active{border-color:var(–cyan);color:var(–cyan);}
+.ccard{border:1px solid var(–border);background:var(–card);overflow:hidden;margin-bottom:12px;}
+.cimg{width:100%;height:130px;background:linear-gradient(135deg,#1a2a3a,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:38px;border-bottom:1px solid var(–border);}
+.cbody{padding:16px;}
+.ccat{font-size:10px;letter-spacing:2px;color:var(–cyan);text-transform:uppercase;margin-bottom:5px;}
+.cname{font-size:15px;font-weight:700;margin-bottom:6px;color:#fff;}
+.cdesc{font-size:13px;color:var(–lgray);line-height:1.8;}
 
 /* PROCESS */
-.steps{display:flex;flex-direction:column;}
-.step-item{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid var(–border);}
-.step-item:last-child{border-bottom:none;}
-.step-circle{width:50px;height:50px;border-radius:50%;border:1px solid var(–cyan);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;background:var(–navy);}
-.step-n{font-size:15px;font-weight:700;color:var(–cyan);line-height:1;}
-.step-s{font-size:7px;letter-spacing:1px;color:var(–muted);text-transform:uppercase;}
-.step-title{font-size:14px;font-weight:700;margin-bottom:4px;}
-.step-desc{font-size:12px;color:var(–muted);line-height:1.8;}
+.pitem{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(–border);}
+.pitem:last-child{border-bottom:none;}
+.pcircle{width:52px;height:52px;border-radius:50%;border:2px solid var(–cyan);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;background:var(–bg);}
+.pn{font-size:16px;font-weight:700;color:var(–cyan);line-height:1;}
+.ps{font-size:8px;letter-spacing:1px;color:var(–gray);}
+.ptitle{font-size:15px;font-weight:700;margin-bottom:5px;color:#fff;}
+.pdesc{font-size:13px;color:var(–lgray);line-height:1.8;}
 
 /* TEAM */
-.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.team-card{border:1px solid var(–border);padding:18px 12px;text-align:center;background:rgba(0,212,255,0.03);}
-.team-av{width:48px;height:48px;border-radius:50%;border:1.5px solid var(–cyan);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(–cyan);margin:0 auto 10px;background:rgba(0,212,255,0.06);}
-.team-name{font-size:14px;font-weight:700;margin-bottom:3px;}
-.team-role{font-size:9px;letter-spacing:2px;color:var(–cyan);text-transform:uppercase;margin-bottom:7px;}
-.team-exp{font-size:11px;color:var(–muted);line-height:1.7;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tcard{border:1px solid var(–border);padding:20px 14px;text-align:center;background:var(–card);}
+.tav{width:52px;height:52px;border-radius:50%;border:2px solid var(–cyan);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(–cyan);margin:0 auto 12px;background:#111;}
+.tname{font-size:15px;font-weight:700;margin-bottom:4px;color:#fff;}
+.trole{font-size:10px;letter-spacing:2px;color:var(–cyan);text-transform:uppercase;margin-bottom:8px;}
+.texp{font-size:12px;color:var(–lgray);line-height:1.7;}
 
 /* ADV */
-.adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.adv-card{background:var(–navy);padding:20px 14px;text-align:center;border:1px solid var(–border);}
-.adv-icon{font-size:22px;margin-bottom:8px;}
-.adv-title{font-size:13px;font-weight:700;color:var(–cyan);margin-bottom:7px;}
-.adv-desc{font-size:11px;color:var(–muted);line-height:1.8;}
-.adv-full{grid-column:1/-1;}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.vcard{background:var(–card);padding:22px 16px;text-align:center;border:1px solid var(–border);}
+.vicon{font-size:24px;margin-bottom:10px;}
+.vtitle{font-size:14px;font-weight:700;color:var(–cyan);margin-bottom:8px;}
+.vdesc{font-size:12px;color:var(–lgray);line-height:1.8;}
+.full{grid-column:1/-1;}
 
 /* CLIENTS */
-.clients-section{background:var(–navy);}
-.client-group{margin-bottom:24px;}
-.client-group-title{font-size:10px;letter-spacing:3px;color:var(–cyan);text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(–border);}
-.client-chips{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{padding:6px 14px;border:1px solid var(–border);font-size:12px;color:var(–muted);}
+.cgroup{margin-bottom:24px;}
+.cgtitle{font-size:10px;letter-spacing:3px;color:var(–cyan);text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(–border);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:6px 16px;border:1px solid var(–border);font-size:13px;color:var(–lgray);}
 
 /* VISION */
-.vision-list{display:flex;flex-direction:column;gap:14px;}
-.vision-card{border:1px solid var(–border);padding:22px 18px;position:relative;overflow:hidden;}
-.vision-bg{position:absolute;top:-16px;right:12px;font-size:68px;font-weight:700;color:rgba(10,132,255,0.04);pointer-events:none;line-height:1;}
-.vision-period{font-size:10px;letter-spacing:3px;color:var(–gold);text-transform:uppercase;margin-bottom:7px;}
-.vision-head{font-size:15px;font-weight:700;margin-bottom:12px;}
-.vision-items{list-style:none;}
-.vision-items li{font-size:12px;color:var(–muted);line-height:1.9;padding-left:13px;position:relative;margin-bottom:3px;}
-.vision-items li::before{content:‘▸’;position:absolute;left:0;color:var(–gold);font-size:9px;top:2px;}
+.vicard{border:1px solid var(–border);padding:24px 20px;margin-bottom:12px;background:var(–card);position:relative;overflow:hidden;}
+.vibg{position:absolute;top:-10px;right:12px;font-size:72px;font-weight:700;color:rgba(0,200,255,0.04);pointer-events:none;line-height:1;}
+.viperiod{font-size:10px;letter-spacing:3px;color:var(–gold);text-transform:uppercase;margin-bottom:8px;}
+.vihead{font-size:16px;font-weight:700;margin-bottom:14px;color:#fff;}
+.vilist{list-style:none;}
+.vilist li{font-size:13px;color:var(–lgray);line-height:1.9;padding-left:14px;position:relative;margin-bottom:4px;}
+.vilist li::before{content:‘▸’;position:absolute;left:0;color:var(–gold);font-size:10px;}
 
 /* CONTACT */
-.contact-section{background:var(–navy);border-top:1px solid var(–border);}
-.contact-headline{font-size:clamp(20px,5vw,26px);font-weight:700;line-height:1.5;margin-bottom:10px;}
-.contact-sub{font-size:13px;color:var(–muted);line-height:2;margin-bottom:28px;}
-.contact-items{display:flex;flex-direction:column;gap:18px;}
-.contact-item{display:flex;gap:14px;align-items:flex-start;}
-.contact-icon{width:38px;height:38px;border:1px solid var(–cyan);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(–cyan);}
-.contact-label{font-size:9px;letter-spacing:2px;color:var(–muted);text-transform:uppercase;margin-bottom:3px;}
-.contact-val{font-size:13px;color:var(–white);line-height:1.7;}
-.contact-val a{color:var(–cyan);text-decoration:none;}
+.cthead{font-size:26px;font-weight:700;line-height:1.5;margin-bottom:10px;color:#fff;}
+.ctsub{font-size:14px;color:var(–lgray);line-height:2;margin-bottom:28px;}
+.ctitem{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px;}
+.cticon{width:40px;height:40px;border:1px solid var(–cyan);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.ctlabel{font-size:10px;letter-spacing:2px;color:var(–gray);text-transform:uppercase;margin-bottom:4px;}
+.ctval{font-size:14px;color:#fff;line-height:1.7;}
+.ctval a{color:var(–cyan);text-decoration:none;}
 
 /* FLOAT */
-.float-btns{position:fixed;right:14px;bottom:calc(var(–bar-h) + 14px);display:flex;flex-direction:column;gap:10px;z-index:150;}
-.float-btn{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.5);border:none;cursor:pointer;}
-.fb-phone{background:var(–blue);}
-.fb-line{background:#06c755;}
-.fb-chat{background:var(–panel);border:1px solid var(–border);}
+.fbts{position:fixed;right:16px;bottom:calc(var(–bar) + 16px);display:flex;flex-direction:column;gap:10px;z-index:150;}
+.fbt{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.6);border:none;cursor:pointer;}
+.fp{background:var(–blue);}
+.fl{background:#06c755;}
+.fc{background:#333;border:1px solid #444;}
 
 /* BOTTOM BAR */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;height:var(–bar-h);display:flex;}
-.bar-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:500;text-decoration:none;letter-spacing:1.5px;cursor:pointer;border:none;}
-.bar-call{background:linear-gradient(135deg,#0a84ff,#0060d0);color:#fff;}
-.bar-line{background:linear-gradient(135deg,#06c755,#049a40);color:#fff;}
+.bbar{position:fixed;bottom:0;left:0;right:0;z-index:200;height:var(–bar);display:flex;}
+.bbt{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;border:none;letter-spacing:1px;font-family:‘PingFang TC’,‘Microsoft JhengHei’,sans-serif;}
+.bc{background:linear-gradient(135deg,#0a84ff,#0060d0);color:#fff;}
+.be{background:linear-gradient(135deg,#06c755,#049a40);color:#fff;}
 
-/* FOOTER */
-footer{padding:20px;border-top:1px solid var(–border);text-align:center;font-size:10px;letter-spacing:2px;color:var(–muted);text-transform:uppercase;line-height:2;}
-
-/* DIVIDER */
-.div{height:1px;background:linear-gradient(to right,transparent,var(–border),transparent);margin:0 20px;}
+footer{padding:24px;border-top:1px solid var(–border);text-align:center;font-size:11px;letter-spacing:1px;color:var(–gray);line-height:2;}
 </style>
 
 </head>
 <body>
 
-<!-- NAV -->
-
 <nav>
-  <div class="nav-brand">
-    <span class="nav-brand-cn">明曜晶光顯科技</span>
-    <span class="nav-brand-en">MINGYAO CRYSTAL DISPLAY</span>
+  <div>
+    <div class="nb-cn">明曜晶光顯科技</div>
+    <div class="nb-en">MINGYAO CRYSTAL DISPLAY</div>
   </div>
-  <button class="hamburger" id="hmb" onclick="toggleDrawer()">
-    <span></span><span></span><span></span>
-  </button>
+  <button id="hmb"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- DRAWER -->
-
-<div class="drawer" id="drawer">
-  <ul class="drawer-menu">
-    <li class="drawer-item">
-      <button class="drawer-btn" onclick="toggleSub(this)">關於我們 <span class="icon">+</span></button>
-      <ul class="sub-menu">
-        <li><a href="#about" onclick="closeDrawer()">公司簡介</a></li>
-        <li><a href="#team" onclick="closeDrawer()">核心團隊</a></li>
+<div id="drawer">
+  <ul class="dmenu">
+    <li class="ditem">
+      <button class="dbtn toggle-sub">關於我們 <i class="ic">+</i></button>
+      <ul class="smenu">
+        <li><a href="#about" class="close-drawer">公司簡介</a></li>
+        <li><a href="#team" class="close-drawer">核心團隊</a></li>
       </ul>
     </li>
-    <li class="drawer-item">
-      <button class="drawer-btn" onclick="toggleSub(this)">業務範疇 <span class="icon">+</span></button>
-      <ul class="sub-menu">
-        <li><a href="#business" onclick="closeDrawer()">LCD 銷售與方案設計</a></li>
-        <li><a href="#business" onclick="closeDrawer()">光學膜材貿易</a></li>
+    <li class="ditem">
+      <button class="dbtn toggle-sub">業務範疇 <i class="ic">+</i></button>
+      <ul class="smenu">
+        <li><a href="#business" class="close-drawer">LCD 銷售與方案設計</a></li>
+        <li><a href="#business" class="close-drawer">光學膜材貿易</a></li>
       </ul>
     </li>
-    <li class="drawer-item">
-      <button class="drawer-btn" onclick="toggleSub(this)">應用領域 <span class="icon">+</span></button>
-      <ul class="sub-menu">
-        <li><a href="#applications" onclick="closeDrawer()">車用顯示應用</a></li>
-        <li><a href="#applications" onclick="closeDrawer()">工控顯示應用</a></li>
-        <li><a href="#applications" onclick="closeDrawer()">生物醫療應用</a></li>
+    <li class="ditem">
+      <button class="dbtn toggle-sub">應用領域 <i class="ic">+</i></button>
+      <ul class="smenu">
+        <li><a href="#applications" class="close-drawer">車用顯示應用</a></li>
+        <li><a href="#applications" class="close-drawer">工控顯示應用</a></li>
+        <li><a href="#applications" class="close-drawer">生物醫療應用</a></li>
       </ul>
     </li>
-    <li class="drawer-item">
-      <button class="drawer-btn" onclick="goTo('#technology')">技術優勢 <span class="icon" style="font-size:14px;">→</span></button>
-    </li>
-    <li class="drawer-item">
-      <button class="drawer-btn" onclick="goTo('#cases')">成功案例 <span class="icon" style="font-size:14px;">→</span></button>
-    </li>
-    <li class="drawer-item">
-      <button class="drawer-btn" onclick="goTo('#contact')">聯絡我們 <span class="icon" style="font-size:14px;">→</span></button>
-    </li>
+    <li class="ditem"><button class="dbtn goto-link" data-target="#technology">技術優勢</button></li>
+    <li class="ditem"><button class="dbtn goto-link" data-target="#cases">成功案例</button></li>
+    <li class="ditem"><button class="dbtn goto-link" data-target="#contact">聯絡我們</button></li>
   </ul>
 </div>
 
-<!-- HERO -->
-
 <section class="hero">
-  <div class="hero-orb orb1"></div>
-  <div class="hero-orb orb2"></div>
-  <div class="hero-content">
-    <div class="hero-tag">Shenzhen · Est. 2025</div>
-    <h1 class="hero-title"><span class="hl">明曜晶光顯</span><br>科技（深圳）</h1>
-    <p class="hero-sub">MINGYAO CRYSTAL DISPLAY TECHNOLOGY</p>
-    <p class="hero-desc">
-      專業 LCD 顯示方案設計<br>
-      日本前沿光學膜材獨家代理<br>
-      車用・工控・生物醫療 一站式解決方案
-    </p>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-n">5<small>+</small></div>
-        <div class="stat-l">精英成員</div>
-      </div>
-      <div>
-        <div class="stat-n">2</div>
-        <div class="stat-l">核心業務</div>
-      </div>
-      <div>
-        <div class="stat-n">30<small>+</small></div>
-        <div class="stat-l">年業界經驗</div>
-      </div>
-    </div>
-    <a href="#contact" class="hero-cta">開啟合作 →</a>
+  <div class="htag">Shenzhen · Est. 2025</div>
+  <h1 class="htitle"><span class="hl">明曜晶光顯</span><br>科技（深圳）</h1>
+  <p class="hsub">MINGYAO CRYSTAL DISPLAY TECHNOLOGY</p>
+  <p class="hdesc">專業 LCD 顯示方案設計<br>日本前沿光學膜材獨家代理<br>車用・工控・生物醫療 一站式解決方案</p>
+  <div class="hstats">
+    <div><div class="sn">5<small>+</small></div><div class="sl">精英成員</div></div>
+    <div><div class="sn">2</div><div class="sl">核心業務</div></div>
+    <div><div class="sn">30<small>+</small></div><div class="sl">年業界經驗</div></div>
   </div>
+  <a href="#contact" class="hcta">開啟合作 →</a>
 </section>
 
 <div class="div"></div>
-
-<!-- ABOUT -->
 
 <section id="about">
-  <div class="sec-tag">Company Profile</div>
-  <h2 class="sec-title">關於明曜晶</h2>
-  <p class="about-desc">明曜晶光顯科技成立於 2025 年 12 月，擁有來自友達光電、深超光電、緯鑫科技等頭部企業的精英團隊，累計超過 30 年行業實戰經驗。專注高端 LCD 顯示方案設計與日本頂級光學膜材代理銷售。</p>
-  <div class="info-cards">
-    <div class="icard"><div class="icard-label">成立時間</div><div class="icard-val">2025 年 12 月</div></div>
-    <div class="icard"><div class="icard-label">公司定位</div><div class="icard-val">技術與服務驅動的專業顯示方案合作夥伴</div></div>
-    <div class="icard"><div class="icard-label">公司地址</div><div class="icard-val">深圳市龍華區觀瀾街道橫坑工業區 A2 棟 3 樓 303</div></div>
-    <div class="icard"><div class="icard-label">統一社會信用代碼</div><div class="icard-val">91440300MAK3H66039</div></div>
-  </div>
+  <div class="stag">Company Profile</div>
+  <h2 class="stitle">關於明曜晶</h2>
+  <p class="adesc">明曜晶光顯科技成立於 2025 年 12 月，擁有來自友達光電、深超光電、緯鑫科技等頭部企業的精英團隊，累計超過 30 年行業實戰經驗。專注高端 LCD 顯示方案設計與日本頂級光學膜材代理銷售。</p>
+  <div class="icard"><div class="ilabel">成立時間</div><div class="ival">2025 年 12 月</div></div>
+  <div class="icard"><div class="ilabel">公司定位</div><div class="ival">技術與服務驅動的專業顯示方案合作夥伴</div></div>
+  <div class="icard"><div class="ilabel">公司地址</div><div class="ival">深圳市龍華區觀瀾街道橫坑工業區 A2 棟 3 樓 303</div></div>
+  <div class="icard"><div class="ilabel">統一社會信用代碼</div><div class="ival">91440300MAK3H66039</div></div>
 </section>
 
 <div class="div"></div>
-
-<!-- BUSINESS -->
 
 <section id="business">
-  <div class="sec-tag">Core Business</div>
-  <h2 class="sec-title">雙引擎業務</h2>
-  <div class="biz-cards">
-    <div class="biz-card">
-      <div class="biz-num">01</div>
-      <h3 class="biz-title">LCD 銷售與方案設計</h3>
-      <ul class="biz-list">
-        <li>工控級 LCD 顯示模組銷售</li>
-        <li>車用 LCD 顯示方案定制設計</li>
-        <li>顯示系統整合與技術支援</li>
-        <li>特殊應用場景客製化方案</li>
-      </ul>
-    </div>
-    <div class="biz-card" style="margin-top:2px;">
-      <div class="biz-num">02</div>
-      <h3 class="biz-title">光學膜材貿易</h3>
-      <ul class="biz-list">
-        <li>日本前沿光學膜材代理與銷售</li>
-        <li>專業技術諮詢與應用指導</li>
-        <li>快速響應的供應鏈服務</li>
-        <li>品質保證與售後技術支援</li>
-      </ul>
-    </div>
+  <div class="stag">Core Business</div>
+  <h2 class="stitle">雙引擎業務</h2>
+  <div class="bcard">
+    <div class="bnum">01</div>
+    <h3 class="btitle">LCD 銷售與方案設計</h3>
+    <ul class="blist"><li>工控級 LCD 顯示模組銷售</li><li>車用 LCD 顯示方案定制設計</li><li>顯示系統整合與技術支援</li><li>特殊應用場景客製化方案</li></ul>
+  </div>
+  <div class="bcard">
+    <div class="bnum">02</div>
+    <h3 class="btitle">光學膜材貿易</h3>
+    <ul class="blist"><li>日本前沿光學膜材代理與銷售</li><li>專業技術諮詢與應用指導</li><li>快速響應的供應鏈服務</li><li>品質保證與售後技術支援</li></ul>
   </div>
 </section>
 
 <div class="div"></div>
-
-<!-- APPLICATIONS -->
 
 <section id="applications">
-  <div class="sec-tag">Market Applications</div>
-  <h2 class="sec-title">應用領域</h2>
-  <div class="app-grid">
-    <div class="app-card">
-      <div class="app-icon">🚗</div>
-      <div><h3 class="app-title">車用顯示應用</h3><p class="app-desc">車載娛樂系統、儀表板、HUD 等高可靠性顯示解決方案。</p></div>
-    </div>
-    <div class="app-card">
-      <div class="app-icon">⚙️</div>
-      <div><h3 class="app-title">工控顯示應用</h3><p class="app-desc">工業控制面板、醫療設備、戶外廣告機，高穩定性寬溫操作。</p></div>
-    </div>
-    <div class="app-card">
-      <div class="app-icon">🔬</div>
-      <div><h3 class="app-title">生物醫療應用</h3><p class="app-desc">高精度、高對比度顯示，滿足醫療診斷與實驗室嚴格需求。</p></div>
-    </div>
-  </div>
+  <div class="stag">Market Applications</div>
+  <h2 class="stitle">應用領域</h2>
+  <div class="acard"><div class="aicon">🚗</div><div><h3 class="atitle">車用顯示應用</h3><p class="adesc2">車載娛樂系統、儀表板、HUD 等高可靠性顯示解決方案，通過汽車電子嚴格標準。</p></div></div>
+  <div class="acard"><div class="aicon">⚙️</div><div><h3 class="atitle">工控顯示應用</h3><p class="adesc2">工業控制面板、醫療設備、戶外廣告機，高穩定性寬溫操作顯示方案。</p></div></div>
+  <div class="acard"><div class="aicon">🔬</div><div><h3 class="atitle">生物醫療應用</h3><p class="adesc2">高精度、高對比度顯示，滿足醫療診斷與實驗室設備嚴格影像品質需求。</p></div></div>
 </section>
 
 <div class="div"></div>
-
-<!-- TECHNOLOGY -->
 
 <section id="technology">
-  <div class="sec-tag">Optical Materials</div>
-  <h2 class="sec-title">日本前沿光學膜材</h2>
-  <div class="film-list">
-    <div class="film-card">
-      <div class="film-dot">💧</div>
-      <div><div class="film-name">麗光阻水膜</div><p class="film-desc">優異防水防污性能，戶外與惡劣環境顯示首選。</p><div class="film-tags"><span class="ftag">提升耐久性</span><span class="ftag">戶外首選</span></div></div>
-    </div>
-    <div class="film-card">
-      <div class="film-dot">🔆</div>
-      <div><div class="film-name">3A/2A 防眩光膜</div><p class="film-desc">降低環境光反射，提升強光下可視性，符合車用/工控標準。</p><div class="film-tags"><span class="ftag">低反射率</span><span class="ftag">車用標準</span></div></div>
-    </div>
-    <div class="film-card">
-      <div class="film-dot">🛡️</div>
-      <div><div class="film-name">晶智防窺膜</div><p class="film-desc">精準控制視角，保護敏感資訊，適用金融與醫療場景。</p><div class="film-tags"><span class="ftag">隱私保護</span><span class="ftag">視角控制</span></div></div>
-    </div>
-    <div class="film-card">
-      <div class="film-dot">🔗</div>
-      <div><div class="film-name">巴川 OCA 光學膠</div><p class="film-desc">日本巴川化學高品質 OCA，優異透光率與長期貼合穩定性。</p><div class="film-tags"><span class="ftag">高透光率</span><span class="ftag">不黃變</span></div></div>
-    </div>
-  </div>
+  <div class="stag">Optical Materials</div>
+  <h2 class="stitle">日本前沿光學膜材</h2>
+  <div class="fcard"><div class="fdot">💧</div><div><div class="fname">麗光阻水膜</div><p class="fdesc">優異防水防污性能，戶外與惡劣環境顯示首選。</p><div class="ftags"><span class="ftag">提升耐久性</span><span class="ftag">戶外首選</span></div></div></div>
+  <div class="fcard"><div class="fdot">🔆</div><div><div class="fname">3A/2A 防眩光膜</div><p class="fdesc">降低環境光反射，提升強光下可視性，符合車用/工控標準。</p><div class="ftags"><span class="ftag">低反射率</span><span class="ftag">車用標準</span></div></div></div>
+  <div class="fcard"><div class="fdot">🛡️</div><div><div class="fname">晶智防窺膜</div><p class="fdesc">精準控制視角，保護敏感資訊，適用金融與醫療場景。</p><div class="ftags"><span class="ftag">隱私保護</span><span class="ftag">視角控制</span></div></div></div>
+  <div class="fcard"><div class="fdot">🔗</div><div><div class="fname">巴川 OCA 光學膠</div><p class="fdesc">日本巴川化學高品質 OCA，優異透光率與長期貼合穩定性。</p><div class="ftags"><span class="ftag">高透光率</span><span class="ftag">不黃變</span></div></div></div>
 </section>
 
 <div class="div"></div>
 
-<!-- CASES -->
-
-<section id="cases" class="cases-section">
-  <div class="sec-tag">Success Cases</div>
-  <h2 class="sec-title">客戶應用案例</h2>
-  <input class="search-bar" type="text" id="caseSearch" placeholder="搜尋公司名稱或類型..." oninput="filterCases()">
-  <div class="case-tabs" id="caseTabs">
-    <button class="case-tab active" onclick="filterByTag('all',this)">全部</button>
-    <button class="case-tab" onclick="filterByTag('car',this)">車用</button>
-    <button class="case-tab" onclick="filterByTag('industrial',this)">工控</button>
-    <button class="case-tab" onclick="filterByTag('medical',this)">醫療</button>
+<section id="cases">
+  <div class="stag">Success Cases</div>
+  <h2 class="stitle">客戶應用案例</h2>
+  <input class="sbar" type="text" id="caseSearch" placeholder="搜尋公司名稱或應用類型...">
+  <div class="ctabs">
+    <button class="ctab active" data-filter="all">全部</button>
+    <button class="ctab" data-filter="car">車用</button>
+    <button class="ctab" data-filter="industrial">工控</button>
+    <button class="ctab" data-filter="medical">醫療</button>
   </div>
-  <div class="case-grid" id="caseGrid">
-    <div class="case-card" data-tag="car" data-name="BOE京東方 車載顯示">
-      <div class="case-img">🚗</div>
-      <div class="case-body"><div class="case-cat">車用顯示</div><div class="case-name">BOE 京東方</div><p class="case-desc">全球領先顯示技術商，車載顯示重要合作夥伴，提供高品質 LCD 模組支持極端環境表現。</p></div>
-    </div>
-    <div class="case-card" data-tag="car" data-name="Desay德賽 車載資訊娛樂">
-      <div class="case-img">🎛️</div>
-      <div class="case-body"><div class="case-cat">車用顯示</div><div class="case-name">Desay 德賽</div><p class="case-desc">國內領先汽車電子企業，車載資訊娛樂系統專家。</p></div>
-    </div>
-    <div class="case-card" data-tag="car" data-name="台冠 車用顯示模組">
-      <div class="case-img">📱</div>
-      <div class="case-body"><div class="case-cat">車用顯示</div><div class="case-name">Taiguan 台冠</div><p class="case-desc">知名車用顯示供應商，合作開發高可靠性車載顯示模組。</p></div>
-    </div>
-    <div class="case-card" data-tag="industrial" data-name="金戰神 維準 微步 工業自動化">
-      <div class="case-img">🏭</div>
-      <div class="case-body"><div class="case-cat">工控顯示</div><div class="case-name">金戰神 / 維準 / 微步</div><p class="case-desc">工業自動化顯示設備供應商，專注生產線監控與智能製造介面。</p></div>
-    </div>
-    <div class="case-card" data-tag="industrial" data-name="合勤 光翼創新 光伏">
-      <div class="case-img">☀️</div>
-      <div class="case-body"><div class="case-cat">工控 / 光伏</div><div class="case-name">合勤 / 光翼創新</div><p class="case-desc">光伏設備製造商，採用寬溫抗干擾顯示模組，滿足戶外長壽命需求。</p></div>
-    </div>
-    <div class="case-card" data-tag="medical" data-name="思邁芯 生物醫療檢測">
-      <div class="case-img">🔬</div>
-      <div class="case-body"><div class="case-cat">生物醫療</div><div class="case-name">思邁芯 SiMaiXin</div><p class="case-desc">生物醫療檢測設備製造商，對顯示精度與數據可視化有嚴格標準。</p></div>
-    </div>
-    <div class="case-card" data-tag="medical" data-name="TPK宸鴻 醫療觸控">
-      <div class="case-img">💉</div>
-      <div class="case-body"><div class="case-cat">生物醫療</div><div class="case-name">TPK 宸鴻</div><p class="case-desc">全球知名觸控解決方案供應商，合作開發醫療觸控顯示方案。</p></div>
-    </div>
+  <div id="caseGrid">
+    <div class="ccard" data-tag="car" data-name="BOE京東方 車載顯示"><div class="cimg">🚗</div><div class="cbody"><div class="ccat">車用顯示</div><div class="cname">BOE 京東方</div><p class="cdesc">全球領先顯示技術商，車載顯示重要合作夥伴，提供高品質 LCD 模組支持極端環境表現。</p></div></div>
+    <div class="ccard" data-tag="car" data-name="Desay德賽 車載資訊娛樂"><div class="cimg">🎛️</div><div class="cbody"><div class="ccat">車用顯示</div><div class="cname">Desay 德賽</div><p class="cdesc">國內領先汽車電子企業，車載資訊娛樂系統專家。</p></div></div>
+    <div class="ccard" data-tag="car" data-name="台冠 車用顯示"><div class="cimg">📱</div><div class="cbody"><div class="ccat">車用顯示</div><div class="cname">Taiguan 台冠</div><p class="cdesc">知名車用顯示供應商，合作開發高可靠性車載顯示模組。</p></div></div>
+    <div class="ccard" data-tag="industrial" data-name="金戰神 維準 微步 工業自動化"><div class="cimg">🏭</div><div class="cbody"><div class="ccat">工控顯示</div><div class="cname">金戰神 / 維準 / 微步</div><p class="cdesc">工業自動化顯示設備供應商，專注生產線監控與智能製造介面。</p></div></div>
+    <div class="ccard" data-tag="industrial" data-name="合勤 光翼創新 光伏"><div class="cimg">☀️</div><div class="cbody"><div class="ccat">工控 / 光伏</div><div class="cname">合勤 / 光翼創新</div><p class="cdesc">光伏設備製造商，採用寬溫抗干擾顯示模組，滿足戶外長壽命需求。</p></div></div>
+    <div class="ccard" data-tag="medical" data-name="思邁芯 生物醫療"><div class="cimg">🔬</div><div class="cbody"><div class="ccat">生物醫療</div><div class="cname">思邁芯 SiMaiXin</div><p class="cdesc">生物醫療檢測設備製造商，對顯示精度與數據可視化有嚴格標準。</p></div></div>
+    <div class="ccard" data-tag="medical" data-name="TPK宸鴻 醫療觸控"><div class="cimg">💉</div><div class="cbody"><div class="ccat">生物醫療</div><div class="cname">TPK 宸鴻</div><p class="cdesc">全球知名觸控解決方案供應商，合作開發醫療觸控顯示方案。</p></div></div>
   </div>
 </section>
 
 <div class="div"></div>
-
-<!-- PROCESS -->
 
 <section>
-  <div class="sec-tag">Service Flow</div>
-  <h2 class="sec-title">服務流程</h2>
-  <div class="steps">
-    <div class="step-item"><div class="step-circle"><span class="step-n">01</span><span class="step-s">STEP</span></div><div><div class="step-title">需求溝通</div><p class="step-desc">深入了解應用場景，確定關鍵技術指標</p></div></div>
-    <div class="step-item"><div class="step-circle"><span class="step-n">02</span><span class="step-s">STEP</span></div><div><div class="step-title">方案設計</div><p class="step-desc">推薦合適 LCD 模組，選配最佳光學膜材</p></div></div>
-    <div class="step-item"><div class="step-circle"><span class="step-n">03</span><span class="step-s">STEP</span></div><div><div class="step-title">樣品驗證</div><p class="step-desc">快速提供測試樣品，協助性能驗證</p></div></div>
-    <div class="step-item"><div class="step-circle"><span class="step-n">04</span><span class="step-s">STEP</span></div><div><div class="step-title">批量供應</div><p class="step-desc">穩定供貨能力，嚴格品質管控</p></div></div>
-    <div class="step-item"><div class="step-circle"><span class="step-n">05</span><span class="step-s">STEP</span></div><div><div class="step-title">售後支持</div><p class="step-desc">持續技術諮詢，建立長期夥伴關係</p></div></div>
-  </div>
+  <div class="stag">Service Flow</div>
+  <h2 class="stitle">服務流程</h2>
+  <div class="pitem"><div class="pcircle"><span class="pn">01</span><span class="ps">STEP</span></div><div><div class="ptitle">需求溝通</div><p class="pdesc">深入了解應用場景，確定關鍵技術指標</p></div></div>
+  <div class="pitem"><div class="pcircle"><span class="pn">02</span><span class="ps">STEP</span></div><div><div class="ptitle">方案設計</div><p class="pdesc">推薦合適 LCD 模組，選配最佳光學膜材</p></div></div>
+  <div class="pitem"><div class="pcircle"><span class="pn">03</span><span class="ps">STEP</span></div><div><div class="ptitle">樣品驗證</div><p class="pdesc">快速提供測試樣品，協助性能驗證</p></div></div>
+  <div class="pitem"><div class="pcircle"><span class="pn">04</span><span class="ps">STEP</span></div><div><div class="ptitle">批量供應</div><p class="pdesc">穩定供貨能力，嚴格品質管控</p></div></div>
+  <div class="pitem"><div class="pcircle"><span class="pn">05</span><span class="ps">STEP</span></div><div><div class="ptitle">售後支持</div><p class="pdesc">持續技術諮詢，建立長期夥伴關係</p></div></div>
 </section>
 
 <div class="div"></div>
-
-<!-- TEAM -->
 
 <section id="team">
-  <div class="sec-tag">Our Team</div>
-  <h2 class="sec-title">核心精英團隊</h2>
-  <div class="team-grid">
-    <div class="team-card"><div class="team-av">梁</div><div class="team-name">梁瑞明</div><div class="team-role">CEO</div><div class="team-exp">深超光電 18年<br>友達光電 6年</div></div>
-    <div class="team-card"><div class="team-av">陳</div><div class="team-name">陳淳浩</div><div class="team-role">CTO</div><div class="team-exp">緯鑫科技 15年<br>東捷科技 7年</div></div>
-    <div class="team-card"><div class="team-av">葉</div><div class="team-name">葉志強</div><div class="team-role">工程經理</div><div class="team-exp">緯鑫機械 6年<br>業成光電 3年</div></div>
-    <div class="team-card"><div class="team-av">胡</div><div class="team-name">胡泳嵐</div><div class="team-role">採購經理</div><div class="team-exp">緯鑫機械 3年<br>廣東快可力 3年</div></div>
-    <div class="team-card adv-full"><div class="team-av">吳</div><div class="team-name">吳強</div><div class="team-role">設計總監</div><div class="team-exp">緯鑫機械 3年</div></div>
+  <div class="stag">Our Team</div>
+  <h2 class="stitle">核心精英團隊</h2>
+  <div class="tgrid">
+    <div class="tcard"><div class="tav">梁</div><div class="tname">梁瑞明</div><div class="trole">CEO</div><div class="texp">深超光電 18年<br>友達光電 6年</div></div>
+    <div class="tcard"><div class="tav">陳</div><div class="tname">陳淳浩</div><div class="trole">CTO</div><div class="texp">緯鑫科技 15年<br>東捷科技 7年</div></div>
+    <div class="tcard"><div class="tav">葉</div><div class="tname">葉志強</div><div class="trole">工程經理</div><div class="texp">緯鑫機械 6年<br>業成光電 3年</div></div>
+    <div class="tcard"><div class="tav">胡</div><div class="tname">胡泳嵐</div><div class="trole">採購經理</div><div class="texp">緯鑫機械 3年<br>廣東快可力 3年</div></div>
+    <div class="tcard full" style="max-width:200px;margin:0 auto;width:100%;"><div class="tav">吳</div><div class="tname">吳強</div><div class="trole">設計總監</div><div class="texp">緯鑫機械 3年</div></div>
   </div>
 </section>
 
 <div class="div"></div>
-
-<!-- ADV -->
 
 <section>
-  <div class="sec-tag">Why Us</div>
-  <h2 class="sec-title">競爭優勢</h2>
-  <div class="adv-grid">
-    <div class="adv-card"><div class="adv-icon">🎯</div><div class="adv-title">專業技術</div><div class="adv-desc">LCD 與光學膜材深度行業經驗</div></div>
-    <div class="adv-card"><div class="adv-icon">🇯🇵</div><div class="adv-title">日本品質</div><div class="adv-desc">獨家代理日本頂級光學膜材</div></div>
-    <div class="adv-card"><div class="adv-icon">⚡</div><div class="adv-title">快速響應</div><div class="adv-desc">精簡團隊，決策快速高效</div></div>
-    <div class="adv-card"><div class="adv-icon">🔗</div><div class="adv-title">穩定供應</div><div class="adv-desc">與日本供應商穩定合作關係</div></div>
-    <div class="adv-card adv-full"><div class="adv-icon">🤝</div><div class="adv-title">全程支持</div><div class="adv-desc">從需求分析到售後，全程技術支援，建立長期互信夥伴關係</div></div>
+  <div class="stag">Why Us</div>
+  <h2 class="stitle">競爭優勢</h2>
+  <div class="vgrid">
+    <div class="vcard"><div class="vicon">🎯</div><div class="vtitle">專業技術</div><div class="vdesc">LCD 與光學膜材深度行業經驗</div></div>
+    <div class="vcard"><div class="vicon">🇯🇵</div><div class="vtitle">日本品質</div><div class="vdesc">獨家代理日本頂級光學膜材</div></div>
+    <div class="vcard"><div class="vicon">⚡</div><div class="vtitle">快速響應</div><div class="vdesc">精簡團隊，決策快速高效</div></div>
+    <div class="vcard"><div class="vicon">🔗</div><div class="vtitle">穩定供應</div><div class="vdesc">與日本供應商穩定合作</div></div>
+    <div class="vcard full"><div class="vicon">🤝</div><div class="vtitle">全程支持</div><div class="vdesc">從需求分析到售後全程技術支援，建立長期互信夥伴關係</div></div>
   </div>
 </section>
 
 <div class="div"></div>
-
-<!-- CLIENTS -->
-
-<section class="clients-section">
-  <div class="sec-tag">Partners</div>
-  <h2 class="sec-title">資源夥伴</h2>
-  <div class="client-group"><div class="client-group-title">面板廠</div><div class="client-chips"><span class="chip">BOE</span><span class="chip">CTC</span><span class="chip">HSD</span><span class="chip">HKC</span></div></div>
-  <div class="client-group"><div class="client-group-title">膜材廠（日本）</div><div class="client-chips"><span class="chip">麗光</span><span class="chip">巴川</span><span class="chip">寶萊</span><span class="chip">DNP</span></div></div>
-  <div class="client-group"><div class="client-group-title">膜材廠（中國）</div><div class="client-chips"><span class="chip">晶智</span><span class="chip">中國富士</span></div></div>
-  <div class="client-group"><div class="client-group-title">模組廠</div><div class="client-chips"><span class="chip">騰洋光電</span><span class="chip">百視佳</span><span class="chip">金宏光電</span><span class="chip">聯創</span><span class="chip">創憶達</span><span class="chip">台冠</span><span class="chip">菱光旺</span></div></div>
-</section>
-
-<div class="div"></div>
-
-<!-- VISION -->
 
 <section>
-  <div class="sec-tag">Roadmap</div>
-  <h2 class="sec-title">發展願景</h2>
-  <div class="vision-list">
-    <div class="vision-card"><div class="vision-bg">26</div><div class="vision-period">2026 – 2027</div><h3 class="vision-head">短期目標：深化合作</h3><ul class="vision-items"><li>深化與現有客戶的合作關係</li><li>擴大車用與工控顯示市場份額</li><li>引進更多日本前沿光學材料</li></ul></div>
-    <div class="vision-card"><div class="vision-bg">28</div><div class="vision-period">2028 – 2030</div><h3 class="vision-head">中期目標：拓展領域</h3><ul class="vision-items"><li>拓展智能家居與商業顯示</li><li>建立區域服務網絡</li><li>發展自有品牌產品線</li></ul></div>
-    <div class="vision-card"><div class="vision-bg">∞</div><div class="vision-period">Long Term</div><h3 class="vision-head">長期願景：行業領先</h3><ul class="vision-items"><li>成為顯示技術領域值得信賴的夥伴</li><li>為客戶持續創造價值</li><li>推動顯示技術創新應用</li></ul></div>
-  </div>
+  <div class="stag">Partners</div>
+  <h2 class="stitle">資源夥伴</h2>
+  <div class="cgroup"><div class="cgtitle">面板廠</div><div class="chips"><span class="chip">BOE</span><span class="chip">CTC</span><span class="chip">HSD</span><span class="chip">HKC</span></div></div>
+  <div class="cgroup"><div class="cgtitle">膜材廠（日本）</div><div class="chips"><span class="chip">麗光</span><span class="chip">巴川</span><span class="chip">寶萊</span><span class="chip">DNP</span></div></div>
+  <div class="cgroup"><div class="cgtitle">膜材廠（中國）</div><div class="chips"><span class="chip">晶智</span><span class="chip">中國富士</span></div></div>
+  <div class="cgroup"><div class="cgtitle">模組廠</div><div class="chips"><span class="chip">騰洋光電</span><span class="chip">百視佳</span><span class="chip">金宏光電</span><span class="chip">聯創</span><span class="chip">創憶達</span><span class="chip">台冠</span><span class="chip">菱光旺</span></div></div>
 </section>
 
 <div class="div"></div>
 
-<!-- CONTACT -->
-
-<section id="contact" class="contact-section">
-  <div class="sec-tag">Contact Us</div>
-  <h2 class="contact-headline">歡迎洽詢<br>顯示方案需求</h2>
-  <p class="contact-sub">讓我們共同探討如何提升您的產品競爭力</p>
-  <div class="contact-items">
-    <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-label">Address</div><div class="contact-val">深圳市龍華區觀瀾街道<br>橫坑工業區 A2 棟 3 樓 303</div></div></div>
-    <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-label">Phone</div><div class="contact-val"><a href="tel:+8613410725230">+86 134 1072 5230</a></div></div></div>
-    <div class="contact-item"><div class="contact-icon">✉️</div><div><div class="contact-label">Email</div><div class="contact-val"><a href="mailto:jmliang520@gmail.com">jmliang520@gmail.com</a></div></div></div>
-  </div>
+<section>
+  <div class="stag">Roadmap</div>
+  <h2 class="stitle">發展願景</h2>
+  <div class="vicard"><div class="vibg">26</div><div class="viperiod">2026 – 2027</div><h3 class="vihead">短期目標：深化合作</h3><ul class="vilist"><li>深化與現有客戶的合作關係</li><li>擴大車用與工控顯示市場份額</li><li>引進更多日本前沿光學材料</li></ul></div>
+  <div class="vicard"><div class="vibg">28</div><div class="viperiod">2028 – 2030</div><h3 class="vihead">中期目標：拓展領域</h3><ul class="vilist"><li>拓展智能家居與商業顯示</li><li>建立區域服務網絡</li><li>發展自有品牌產品線</li></ul></div>
+  <div class="vicard"><div class="vibg">∞</div><div class="viperiod">Long Term</div><h3 class="vihead">長期願景：行業領先</h3><ul class="vilist"><li>成為顯示技術領域值得信賴的夥伴</li><li>為客戶持續創造價值</li><li>推動顯示技術創新應用</li></ul></div>
 </section>
 
-<footer>© 2026 明曜晶光顯科技（深圳）有限公司 · 91440300MAK3H66039</footer>
+<div class="div"></div>
 
-<!-- FLOAT -->
+<section id="contact">
+  <div class="stag">Contact Us</div>
+  <h2 class="cthead">歡迎洽詢<br>顯示方案需求</h2>
+  <p class="ctsub">讓我們共同探討如何提升您的產品競爭力</p>
+  <div class="ctitem"><div class="cticon">📍</div><div><div class="ctlabel">Address</div><div class="ctval">深圳市龍華區觀瀾街道<br>橫坑工業區 A2 棟 3 樓 303</div></div></div>
+  <div class="ctitem"><div class="cticon">📞</div><div><div class="ctlabel">Phone</div><div class="ctval"><a href="tel:+8613410725230">+86 134 1072 5230</a></div></div></div>
+  <div class="ctitem"><div class="cticon">✉️</div><div><div class="ctlabel">Email</div><div class="ctval"><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#109;&#108;&#105;&#97;&#110;&#103;&#53;&#50;&#48;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">jmliang520&#64;gmail.com</a></div></div></div>
+</section>
 
-<div class="float-btns">
-  <a class="float-btn fb-phone" href="tel:+8613410725230">📞</a>
-  <a class="float-btn fb-line" href="https://line.me" target="_blank">💬</a>
-  <button class="float-btn fb-chat" onclick="alert('歡迎詢問 LCD 方案與膜材需求！\n電話：+86 134 1072 5230\nEmail：jmliang520@gmail.com')">🗨️</button>
+<footer>&#169; 2026 明曜晶光顯科技（深圳）有限公司<br>91440300MAK3H66039</footer>
+
+<div class="fbts">
+  <a class="fbt fp" href="tel:+8613410725230">📞</a>
+  <a class="fbt fl" href="https://line.me" target="_blank">💬</a>
+  <button class="fbt fc" id="chatBtn">🗨️</button>
 </div>
 
-<!-- BOTTOM BAR -->
-
-<div class="bottom-bar">
-  <a class="bar-btn bar-call" href="tel:+8613410725230">📞 立即來電</a>
-  <a class="bar-btn bar-line" href="mailto:jmliang520@gmail.com">✉️ 發送詢價</a>
+<div class="bbar">
+  <a class="bbt bc" href="tel:+8613410725230">📞 立即來電</a>
+  <a class="bbt be" href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#109;&#108;&#105;&#97;&#110;&#103;&#53;&#50;&#48;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">✉️ 發送詢價</a>
 </div>
 
 <script>
-function toggleDrawer(){
-  var d=document.getElementById('drawer');
-  var h=document.getElementById('hmb');
-  var open=d.classList.toggle('open');
-  h.classList.toggle('open',open);
-  document.body.style.overflow=open?'hidden':'';
-}
-function closeDrawer(){
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('hmb').classList.remove('open');
-  document.body.style.overflow='';
-}
-function goTo(id){
-  closeDrawer();
-  setTimeout(function(){
-    var el=document.querySelector(id);
-    if(el)el.scrollIntoView({behavior:'smooth'});
-  },300);
-}
-function toggleSub(btn){
-  var sub=btn.nextElementSibling;
-  var open=sub.classList.toggle('open');
-  btn.classList.toggle('active',open);
-}
-var activeTag='all';
-function filterCases(){
-  var q=document.getElementById('caseSearch').value.toLowerCase();
-  document.querySelectorAll('.case-card').forEach(function(c){
-    var name=c.dataset.name.toLowerCase();
-    var tag=c.dataset.tag;
-    var mq=!q||name.includes(q);
-    var mt=activeTag==='all'||tag===activeTag;
-    c.style.display=(mq&&mt)?'':'none';
+(function(){
+  var activeFilter = 'all';
+
+  // Hamburger
+  document.getElementById('hmb').addEventListener('click', function(){
+    var drawer = document.getElementById('drawer');
+    var isOpen = drawer.classList.toggle('open');
+    this.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
-}
-function filterByTag(tag,btn){
-  activeTag=tag;
-  document.querySelectorAll('.case-tab').forEach(function(t){t.classList.remove('active');});
-  btn.classList.add('active');
-  filterCases();
-}
+
+  // Close drawer links
+  document.querySelectorAll('.close-drawer').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('hmb').classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Goto links in drawer
+  document.querySelectorAll('.goto-link').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = this.getAttribute('data-target');
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('hmb').classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(function(){
+        var el = document.querySelector(target);
+        if(el) el.scrollIntoView({behavior:'smooth'});
+      }, 300);
+    });
+  });
+
+  // Sub menu toggle
+  document.querySelectorAll('.toggle-sub').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sub = this.nextElementSibling;
+      var isOpen = sub.classList.toggle('open');
+      this.classList.toggle('open', isOpen);
+    });
+  });
+
+  // Case filter tabs
+  document.querySelectorAll('.ctab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      activeFilter = this.getAttribute('data-filter');
+      document.querySelectorAll('.ctab').forEach(function(t){ t.classList.remove('active'); });
+      this.classList.add('active');
+      runFilter();
+    });
+  });
+
+  // Case search
+  document.getElementById('caseSearch').addEventListener('input', runFilter);
+
+  function runFilter(){
+    var q = document.getElementById('caseSearch').value.toLowerCase();
+    document.querySelectorAll('.ccard').forEach(function(c){
+      var name = (c.getAttribute('data-name')||'').toLowerCase();
+      var tag = c.getAttribute('data-tag')||'';
+      var mq = !q || name.indexOf(q) !== -1;
+      var mt = activeFilter === 'all' || tag === activeFilter;
+      c.style.display = (mq && mt) ? '' : 'none';
+    });
+  }
+
+  // Chat button
+  document.getElementById('chatBtn').addEventListener('click', function(){
+    alert('歡迎詢問！\n\n📞 +86 134 1072 5230\n✉️ jmliang520@gmail.com');
+  });
+})();
 </script>
 
 </body>
