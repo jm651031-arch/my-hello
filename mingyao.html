@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
+  /* Fallback fonts if Google Fonts fail to load */
+  body { font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif !important; }
+  .nav-brand-cn, .hero-title, .sec-title, .biz-title, .app-title, .film-name, .step-title, .team-name, .adv-title, .vision-head, .contact-headline { font-family: 'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif !important; }
+  .hero-tag, .hero-sub, .sec-tag, .biz-num, .stat-n, .stat-l, .step-n, .step-s, .team-role, .ftag, .case-cat, .client-group-title, .vision-period, .contact-label, .nav-brand-en, footer { font-family: 'Barlow Condensed', 'Arial Narrow', 'PingFang TC', sans-serif !important; }
+</style>
+<style>
 :root {
   --bg: #060e1c;
   --navy: #091525;
@@ -43,11 +49,11 @@ body::before{
 
 /* ── NAV ── */
 nav{
-position:fixed;top:0;left:0;right:0;z-index:200;
+position:fixed;top:0;left:0;right:0;z-index:500;
 height:var(–nav-h);
 display:flex;align-items:center;justify-content:space-between;
 padding:0 18px;
-background:rgba(6,14,28,0.96);
+background:rgba(6,14,28,0.99);
 backdrop-filter:blur(12px);
 border-bottom:1px solid var(–border);
 }
@@ -1037,7 +1043,7 @@ transition:all .3s;
       <div class="contact-icon">✉️</div>
       <div>
         <div class="contact-label">Email</div>
-        <div class="contact-val"><a href="mailto:jmliang520@gmail.com">jmliang520@gmail.com</a></div>
+        <div class="contact-val"><a href="/cdn-cgi/l/email-protection#e88285848189868fdddad8a88f85898184c68b8785"><span class="__cf_email__" data-cfemail="2f454243464e41481a1d1f6f48424e4643014c4042">[email&#160;protected]</span></a></div>
       </div>
     </div>
   </div>
@@ -1061,79 +1067,67 @@ transition:all .3s;
 
 <div class="bottom-bar">
   <a class="bar-btn bar-call" href="tel:+8613410725230">📞 立即來電</a>
-  <a class="bar-btn bar-line" href="mailto:jmliang520@gmail.com">✉️ 發送詢價</a>
+  <a class="bar-btn bar-line" href="/cdn-cgi/l/email-protection#791314151018171e4c4b49391e14181015571a1614">✉️ 發送詢價</a>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
 // Hamburger + Drawer
-const hmb = document.getElementById('hmb');
-const drawer = document.getElementById('drawer');
-hmb.addEventListener('click', () => {
-  const open = drawer.classList.toggle('open');
-  hmb.classList.toggle('open', open);
-  document.body.style.overflow = open ? 'hidden' : '';
+const hmb = document.getElementById(‘hmb’);
+const drawer = document.getElementById(‘drawer’);
+hmb.addEventListener(‘click’, () => {
+const open = drawer.classList.toggle(‘open’);
+hmb.classList.toggle(‘open’, open);
+document.body.style.overflow = open ? ‘hidden’ : ‘’;
 });
 function closeDrawer() {
-  drawer.classList.remove('open');
-  hmb.classList.remove('open');
-  document.body.style.overflow = '';
+drawer.classList.remove(‘open’);
+hmb.classList.remove(‘open’);
+document.body.style.overflow = ‘’;
 }
 function goTo(id) {
-  closeDrawer();
-  setTimeout(() => document.querySelector(id)?.scrollIntoView({behavior:'smooth'}), 300);
+closeDrawer();
+setTimeout(() => document.querySelector(id)?.scrollIntoView({behavior:‘smooth’}), 300);
 }
 
 // Sub menu toggle
 function toggleSub(btn) {
-  const sub = btn.nextElementSibling;
-  const isOpen = sub.classList.toggle('open');
-  btn.classList.toggle('active', isOpen);
+const sub = btn.nextElementSibling;
+const isOpen = sub.classList.toggle(‘open’);
+btn.classList.toggle(‘active’, isOpen);
 }
 
 // Scroll reveal
 const rv = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('vis'), i * 60);
-      rv.unobserve(e.target);
-    }
-  });
+entries.forEach((e, i) => {
+if (e.isIntersecting) {
+setTimeout(() => e.target.classList.add(‘vis’), i * 60);
+rv.unobserve(e.target);
+}
+});
 }, {threshold: 0.1});
-document.querySelectorAll('.rv').forEach(el => rv.observe(el));
+document.querySelectorAll(’.rv’).forEach(el => rv.observe(el));
 
 // Case search + filter
-let activeTag = 'all';
+let activeTag = ‘all’;
 function filterCases() {
-  const q = document.getElementById('caseSearch').value.toLowerCase();
-  document.querySelectorAll('.case-card').forEach(card => {
-    const name = card.dataset.name.toLowerCase();
-    const tag = card.dataset.tag;
-    const matchQ = !q || name.includes(q);
-    const matchT = activeTag === 'all' || tag === activeTag;
-    card.style.display = (matchQ && matchT) ? '' : 'none';
-  });
+const q = document.getElementById(‘caseSearch’).value.toLowerCase();
+document.querySelectorAll(’.case-card’).forEach(card => {
+const name = card.dataset.name.toLowerCase();
+const tag = card.dataset.tag;
+const matchQ = !q || name.includes(q);
+const matchT = activeTag === ‘all’ || tag === activeTag;
+card.style.display = (matchQ && matchT) ? ‘’ : ‘none’;
+});
 }
 function filterByTag(tag, btn) {
-  activeTag = tag;
-  document.querySelectorAll('.case-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  filterCases();
+activeTag = tag;
+document.querySelectorAll(’.case-tab’).forEach(t => t.classList.remove(‘active’));
+btn.classList.add(‘active’);
+filterCases();
 }
 
 // Chat tooltip
 function toggleChat() {
-  const tip = document.getElementById('chatTip');
-  tip.classList.toggle('show');
-  if (tip.classList.contains('show')) {
-    setTimeout(() => tip.classList.remove('show'), 3000);
-  }
-}
-
-// Scroll to top on orb click
-document.querySelector('.orb1').addEventListener('click', () => {
-  window.scrollTo({top:0, behavior:'smooth'});
-});
-</script>
-
-</body>
-</html>
+const tip = document.getElementById(‘chatTip’);
+tip.classList.toggle
