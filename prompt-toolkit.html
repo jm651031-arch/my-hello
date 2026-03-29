@@ -10,19 +10,13 @@
   :root{--ink:#1a1208;--paper:#f5f0e8;--gold:#c9a84c;--gold-light:#e8d5a0;--rust:#8b3a2a;--sage:#4a6741;--blue-deep:#1e3a5f;--cream:#faf7f0;--shadow:rgba(26,18,8,0.15)}
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--paper);color:var(--ink);font-family:"Noto Serif TC",serif;min-height:100vh}
-  .section-banner{padding:36px 24px 28px;border-bottom:1px solid var(--gold-light);position:relative;text-align:center}
-  .section-banner::before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
-  .banner-tm::before{background:linear-gradient(90deg,var(--rust),var(--gold),var(--sage),var(--blue-deep))}
-  .banner-biz::before{background:linear-gradient(90deg,#1e3a5f,#2d6a9f,#4a9eff,#1e3a5f)}
-  .banner-news::before{background:linear-gradient(90deg,#0a2a4a,#1a5f8a,#e8c84a,#0a2a4a)}
-  .banner-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px}
-  .banner-tm .banner-label{color:var(--gold)}
-  .banner-biz .banner-label{color:#4a9eff}
-  .banner-news .banner-label{color:#e8c84a}
-  .banner-title{font-family:"Playfair Display",serif;font-size:clamp(20px,3.5vw,32px);line-height:1.2;margin-bottom:6px}
-  .banner-sub{font-size:13px;color:#6b5a3a}
-  .banner-news{background:#0a1a2e;color:#e0eeff}
-  .banner-news .banner-sub{color:#8ab0cc}
+  .section-banner{padding:40px 24px 32px;border-bottom:1px solid var(--gold-light);position:relative;text-align:center}
+  .banner-unified{background:var(--ink)}
+  .banner-unified::before{display:none}
+  .banner-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;color:var(--gold-light)}
+  .banner-title{font-family:"Playfair Display",serif;font-size:clamp(24px,4vw,38px);line-height:1.2;margin-bottom:8px;color:var(--gold)}
+  .banner-sub{font-size:13px;color:#8b7355}
+  .banner-unified .banner-sub{color:#8a8070}
   .filter-wrap{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:1px solid var(--gold-light);padding:8px 12px}
   .categories{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
   .cat-btn{padding:7px 4px;border:1px solid var(--gold-light);background:transparent;cursor:pointer;font-family:"Noto Serif TC",serif;font-size:11px;color:#6b5a3a;transition:all .2s;white-space:nowrap;text-align:center;border-radius:6px}
@@ -80,26 +74,18 @@
   .news-modal .modal-copy-btn{background:#1a5f8a;color:#e0eeff}
   .modal-close-btn{padding:12px 20px;background:transparent;color:#6b5a3a;border:1px solid var(--gold-light);border-radius:6px;font-size:14px;cursor:pointer;font-family:"Noto Serif TC",serif}
   .news-modal .modal-close-btn{color:#6a90b0;border-color:#1a3a5f}
+  .banner-credit{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:3px;color:#5a5040;margin-top:10px;text-transform:uppercase}
+  .theme-badge{position:fixed;bottom:14px;left:14px;z-index:999;background:rgba(0,0,0,0.5);color:#fff;font-family:"DM Mono",monospace;font-size:10px;padding:4px 12px;border-radius:20px;backdrop-filter:blur(6px);letter-spacing:1px;pointer-events:none;transition:opacity 0.5s}
   #toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--gold);padding:10px 20px;border-radius:6px;font-size:13px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999}
   #toast.show{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
-<div class="section-banner banner-tm">
-  <div class="banner-label">Toastmasters · 個人成長</div>
-  <div class="banner-title">&#127908; 健言社 AI 提示詞工具箱</div>
-  <div class="banner-sub">個人探索 · 演講準備 · 跨界思辨 · 點選即可複製</div>
-  <div class="banner-sub" style="margin-top:6px;font-size:11px">中華民國健言社 第37屆 · 3/22 AI網路營 · 竹北健言社 整理分享</div>
-</div>
-<div class="section-banner banner-biz">
-  <div class="banner-label">Business Strategy · AI Tools</div>
-  <div class="banner-title">&#128202; 商業策略 AI 工具組</div>
-  <div class="banner-sub">市場分析 · 競品研究 · 策略規劃 · 點選即可複製</div>
-</div>
-<div class="section-banner banner-news">
-  <div class="banner-label">AI Intelligence · Daily Briefing</div>
-  <div class="banner-title">&#128240; AI 情報日報工具</div>
-  <div class="banner-sub">每日搜尋整理 · 寄送 Gmail · 趨勢追蹤</div>
+<div class="section-banner banner-unified"><span id="bannerBar" style="position:absolute;top:0;left:0;right:0;height:5px;display:block"></span>
+  <div class="banner-label">Prompts · Strategy · Intelligence</div>
+  <div class="banner-title">&#129504; AI 提示詞工具箱</div>
+  <div class="banner-sub">個人成長 · 演講準備 · 商業策略 · AI 情報 · 點選即可複製</div>
+  <div class="banner-credit">Made by JM</div>
 </div>
 <div class="filter-wrap">
   <div class="categories">
@@ -300,6 +286,110 @@ function showToast(){const t=document.getElementById(“toast”);t.classList.ad
 function filterCat(cat,btn){document.querySelectorAll(”.cat-btn”).forEach(b=>b.classList.remove(“active”));btn.classList.add(“active”);document.querySelectorAll(”.card”).forEach(card=>{card.classList.toggle(“hidden”,cat!==“all”&&card.dataset.cat!==cat)})}
 function filterCards(query){const q=query.toLowerCase();document.querySelectorAll(”.card”).forEach(card=>{const id=parseInt(card.dataset.id);const p=prompts[id];const text=(p.title+p.text+p.catLabel).toLowerCase();card.classList.toggle(“hidden”,q.length>0&&!text.includes(q))})}
 document.addEventListener(“keydown”,e=>{if(e.key===“Escape”)closeModal()});
+</script>
+
+<div class="theme-badge" id="themeBadge"></div>
+<script>
+const THEMES = [
+  // 1. 奶油古典
+  {name:"奶油古典",bg:"#faf6ef",surface:"white",ink:"#1a1208",gold:"#c9a84c",accent:"#8b3a2a",bar:"linear-gradient(90deg,#8b3a2a,#c9a84c,#4a6741,#1e3a5f)"},
+  // 2. 深夜藍調
+  {name:"深夜藍調",bg:"#060d1a",surface:"#0d1829",ink:"#e0eeff",gold:"#4a9eff",accent:"#7ecbff",bar:"linear-gradient(90deg,#0a2a4a,#1a5f8a,#4a9eff,#7ecbff)"},
+  // 3. 翡翠商務
+  {name:"翡翠商務",bg:"#f0f7f4",surface:"white",ink:"#0d2b1e",gold:"#1a8c5a",accent:"#0f6644",bar:"linear-gradient(90deg,#0f6644,#1a8c5a,#2db87a,#0f6644)"},
+  // 4. 玫瑰金
+  {name:"玫瑰金",bg:"#fff8f6",surface:"white",ink:"#2a1510",gold:"#c97050",accent:"#e8a080",bar:"linear-gradient(90deg,#8b3020,#c97050,#e8a080,#c97050)"},
+  // 5. 極簡白
+  {name:"極簡白",bg:"#ffffff",surface:"#f8f8f8",ink:"#111111",gold:"#333333",accent:"#666666",bar:"linear-gradient(90deg,#111,#444,#111,#444)"},
+  // 6. 碳黑極致
+  {name:"碳黑極致",bg:"#0a0a0a",surface:"#141414",ink:"#f0f0f0",gold:"#e8e8e8",accent:"#aaaaaa",bar:"linear-gradient(90deg,#222,#555,#222,#888)"},
+  // 7. 紫羅蘭
+  {name:"紫羅蘭",bg:"#f8f4ff",surface:"white",ink:"#1a0a2e",gold:"#7c3aed",accent:"#a855f7",bar:"linear-gradient(90deg,#4c1d95,#7c3aed,#a855f7,#4c1d95)"},
+  // 8. 午夜紫
+  {name:"午夜紫",bg:"#0d0618",surface:"#160926",ink:"#ede0ff",gold:"#c084fc",accent:"#e879f9",bar:"linear-gradient(90deg,#4c1d95,#7c3aed,#c084fc,#e879f9)"},
+  // 9. 珊瑚活力
+  {name:"珊瑚活力",bg:"#fff5f0",surface:"white",ink:"#1a0a00",gold:"#f97316",accent:"#fb923c",bar:"linear-gradient(90deg,#c2410c,#f97316,#fb923c,#fbbf24)"},
+  // 10. 海洋青
+  {name:"海洋青",bg:"#f0fafa",surface:"white",ink:"#062b2b",gold:"#0891b2",accent:"#06b6d4",bar:"linear-gradient(90deg,#164e63,#0891b2,#06b6d4,#22d3ee)"},
+  // 11. 森林綠
+  {name:"森林綠",bg:"#f1f8f1",surface:"white",ink:"#0a1f0a",gold:"#16a34a",accent:"#22c55e",bar:"linear-gradient(90deg,#14532d,#16a34a,#22c55e,#86efac)"},
+  // 12. 夕陽橘
+  {name:"夕陽橘",bg:"#fff9f0",surface:"white",ink:"#1c0a00",gold:"#ea580c",accent:"#f59e0b",bar:"linear-gradient(90deg,#9a3412,#ea580c,#f59e0b,#fcd34d)"},
+  // 13. 薰衣草
+  {name:"薰衣草",bg:"#faf5ff",surface:"white",ink:"#1e1030",gold:"#8b5cf6",accent:"#a78bfa",bar:"linear-gradient(90deg,#5b21b6,#8b5cf6,#a78bfa,#ddd6fe)"},
+  // 14. 霓虹未來
+  {name:"霓虹未來",bg:"#050510",surface:"#0a0a20",ink:"#f0f0ff",gold:"#00ffcc",accent:"#ff00ff",bar:"linear-gradient(90deg,#00ffcc,#0080ff,#ff00ff,#00ffcc)"},
+  // 15. 麥田金
+  {name:"麥田金",bg:"#fffbeb",surface:"white",ink:"#1c1000",gold:"#d97706",accent:"#f59e0b",bar:"linear-gradient(90deg,#92400e,#d97706,#f59e0b,#fde68a)"},
+  // 16. 丹寧藍
+  {name:"丹寧藍",bg:"#f0f4f8",surface:"white",ink:"#0f172a",gold:"#3b82f6",accent:"#60a5fa",bar:"linear-gradient(90deg,#1e3a8a,#3b82f6,#60a5fa,#1e3a8a)"},
+  // 17. 聖誕節慶
+  {name:"聖誕節慶",bg:"#fff5f5",surface:"white",ink:"#1a0000",gold:"#dc2626",accent:"#16a34a",bar:"linear-gradient(90deg,#dc2626,#16a34a,#dc2626,#fbbf24)"},
+  // 18. 新年煙火
+  {name:"新年煙火",bg:"#0a0800",surface:"#141000",ink:"#fff8e0",gold:"#fbbf24",accent:"#f97316",bar:"linear-gradient(90deg,#fbbf24,#f97316,#ef4444,#fbbf24)"},
+  // 19. 春日粉
+  {name:"春日粉",bg:"#fff0f6",surface:"white",ink:"#2a0a18",gold:"#ec4899",accent:"#f472b6",bar:"linear-gradient(90deg,#be185d,#ec4899,#f472b6,#fbcfe8)"},
+  // 20. 秋楓紅
+  {name:"秋楓紅",bg:"#fff8f0",surface:"white",ink:"#1a0800",gold:"#b45309",accent:"#d97706",bar:"linear-gradient(90deg,#7c2d12,#b45309,#d97706,#fbbf24)"},
+  // 21. 冰雪藍
+  {name:"冰雪藍",bg:"#f0f8ff",surface:"white",ink:"#0a1a2a",gold:"#0ea5e9",accent:"#38bdf8",bar:"linear-gradient(90deg,#0369a1,#0ea5e9,#38bdf8,#bae6fd)"},
+  // 22. 抹茶綠
+  {name:"抹茶綠",bg:"#f5f8f0",surface:"white",ink:"#0a1800",gold:"#65a30d",accent:"#84cc16",bar:"linear-gradient(90deg,#365314,#65a30d,#84cc16,#d9f99d)"},
+  // 23. 頂級黑金
+  {name:"頂級黑金",bg:"#080600",surface:"#120e00",ink:"#f5e6c0",gold:"#d4af37",accent:"#f0d060",bar:"linear-gradient(90deg,#d4af37,#f0d060,#d4af37,#a08020)"},
+  // 24. 摩卡咖啡
+  {name:"摩卡咖啡",bg:"#f5f0eb",surface:"white",ink:"#1a1008",gold:"#6b4226",accent:"#8b5e3c",bar:"linear-gradient(90deg,#3c1f0a,#6b4226,#8b5e3c,#c49a6c)"},
+  // 25. 電競紫
+  {name:"電競紫",bg:"#0a0014",surface:"#110020",ink:"#f0e0ff",gold:"#bf00ff",accent:"#00ffcc",bar:"linear-gradient(90deg,#bf00ff,#6600cc,#00ffcc,#bf00ff)"},
+  // 26. 地中海
+  {name:"地中海",bg:"#f0f6ff",surface:"white",ink:"#0a1428",gold:"#1d4ed8",accent:"#3b82f6",bar:"linear-gradient(90deg,#1e3a8a,#1d4ed8,#3b82f6,#f59e0b)"},
+  // 27. 暖灰簡約
+  {name:"暖灰簡約",bg:"#f5f4f2",surface:"white",ink:"#1c1c1c",gold:"#6b6b6b",accent:"#9b9b9b",bar:"linear-gradient(90deg,#2c2c2c,#6b6b6b,#9b9b9b,#2c2c2c)"},
+  // 28. 霓虹粉紅
+  {name:"霓虹粉紅",bg:"#0a0008",surface:"#150010",ink:"#ffe0f8",gold:"#ff00aa",accent:"#ff80d4",bar:"linear-gradient(90deg,#ff00aa,#cc0088,#ff80d4,#ff00aa)"},
+  // 29. 竹林青
+  {name:"竹林青",bg:"#f2f8f4",surface:"white",ink:"#081810",gold:"#059669",accent:"#10b981",bar:"linear-gradient(90deg,#064e3b,#059669,#10b981,#6ee7b7)"},
+  // 30. 星空深藍
+  {name:"星空深藍",bg:"#020b18",surface:"#051628",ink:"#d0e8ff",gold:"#60a5fa",accent:"#93c5fd",bar:"linear-gradient(90deg,#1e3a5f,#2563eb,#60a5fa,#93c5fd)"},
+  // 31. 琥珀暖光
+  {name:"琥珀暖光",bg:"#fff8e8",surface:"white",ink:"#1a1000",gold:"#b45309",accent:"#fbbf24",bar:"linear-gradient(90deg,#78350f,#b45309,#fbbf24,#78350f)"},
+  // 32. 霜白銀
+  {name:"霜白銀",bg:"#f8f9fa",surface:"white",ink:"#1a1a2e",gold:"#6c757d",accent:"#adb5bd",bar:"linear-gradient(90deg,#343a40,#6c757d,#adb5bd,#343a40)"},
+];
+
+function applyTheme(t) {
+const r = document.documentElement.style;
+r.setProperty(’–paper’, t.bg);
+r.setProperty(’–cream’, t.bg);
+r.setProperty(’–ink’, t.ink);
+r.setProperty(’–gold’, t.gold);
+r.setProperty(’–gold-light’, t.gold + ‘55’);
+r.setProperty(’–rust’, t.accent);
+r.setProperty(’–shadow’, ‘rgba(0,0,0,0.15)’);
+// banner
+const banner = document.querySelector(’.banner-unified’);
+if (banner) {
+banner.style.background = t.ink;
+const before = document.getElementById(‘bannerBar’);
+if (before) before.style.background = t.bar;
+}
+// filter bar bg
+const fw = document.querySelector(’.filter-wrap’);
+const sw = document.querySelector(’.search-wrap’);
+if (fw) fw.style.background = t.bg;
+if (sw) sw.style.background = t.bg;
+// badge
+const badge = document.getElementById(‘themeBadge’);
+if (badge) {
+badge.textContent = ’🎨 ’ + t.name;
+badge.style.opacity = ‘1’;
+setTimeout(() => badge.style.opacity = ‘0’, 3000);
+}
+}
+
+// Pick random theme on load
+const t = THEMES[Math.floor(Math.random() * THEMES.length)];
+window.addEventListener(‘DOMContentLoaded’, () => applyTheme(t));
 </script>
 
 </body>
