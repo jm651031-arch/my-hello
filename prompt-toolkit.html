@@ -5,95 +5,119 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 提示詞工具箱</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap');
-  :root{--ink:#1a1208;--paper:#f5f0e8;--gold:#c9a84c;--gold-light:#e8d5a0;--rust:#8b3a2a;--sage:#4a6741;--blue-deep:#1e3a5f;--cream:#faf7f0;--shadow:rgba(26,18,8,0.15)}
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--paper);color:var(--ink);font-family:"Noto Serif TC",serif;min-height:100vh}
-  .section-banner{padding:40px 24px 32px;border-bottom:1px solid var(--gold-light);position:relative;text-align:center}
-  .banner-unified{background:var(--ink)}
-  .banner-unified::before{display:none}
-  .banner-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;color:var(--gold-light)}
-  .banner-title{font-family:"Playfair Display",serif;font-size:clamp(24px,4vw,38px);line-height:1.2;margin-bottom:8px;color:var(--gold)}
-  .banner-sub{font-size:13px;color:#8b7355}
-  .banner-unified .banner-sub{color:#8a8070}
-  .filter-wrap{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:1px solid var(--gold-light);padding:8px 12px}
-  .categories{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-  .cat-btn{padding:7px 4px;border:1px solid var(--gold-light);background:transparent;cursor:pointer;font-family:"Noto Serif TC",serif;font-size:11px;color:#6b5a3a;transition:all .2s;white-space:nowrap;text-align:center;border-radius:6px}
-  .cat-btn.active{background:var(--ink);color:var(--gold);border-color:var(--ink)}
-  .search-wrap{padding:0 16px 12px;background:var(--cream)}
-  .search-input{width:100%;padding:10px 14px;border:1px solid var(--gold-light);border-radius:6px;background:white;font-family:"Noto Serif TC",serif;font-size:14px;color:var(--ink)}
-  .search-input:focus{outline:none;border-color:var(--gold)}
-  .container{max-width:960px;margin:0 auto;padding:32px 20px}
-  .section-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin:24px 0 16px;padding-left:4px}
-  .section-label.news-label{color:#4a9eff}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:40px}
-  .card{background:white;border:1px solid var(--gold-light);border-radius:10px;padding:20px;cursor:pointer;transition:all .2s}
-  .card:hover{border-color:var(--gold);box-shadow:0 4px 16px var(--shadow);transform:translateY(-2px)}
-  .card.news-card{background:#0d1f35;border-color:#1a3a5f}
-  .card.news-card:hover{border-color:#4a9eff;box-shadow:0 4px 16px rgba(74,158,255,0.2)}
-  .card.hidden{display:none}
-  .card-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
-  .card-cat{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-  .card-title{font-size:15px;font-weight:600;margin-bottom:6px;line-height:1.4}
-  .card-desc{font-size:12px;color:#8b7355;line-height:1.5}
-  .news-card .card-cat{color:#4a9eff}
-  .news-card .card-title{color:#e0eeff}
-  .news-card .card-desc{color:#6a90b0}
-  .card-actions{display:flex;gap:8px;margin-top:14px}
-  .btn-copy,.btn-expand{padding:7px 14px;border-radius:5px;font-size:12px;cursor:pointer;transition:all .2s;font-family:"Noto Serif TC",serif}
-  .btn-copy{background:var(--ink);color:var(--gold);border:none;flex:1}
-  .btn-copy:hover{background:#333}
-  .btn-copy.copied{background:var(--sage);color:white}
-  .btn-expand{background:transparent;color:var(--ink);border:1px solid var(--gold-light)}
-  .btn-expand:hover{border-color:var(--gold)}
-  .news-card .btn-copy{background:#1a5f8a;color:#e0eeff}
-  .news-card .btn-expand{background:transparent;color:#6a90b0;border-color:#1a3a5f}
-  .news-card .btn-expand:hover{border-color:#4a9eff;color:#e0eeff}
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:20px}
-  .modal-overlay.open{display:flex}
-  .modal{background:white;border-radius:12px;max-width:680px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
-  .modal.news-modal{background:#0d1f35;border:1px solid #1a3a5f}
-  .modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--gold-light);display:flex;align-items:flex-start;gap:12px}
-  .news-modal .modal-header{border-bottom-color:#1a3a5f}
-  .modal-num{font-family:"Playfair Display",serif;font-size:28px;color:var(--gold-light);line-height:1;flex-shrink:0}
-  .modal-tag{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:2px;padding:3px 10px;border-radius:10px;display:inline-block;margin-bottom:4px}
-  .tag-tm{background:#f5ead0;color:var(--rust)}
-  .tag-biz{background:#d0e8ff;color:var(--blue-deep)}
-  .tag-news{background:#0a2a4a;color:#4a9eff;border:1px solid #1a3a5f}
-  .modal-title{font-size:18px;font-weight:600}
-  .news-modal .modal-title{color:#e0eeff}
-  .modal-body{padding:20px 24px;overflow-y:auto;flex:1}
-  .modal-text{width:100%;min-height:200px;padding:14px;border:1px solid var(--gold-light);border-radius:8px;font-family:"Noto Serif TC",serif;font-size:14px;line-height:1.8;resize:vertical;color:var(--ink)}
-  .news-modal .modal-text{background:#0a1a2e;border-color:#1a3a5f;color:#e0eeff}
-  .modal-footer{padding:16px 24px;border-top:1px solid var(--gold-light);display:flex;gap:10px}
-  .news-modal .modal-footer{border-top-color:#1a3a5f}
-  .modal-copy-btn{flex:1;padding:12px;background:var(--ink);color:var(--gold);border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:"Noto Serif TC",serif;transition:all .2s}
-  .modal-copy-btn:hover{background:#333}
-  .modal-copy-btn.copied{background:var(--sage);color:white}
-  .news-modal .modal-copy-btn{background:#1a5f8a;color:#e0eeff}
-  .modal-close-btn{padding:12px 20px;background:transparent;color:#6b5a3a;border:1px solid var(--gold-light);border-radius:6px;font-size:14px;cursor:pointer;font-family:"Noto Serif TC",serif}
-  .news-modal .modal-close-btn{color:#6a90b0;border-color:#1a3a5f}
-  .banner-credit{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:3px;color:#5a5040;margin-top:10px;text-transform:uppercase}
-  .theme-badge{position:fixed;bottom:14px;left:14px;z-index:999;background:rgba(0,0,0,0.5);color:#fff;font-family:"DM Mono",monospace;font-size:10px;padding:4px 12px;border-radius:20px;backdrop-filter:blur(6px);letter-spacing:1px;pointer-events:none;transition:opacity 0.5s}
-  #toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--gold);padding:10px 20px;border-radius:6px;font-size:13px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999}
-  #toast.show{opacity:1;transform:translateY(0)}
+:root{
+  --bg:#faf6ef;--surface:#fff;--ink:#2a1f0e;--gold:#b8860b;
+  --gold-light:#d4a01766;--accent:#8b4513;--cream:#faf6ef;--shadow:rgba(0,0,0,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Serif TC',serif;min-height:100vh;font-size:16px}
+
+/* HEADER */
+.header{text-align:center;padding:40px 24px 32px;position:relative;background:var(–ink)}
+.header::before{content:’’;position:absolute;top:0;left:0;right:0;height:5px;background:var(–bar,linear-gradient(90deg,#8b4513,#b8860b,#d4a017,#8b4513))}
+.h-label{font-family:‘DM Mono’,monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#9a8060;margin-bottom:10px}
+.h-title{font-family:‘Playfair Display’,serif;font-size:clamp(28px,6vw,44px);color:var(–gold);margin-bottom:10px;line-height:1.2}
+.h-sub{font-size:15px;color:#7a6848;margin-bottom:6px}
+.h-credit{font-family:‘DM Mono’,monospace;font-size:11px;letter-spacing:3px;color:#5a5040;margin-top:10px;text-transform:uppercase}
+
+/* FILTER */
+.filter-wrap{position:sticky;top:0;z-index:50;background:var(–bg);border-bottom:1px solid var(–gold-light);padding:10px 12px 0}
+.cat-row{display:grid;gap:6px;padding-bottom:10px}
+.cat-row-1{grid-template-columns:repeat(5,1fr)}
+.cat-row-2{grid-template-columns:repeat(5,1fr)}
+.cat-btn{padding:9px 4px;border:1px solid var(–gold-light);background:transparent;cursor:pointer;font-family:‘Noto Serif TC’,serif;font-size:13px;color:var(–ink);transition:all .2s;text-align:center;border-radius:7px;white-space:nowrap;opacity:0.75}
+.cat-btn:hover{opacity:1;border-color:var(–gold)}
+.cat-btn.active{background:var(–ink);color:var(–gold);border-color:var(–ink);opacity:1}
+.search-wrap{padding:0 12px 10px;background:var(–bg)}
+.search-input{width:100%;padding:11px 16px;border:1px solid var(–gold-light);border-radius:8px;background:var(–surface);font-family:‘Noto Serif TC’,serif;font-size:15px;color:var(–ink)}
+.search-input:focus{outline:none;border-color:var(–gold)}
+
+/* SECTION LABELS */
+.container{max-width:960px;margin:0 auto;padding:28px 16px 60px}
+.sec-label{font-family:‘DM Mono’,monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(–gold);margin:28px 0 14px 2px;opacity:0.8}
+.sec-label.news{color:#4a9eff}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-bottom:8px}
+.card{background:var(–surface);border:1px solid var(–gold-light);border-radius:12px;padding:22px;transition:all .2s;position:relative}
+.card:hover{border-color:var(–gold);box-shadow:0 6px 20px var(–shadow);transform:translateY(-2px)}
+.card.news-card{background:#0d1f35;border-color:#1a3a5f}
+.card.news-card:hover{border-color:#4a9eff;box-shadow:0 6px 20px rgba(74,158,255,0.2)}
+.card.hidden{display:none!important}
+.c-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.c-cat{font-family:‘DM Mono’,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(–gold);margin-bottom:6px;opacity:0.8}
+.c-title{font-size:17px;font-weight:600;margin-bottom:8px;line-height:1.5;color:var(–ink)}
+.c-desc{font-size:13px;color:#7a6040;line-height:1.65}
+.news-card .c-cat{color:#4a9eff}
+.news-card .c-title{color:#ddeeff}
+.news-card .c-desc{color:#5a8aaa}
+.c-actions{display:flex;gap:8px;margin-top:16px}
+.btn-copy,.btn-expand{padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;transition:all .2s;font-family:‘Noto Serif TC’,serif;font-weight:600}
+.btn-copy{background:var(–ink);color:var(–gold);border:none;flex:1}
+.btn-copy:hover{opacity:0.85}
+.btn-copy.copied{background:#4a6741;color:#fff}
+.btn-expand{background:transparent;color:var(–ink);border:1px solid var(–gold-light)}
+.btn-expand:hover{border-color:var(–gold)}
+.news-card .btn-copy{background:#1a5f8a;color:#ddeeff}
+.news-card .btn-expand{color:#7aabcc;border-color:#1a3a5f}
+.news-card .btn-expand:hover{border-color:#4a9eff;color:#ddeeff}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(–surface);border-radius:14px;max-width:700px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.modal.nm{background:#0d1f35;border:1px solid #1a3a5f}
+.m-head{padding:22px 26px 16px;border-bottom:1px solid var(–gold-light);display:flex;gap:14px;align-items:flex-start}
+.nm .m-head{border-bottom-color:#1a3a5f}
+.m-num{font-family:‘Playfair Display’,serif;font-size:30px;color:var(–gold-light);line-height:1;flex-shrink:0}
+.m-tag{font-family:‘DM Mono’,monospace;font-size:11px;letter-spacing:2px;padding:3px 11px;border-radius:12px;display:inline-block;margin-bottom:5px}
+.tt{background:#f5ead0;color:#8b3a2a}
+.tb{background:#ddeeff;color:#1e3a5f}
+.tn{background:#0a2a4a;color:#4a9eff;border:1px solid #1a3a5f}
+.m-title{font-size:20px;font-weight:600;color:var(–ink);line-height:1.4}
+.nm .m-title{color:#ddeeff}
+.m-body{padding:20px 26px;overflow-y:auto;flex:1}
+.m-text{width:100%;min-height:220px;padding:16px;border:1px solid var(–gold-light);border-radius:10px;font-family:‘Noto Serif TC’,serif;font-size:15px;line-height:1.9;resize:vertical;color:var(–ink);background:var(–surface)}
+.nm .m-text{background:#0a1a2e;border-color:#1a3a5f;color:#ddeeff}
+.m-foot{padding:16px 26px;border-top:1px solid var(–gold-light);display:flex;gap:10px}
+.nm .m-foot{border-top-color:#1a3a5f}
+.m-copy{flex:1;padding:13px;background:var(–ink);color:var(–gold);border:none;border-radius:8px;font-size:15px;cursor:pointer;font-family:‘Noto Serif TC’,serif;font-weight:600;transition:all .2s}
+.m-copy:hover{opacity:0.85}
+.m-copy.copied{background:#4a6741;color:#fff}
+.nm .m-copy{background:#1a5f8a;color:#ddeeff}
+.m-close{padding:13px 20px;background:transparent;color:#7a6040;border:1px solid var(–gold-light);border-radius:8px;font-size:15px;cursor:pointer;font-family:‘Noto Serif TC’,serif}
+.nm .m-close{color:#5a8aaa;border-color:#1a3a5f}
+
+/* THEME BADGE */
+.tbadge{position:fixed;bottom:16px;left:16px;z-index:999;background:rgba(0,0,0,0.55);color:#fff;font-family:‘DM Mono’,monospace;font-size:11px;padding:5px 14px;border-radius:20px;backdrop-filter:blur(6px);letter-spacing:1px;pointer-events:none;opacity:0;transition:opacity 0.5s}
+.tbadge.show{opacity:1}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(–ink);color:var(–gold);padding:11px 22px;border-radius:8px;font-size:14px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999;font-family:‘Noto Serif TC’,serif}
+#toast.show{opacity:1;transform:translateY(0)}
 </style>
+
 </head>
 <body>
-<div class="section-banner banner-unified"><span id="bannerBar" style="position:absolute;top:0;left:0;right:0;height:5px;display:block"></span>
-  <div class="banner-label">Prompts · Strategy · Intelligence</div>
-  <div class="banner-title">&#129504; AI 提示詞工具箱</div>
-  <div class="banner-sub">個人成長 · 演講準備 · 商業策略 · AI 情報 · 點選即可複製</div>
-  <div class="banner-credit">Made by JM</div>
+
+<div class="header" id="mainHeader">
+  <div class="h-label">Prompts &middot; Strategy &middot; Intelligence</div>
+  <div class="h-title">&#129504; AI 提示詞工具箱</div>
+  <div class="h-sub">個人成長 &middot; 演講準備 &middot; 商業策略 &middot; AI 情報 &middot; 點選即可複製</div>
+  <div class="h-credit">Made by JM</div>
 </div>
-<div class="filter-wrap">
-  <div class="categories">
+
+<div class="filter-wrap" id="filterWrap">
+  <div class="cat-row cat-row-1">
     <button class="cat-btn active" onclick="filterCat('all',this)">全部(19)</button>
     <button class="cat-btn" onclick="filterCat('ip',this)">✦ 個人IP</button>
     <button class="cat-btn" onclick="filterCat('self',this)">自我探索</button>
     <button class="cat-btn" onclick="filterCat('tm',this)">演講準備</button>
     <button class="cat-btn" onclick="filterCat('think',this)">跨界思辨</button>
+  </div>
+  <div class="cat-row cat-row-2">
     <button class="cat-btn" onclick="filterCat('market',this)">市場分析</button>
     <button class="cat-btn" onclick="filterCat('strategy',this)">策略規劃</button>
     <button class="cat-btn" onclick="filterCat('biz',this)">商業設計</button>
@@ -101,36 +125,253 @@
     <button class="cat-btn" onclick="filterCat('news',this)">&#128240; AI日報</button>
   </div>
 </div>
-<div class="search-wrap">
+<div class="search-wrap" id="searchWrap">
   <input class="search-input" type="text" placeholder="&#128269; 搜尋提示詞..." oninput="filterCards(this.value)">
 </div>
+
 <div class="container">
-  <div class="section-label">✦ 健言社提示詞 · Toastmasters</div>
+  <div class="sec-label">✦ 健言社提示詞 &middot; Toastmasters</div>
   <div class="grid" id="grid-tm"></div>
-  <div class="section-label">&#128202; 商業策略 AI 工具組 · Business Strategy</div>
+  <div class="sec-label">&#128202; 商業策略 AI 工具組 &middot; Business Strategy</div>
   <div class="grid" id="grid-biz"></div>
-  <div class="section-label news-label">&#128240; AI 情報日報 · Daily Intelligence</div>
+  <div class="sec-label news">&#128240; AI 情報日報 &middot; Daily Intelligence</div>
   <div class="grid" id="grid-news"></div>
 </div>
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
   <div class="modal" id="modalBox">
-    <div class="modal-header">
-      <div class="modal-num" id="modalNum"></div>
+    <div class="m-head">
+      <div class="m-num" id="mNum"></div>
       <div style="flex:1">
-        <div class="modal-tag" id="modalTag"></div>
-        <div class="modal-title" id="modalTitle"></div>
+        <div class="m-tag" id="mTag"></div>
+        <div class="m-title" id="mTitle"></div>
       </div>
     </div>
-    <div class="modal-body"><textarea class="modal-text" id="modalText"></textarea></div>
-    <div class="modal-footer">
-      <button class="modal-copy-btn" id="modalCopyBtn" onclick="copyFromModal()">&#8853; 複製全部</button>
-      <button class="modal-close-btn" onclick="closeModal()">關閉</button>
+    <div class="m-body"><textarea class="m-text" id="mText"></textarea></div>
+    <div class="m-foot">
+      <button class="m-copy" id="mCopyBtn" onclick="copyModal()">&#8853; 複製全部</button>
+      <button class="m-close" onclick="closeModal()">關閉</button>
     </div>
   </div>
 </div>
-<div id="toast">✓ 已複製到剪貼簿</div>
+
+<div class="tbadge" id="tbadge"></div>
+<div id="toast">✓ 已複製</div>
+
 <script>
-const AI_DAILY_TEXT = `請幫我搜尋並整理今天最新的 AI 相關重要資訊，涵蓋以下範疇：
+// ── PROMPTS DATA ──
+const P = [
+ {id:0,g:'grid-tm',cat:'ip',cl:'tt',icon:'&#127912;',bg:'#fdf0e0',num:'00',title:'個人 IP 3D公仔生成',news:false,cat2:'個人 IP',
+  desc:'上傳照片，生成萬代鋼彈風格 3D 公仔，含可樂、炸雞、蝦味先等個人配件。',
+  text:`請參考此照片生成一張3D公仔圖片（記得上傳照片）
+- 包裝為萬代的鋼彈風格的組合零件板
+- 公仔外貌請照上傳的圖片製作
+- 臉部可愛卡通風，但是也要有照片中的神韻
+- 分為左邊公仔區、右邊配件區兩區配件如下：（可以自由替換）
+- 一瓶可樂
+- KFC 炸雞
+- 一包蝦味先
+- 一塊蛋糕
+- 一杯啤酒
+- 麥當勞漢堡`},
+
+ {id:1,g:'grid-tm',cat:'self',cl:'tt',icon:'&#129517;',bg:'#f0f5e8',num:'01',title:'人生教練深度剖析',news:false,cat2:'自我探索',
+  desc:'以你對我的認識深度剖析，列出10件你知道而我不知道的事。',
+  text:`認識這麼久了，請化作我的人生教練，
+以你對我的認識 深度剖析，
+列出10件你知道而我不知道的事。`},
+
+ {id:2,g:'grid-tm',cat:'self',cl:'tt',icon:'&#128203;',bg:'#f0f5e8',num:'02',title:'SWOT 與職涯策略規劃',news:false,cat2:'自我探索',
+  desc:'個人SWOT分析 + 未來五年職涯建議 + 目標達成策略計劃表',
+  text:`1) 請給我個人【SWOT分析】
+2) 給我未來五年的職涯建議
+3) 2026年我的目標是______, 幫我制定「達成目標的策略計劃表」`},
+
+ {id:3,g:'grid-tm',cat:'tm',cl:'tt',icon:'&#127942;',bg:'#fdf5e0',num:'03',title:'TM 世界冠軍觀點發想',news:false,cat2:'演講準備',
+  desc:'以 TM 世界冠軍視角，針對演講題目提供 10 個能製造 AHA 時刻的洞察觀點。',
+  text:`角色設定：
+你是一位 Toastmasters 國際演講比賽的世界冠軍，具備卓越的洞察力、說服力與啟發他人的能力。你善於從抽象概念、日常經驗或社會現象中提煉深刻見解，並引導聽眾反思與行動。
+
+任務目標：
+針對以下 Toastmasters 演講題目，請提供 10 個具啟發性、富洞察力的觀點。這些觀點應該具備以下特質：
+- 引人深思，能讓聽眾產生「AHA」時刻
+- 涵蓋不同角度（個人成長、社會觀察、哲學反思、故事切入等）
+- 避免空泛口號，盡量具體、有例子或邏輯推演基礎
+
+演講題目：
+[AI助我一臂之力]`},
+
+ {id:4,g:'grid-tm',cat:'tm',cl:'tt',icon:'&#9878;',bg:'#fdf5e0',num:'04',title:'TM 金級評審策略拆解',news:false,cat2:'演講準備',
+  desc:'以 TM 金級評審角度完整拆解題目，涵蓋 Content / Delivery / Language，輸出冠軍級策略建議書。',
+  text:`你現在是一位 Toastmasters 國際講演會（TM）金級評審、世界冠軍賽（WCPS）分析專家。
+我會給你一個演講題目 "AI 與我"，請你依 Toastmasters 評審邏輯完整拆解：
+
+1. 題目審題：字面意義、深層意涵、3-5種詮釋方向、哪些詮釋會跑題、評審最期待的主線
+
+2. 分數導向的題目價值
+依 Content / Delivery / Language 三大類拆解：最容易展現哪些亮點？哪些論點打中TM評審價值觀？哪些方向會扣分？
+
+3. TM 評審視角分析
+A. Content：是否真正回答題目？主題是否聚焦？論述邏輯是否清晰？
+B. Delivery：聲音變化、節奏、停頓、表情手勢是否強化主題？
+C. Language：用字是否清楚優雅？是否有令評審印象深刻的金句？
+
+4. 實戰審題（至少6個必問問題）
+
+5. 輸出：冠軍級演講策略建議書`},
+
+ {id:5,g:'grid-tm',cat:'think',cl:'tt',icon:'&#128172;',bg:'#e8f0f8',num:'05',title:'單一大師跨時空對談',news:false,cat2:'跨界思辨',
+  desc:'指定 Steve Jobs 以其真實語言風格與價值觀對談，探討人生觀、工作哲學、產品創新與未來趨勢。',
+  text:`你現在是 Steve Jobs，請以他真實的語言風格、思維方式與價值觀，與我進行一場跨時空對話。
+
+對話主題：[請填入你想討論的主題，例如：AI時代的教育、產品創新、人生選擇]
+
+請展現 Jobs 真實的：
+- 直接、犀利、不妥協的風格
+- 對美學與簡約的執著
+- 對「改變世界」的使命感
+- 不畏批評、堅持己見的態度
+
+開始對話。`},
+
+ {id:6,g:'grid-tm',cat:'think',cl:'tt',icon:'&#127758;',bg:'#e8f0f8',num:'06',title:'多位大師圓桌辯論',news:false,cat2:'跨界思辨',
+  desc:'Jobs、愛因斯坦、達文西、馬斯克加隨機神秘嘉賓，在火星圓桌辯論創新、未來與人生智慧。',
+  text:`場景設定：火星圓桌，2050年。以下大師齊聚：
+- Steve Jobs（蘋果創辦人）
+- Albert Einstein（物理學家）
+- Leonardo da Vinci（文藝復興巨匠）
+- Elon Musk（科技企業家）
+- 神秘嘉賓：由你隨機加入一位跨領域大師
+
+辯論主題：[請填入主題，例如：「真正的創新該如何誕生？」]
+
+規則：
+- 每位大師用自己真實的思維框架與語言風格發言
+- 觀點可以互相辯論、質疑、補充
+- 神秘嘉賓最後登場，帶來意想不到的觀點
+- 最後由你（主持人）總結各方洞見
+
+開始辯論。`},
+
+ {id:7,g:'grid-biz',cat:'market',cl:'tb',icon:'&#127758;',bg:'#e8f4ff',num:'B1',title:'市場洞察引擎（PEST AI）',news:false,cat2:'市場分析',
+  desc:'3分鐘看懂一個市場。PEST分析 + 未來3年趨勢 + 三大機會風險 + 建議切入策略',
+  text:`你是一位頂尖市場策略顧問。請針對以下產業進行完整的 PEST 分析：
+
+產業：[請填入產業名稱]
+
+請輸出：
+1. PEST分析（政治/經濟/社會/科技各3個關鍵因素）
+2. 未來3年最重要的趨勢（3條）
+3. 三大市場機會
+4. 三大市場風險
+5. 建議的市場切入策略`},
+
+ {id:8,g:'grid-biz',cat:'market',cl:'tb',icon:'&#128269;',bg:'#e8f4ff',num:'B2',title:'競品解剖器（3C + Benchmark）',news:false,cat2:'市場分析',
+  desc:'快速找到市場差異。3C架構分析 + 競品比較表 + 差異化機會 + 建議市場定位',
+  text:`你是競爭策略專家。請針對以下品牌/產品進行競品分析：
+
+目標品牌：[請填入品牌名稱]
+主要競品：[請列出2-3個競品]
+
+請輸出：
+1. 3C分析（Company / Customer / Competitor）
+2. 競品比較表（功能/價格/定位/優劣勢）
+3. 市場差異化機會（3個）
+4. 建議的市場定位聲明
+5. 一句話核心差異化策略`},
+
+ {id:9,g:'grid-biz',cat:'strategy',cl:'tb',icon:'&#9822;',bg:'#e8f4ff',num:'B3',title:'SWOT 策略轉換器',news:false,cat2:'策略規劃',
+  desc:'讓策略真正落地。SWOT分析 + SO/ST/WO/WT轉換 + 三個優先策略 + 行動建議',
+  text:`你是企業策略顧問。請針對以下企業/個人進行 SWOT 分析並轉化為可執行策略：
+
+分析對象：[請填入企業或個人描述]
+
+請輸出：
+1. SWOT分析（各3-4個要素）
+2. 策略矩陣（SO/ST/WO/WT各1-2個策略）
+3. 三個最優先執行的策略（附理由）
+4. 每個策略的具體行動建議
+5. 30天內可立刻開始的第一步`},
+
+ {id:10,g:'grid-biz',cat:'biz',cl:'tb',icon:'&#127959;',bg:'#e8f4ff',num:'B4',title:'商業模式設計器（BMC）',news:false,cat2:'商業設計',
+  desc:'建立完整商業邏輯。商業模式畫布九要素 + 核心價值主張 + 收入成本 + 風險優化',
+  text:`你是商業模式設計專家。請針對以下創業概念設計完整的商業模式：
+
+創業概念：[請描述你的產品或服務想法]
+
+請輸出完整的商業模式畫布（BMC）九個要素，並附上三大商業風險與優化建議。`},
+
+ {id:11,g:'grid-biz',cat:'biz',cl:'tb',icon:'&#127919;',bg:'#e8f4ff',num:'B5',title:'需求洞察（JTBD）',news:false,cat2:'商業設計',
+  desc:'避免做錯產品。功能需求 + 情感需求 + 社會需求 + 三個未被滿足的痛點與機會',
+  text:`你是用戶需求洞察專家，擅長 Jobs-To-Be-Done（JTBD）框架。
+
+產品/服務：[請描述你的產品或服務]
+目標用戶：[請描述你的目標用戶]
+
+請輸出：
+1. 功能需求 / 情感需求 / 社會需求
+2. 三個目前未被滿足的核心痛點
+3. 三個對應的產品機會點
+4. 一句話的核心價值主張`},
+
+ {id:12,g:'grid-biz',cat:'strategy',cl:'tb',icon:'&#128176;',bg:'#e8f4ff',num:'B6',title:'定價策略設計器',news:false,cat2:'策略規劃',
+  desc:'理解「價值＝價格」。競品定價分析 + 建議策略 + 價值支撐邏輯 + 提高願付價格方法',
+  text:`你是定價策略專家。請針對以下產品設計最佳定價策略：
+
+產品描述：[請描述你的產品]
+目標客群：[請描述目標客群]
+目前考慮的價格範圍：[請填入]
+
+請輸出：建議定價策略、具體建議價格與理由、價值支撐邏輯、三個提高客戶願付價格的方法、定價風險與應對方案`},
+
+ {id:13,g:'grid-biz',cat:'strategy',cl:'tb',icon:'&#128200;',bg:'#e8f4ff',num:'B7',title:'成長策略規劃器',news:false,cat2:'策略規劃',
+  desc:'找成長路徑。市場擴展 + 產品擴展 + 商業模式創新 + 三條成長路徑 + 風險與條件',
+  text:`你是成長策略顧問。請針對以下企業規劃成長策略：
+
+企業描述：[請描述你的企業現況]
+成長目標：[請填入，例如：3年內營收翻倍]
+
+請輸出：安索夫矩陣分析、三條可行的成長路徑、每條路徑所需資源與條件、主要風險與緩解策略、12個月成長里程碑`},
+
+ {id:14,g:'grid-biz',cat:'action',cl:'tb',icon:'&#128640;',bg:'#e8f4ff',num:'B8',title:'策略行動化引擎（Task Chain）',news:false,cat2:'行動落地',
+  desc:'讓策略真正落地。任務清單 + KPI + 優先順序 + 90 天行動計畫',
+  text:`你是專案管理與策略執行專家。請將以下策略轉化為可執行的行動計畫：
+
+策略目標：[請描述你想達成的策略目標]
+可用資源：[請描述人力/預算/時間等資源]
+期限：[請填入]
+
+請輸出：完整任務清單、每個任務的負責角色與完成標準、關鍵KPI（3-5個）、90天行動計畫、最可能遇到的3個障礙與解決方案、每週檢核清單`},
+
+ {id:15,g:'grid-biz',cat:'action',cl:'tb',icon:'&#9989;',bg:'#e8f4ff',num:'B9',title:'新產品評估器（Go / No-Go）',news:false,cat2:'行動落地',
+  desc:'做對決策。市場需求 + 競爭 + 商業模式 + 可行性評分 + Go/No-Go建議',
+  text:`你是創投顧問與產品評估專家。請對以下新產品概念進行嚴格評估：
+
+產品概念：[請描述你的產品想法]
+目標市場：[請描述]
+預計投入資源：[請填入]
+
+請從六個維度評分（1-10分）：市場需求強度、市場規模、競爭強度、差異化優勢、商業模式可行性、執行可行性
+
+輸出：評分表 + 最大風險 + 最大機會 + 最終 Go/No-Go 建議與理由`},
+
+ {id:16,g:'grid-biz',cat:'action',cl:'tb',icon:'&#128196;',bg:'#e8f4ff',num:'B10',title:'一頁式策略輸出器',news:false,cat2:'行動落地',
+  desc:'產出能交付的成果。問題+洞察+策略+行動+成果 → 一頁式策略報告',
+  text:`你是麥肯錫等級的策略顧問。請針對以下情況，產出一份「一頁式策略報告」：
+
+情況描述：[請詳細描述你面臨的問題或機會]
+
+請按以下結構輸出（每部分2-3句話精煉表達）：
+📌 核心問題（What）
+💡 關鍵洞察（Why）
+🎯 策略選擇（How）
+⚡ 優先行動（Do）
+📊 成功指標（Measure）
+⚠️ 最大風險（Risk）`},
+
+ {id:17,g:'grid-news',cat:'news',cl:'tn',icon:'&#128240;',bg:'#0a2a4a',num:'N1',title:'AI 情報日報 v2.0（完整版）',news:true,cat2:'AI 日報',
+  desc:'每日搜尋十大區塊 AI 資訊。含名人發言、股市、台灣動態、開源模型、中國 AI 等。',
+  text:`請幫我搜尋並整理今天最新的 AI 相關重要資訊，涵蓋以下範疇：
 
 【一、大公司動態】
 OpenAI、Google DeepMind、Anthropic、Meta、Microsoft、Apple、xAI（Elon Musk/Grok）等重要消息
@@ -143,7 +384,6 @@ OpenAI、Google DeepMind、Anthropic、Meta、Microsoft、Apple、xAI（Elon Mus
 
 【四、名人發言與觀點】
 重點關注以下人物的 AI 相關言論：
-
 - 黃仁勳（Jensen Huang / Nvidia）
 - 川普（Trump）與白宮 AI 政策
 - 馬斯克（Elon Musk / xAI）
@@ -151,7 +391,7 @@ OpenAI、Google DeepMind、Anthropic、Meta、Microsoft、Apple、xAI（Elon Mus
 - Dario Amodei（Anthropic）
 - Sundar Pichai（Google）
 - 其他重量級人士看多/看空 AI 的言論
-  ⚠️ 反 AI、看空 AI 股市、AI 泡沫論等聲音也要納入
+⚠️ 反 AI、看空 AI 股市、AI 泡沫論等聲音也要納入
 
 【五、論壇熱議話題】
 X（Twitter）、Reddit、Hacker News 等平台爆紅討論
@@ -172,18 +412,18 @@ Llama、DeepSeek、Mistral、Qwen 等最新進展
 AI 融入日常生活、B2B 落地案例、新興 AI 應用場景
 
 格式要求：
-
 - 每條分區塊、條列清晰
 - 每條標示重要程度：⭐一般 / ⭐⭐重要 / ⭐⭐⭐非常重要
 - 名人發言請直接引用原話或關鍵觀點
-- 看空/反AI的聲音與看多並列呈現，保持平衡`;
+- 看空/反AI的聲音與看多並列呈現，保持平衡`},
 
-const AI_DAILY_DELTA = `今天是 YYYY/MM/DD。
+ {id:18,g:'grid-news',cat:'news',cl:'tn',icon:'&#128260;',bg:'#0a2a4a',num:'N2',title:'AI 日報增量更新版',news:true,cat2:'AI 日報',
+  desc:'只回報昨天之後的新消息，略過已知舊聞。每日例行追蹤用，搭配完整版 N1 效果最佳。',
+  text:`今天是 YYYY/MM/DD。
 
 請搜尋今天最新的 AI 相關資訊，但【只回報昨天（YYYY/MM/DD）之後才出現的新消息】，已知的背景資訊不需要重複。
 
 篩選標準：
-
 - 今天才發布 / 今天才被廣泛報導的消息
 - 昨天日報已有的事件，若今天有【重大進展或後續發展】才納入
 - 純重複、無新進展的舊聞請略過
@@ -201,195 +441,138 @@ const AI_DAILY_DELTA = `今天是 YYYY/MM/DD。
 十、消費者與企業應用
 
 格式：
-
 - 每條標示 ⭐ 重要程度
 - 若某區塊今天無新消息，標註「今日無新動態」即可，不要省略區塊
 - 名人發言請直接引用原話或關鍵觀點
 - 看空/反AI的聲音與看多並列呈現，保持平衡
-- 文末附一行：「與昨日相比，今日最值得關注的變化：＿＿＿」`;
-
-const prompts = [
-{id:0,grid:“grid-tm”,cat:“ip”,catLabel:“個人 IP”,catClass:“tag-tm”,icon:“🎨”,iconBg:”#fdf0e0”,num:“00”,title:“個人 IP 3D公仔生成”,isNews:false,
-desc:“上傳照片，生成萬代鋼彈風格組合零件板 3D 公仔，含可樂、炸雞、蝦味先等個人配件。”,
-text:“請參考此照片生成一張3D公仔圖片（記得上傳照片）\n- 包裝為萬代的鋼彈風格的組合零件板\n- 公仔外貌請照上傳的圖片製作\n- 臉部可愛卡通風，但是也要有照片中的神韻\n- 分為左邊公仔區、右邊配件區兩區配件如下：（可以自由替換）\n- 一瓶可樂\n- KFC 炸雞\n- 一包蝦味先\n- 一塊蛋糕\n- 一杯啤酒\n- 麥當勞漢堡”},
-{id:1,grid:“grid-tm”,cat:“self”,catLabel:“自我探索”,catClass:“tag-tm”,icon:“🧭”,iconBg:”#f0f5e8”,num:“01”,title:“人生教練深度剖析”,isNews:false,
-desc:“認識這麼久了，請化作我的人生教練，以你對我的認識深度剖析，列出10件你知道而我不知道的事。”,
-text:“認識這麼久了，請化作我的人生教練，\n以你對我的認識 深度剖析， \n列出10件你知道而我不知道的事。”},
-{id:2,grid:“grid-tm”,cat:“self”,catLabel:“自我探索”,catClass:“tag-tm”,icon:“📋”,iconBg:”#f0f5e8”,num:“02”,title:“SWOT 與職涯策略規劃”,isNews:false,
-desc:“個人SWOT分析 + 未來五年職涯建議 + 2026年目標達成策略計劃表”,
-text:“1) 請給我個人【SWOT分析】\n2) 給我未來五年的職涯建議 \n3) 2026年我的目標是______, 幫我制定 「達成目標的策略計劃表」”},
-{id:3,grid:“grid-tm”,cat:“tm”,catLabel:“演講準備”,catClass:“tag-tm”,icon:“🏆”,iconBg:”#fdf5e0”,num:“03”,title:“TM 世界冠軍觀點發想”,isNews:false,
-desc:“以 TM 世界冠軍視角，針對演講題目提供 10 個引人深思、能製造 AHA 時刻的洞察觀點。”,
-text:“角色設定：\n你是一位 Toastmasters 國際演講比賽的世界冠軍，具備卓越的洞察力、說服力與啟發他人的能力。你善於從抽象概念、日常經驗或社會現象中提煉深刻見解，並引導聽眾反思與行動。\n\n任務目標：\n針對以下 Toastmasters 演講題目，請提供 10 個具啟發性、富洞察力的觀點。這些觀點應該具備以下特質：\n\n-引人深思，能讓聽眾產生「AHA」時刻\n-涵蓋不同角度（個人成長、社會觀察、哲學反思、故事切入等）\n-避免空泛口號，盡量具體、有例子或邏輯推演基礎\n\n演講題目：\n[AI助我一臂之力]”},
-{id:4,grid:“grid-tm”,cat:“tm”,catLabel:“演講準備”,catClass:“tag-tm”,icon:“⚖️”,iconBg:”#fdf5e0”,num:“04”,title:“TM 金級評審策略拆解”,isNews:false,
-desc:“以 TM 金級評審角度完整拆解題目，涵蓋 Content / Delivery / Language，輸出冠軍級策略建議書。”,
-text:“你現在是一位 Toastmasters 國際講演會（TM）金級評審、世界冠軍賽（WCPS）分析專家。\n我會給你一個演講題目 "AI 與我"，請你依 Toastmasters 評審邏輯完整拆解：\n\n1. 題目審題：字面意義、深層意涵、3-5種詮釋方向、哪些詮釋會跑題、評審最期待的主線\n\n2. 分數導向的題目價值\n依 Content / Delivery / Language 三大類拆解：最容易展現哪些亮點？哪些論點打中TM評審價值觀？哪些方向會扣分？\n\n3. TM 評審視角分析\nA. Content：是否真正回答題目？主題是否聚焦？論述邏輯是否清晰？\nB. Delivery：聲音變化、節奏、停頓、表情手勢是否強化主題？\nC. Language：用字是否清楚優雅？是否有令評審印象深刻的金句？\n\n4. 實戰審題（至少6個必問問題）\n\n5. 輸出：冠軍級演講策略建議書”},
-{id:5,grid:“grid-tm”,cat:“think”,catLabel:“跨界思辨”,catClass:“tag-tm”,icon:“💬”,iconBg:”#e8f0f8”,num:“05”,title:“單一大師跨時空對談”,isNews:false,
-desc:“指定 Steve Jobs 以其真實語言風格與價值觀對談，探討人生觀、工作哲學、產品創新與未來趨勢。”,
-text:“你現在是 Steve Jobs，請以他真實的語言風格、思維方式與價值觀，與我進行一場跨時空對話。\n\n對話主題：[請填入你想討論的主題，例如：AI時代的教育、產品創新、人生選擇]\n\n請展現 Jobs 真實的：\n- 直接、犀利、不妥協的風格\n- 對美學與簡約的執著\n- 對「改變世界」的使命感\n- 不畏批評、堅持己見的態度\n\n開始對話。”},
-{id:6,grid:“grid-tm”,cat:“think”,catLabel:“跨界思辨”,catClass:“tag-tm”,icon:“🌐”,iconBg:”#e8f0f8”,num:“06”,title:“多位大師圓桌辯論”,isNews:false,
-desc:“Jobs、愛因斯坦、達文西、馬斯克加隨機神秘嘉賓，在火星圓桌辯論創新、未來與人生智慧。”,
-text:“場景設定：火星圓桌，2050年。以下大師齊聚：\n- Steve Jobs（蘋果創辦人）\n- Albert Einstein（物理學家）\n- Leonardo da Vinci（文藝復興巨匠）\n- Elon Musk（科技企業家）\n- 神秘嘉賓：由你隨機加入一位跨領域大師\n\n辯論主題：[請填入主題，例如：「真正的創新該如何誕生？」]\n\n規則：\n- 每位大師用自己真實的思維框架與語言風格發言\n- 觀點可以互相辯論、質疑、補充\n- 神秘嘉賓最後登場，帶來意想不到的觀點\n- 最後由你（主持人）總結各方洞見\n\n開始辯論。”},
-{id:7,grid:“grid-biz”,cat:“market”,catLabel:“市場分析”,catClass:“tag-biz”,icon:“🌍”,iconBg:”#e8f4ff”,num:“B1”,title:“Tool 1｜市場洞察引擎（PEST AI）”,isNews:false,
-desc:“🎯 3分鐘看懂一個市場\nPEST分析 + 未來3年趨勢 + 三大機會 + 三大風險 + 建議切入策略”,
-text:“你是一位頂尖市場策略顧問。請針對以下產業進行完整的 PEST 分析：\n\n產業：[請填入產業名稱]\n\n請輸出：\n1. PEST分析（政治/經濟/社會/科技各3個關鍵因素）\n2. 未來3年最重要的趨勢（3條）\n3. 三大市場機會\n4. 三大市場風險\n5. 建議的市場切入策略”},
-{id:8,grid:“grid-biz”,cat:“market”,catLabel:“市場分析”,catClass:“tag-biz”,icon:“🔍”,iconBg:”#e8f4ff”,num:“B2”,title:“Tool 2｜競品解剖器（3C + Benchmark）”,isNews:false,
-desc:“🎯 快速找到市場差異\n3C架構分析 + 競品比較表 + 差異化機會 + 建議市場定位”,
-text:“你是競爭策略專家。請針對以下品牌/產品進行競品分析：\n\n目標品牌：[請填入品牌名稱]\n主要競品：[請列出2-3個競品]\n\n請輸出：\n1. 3C分析（Company / Customer / Competitor）\n2. 競品比較表（功能/價格/定位/優劣勢）\n3. 市場差異化機會（3個）\n4. 建議的市場定位聲明\n5. 一句話核心差異化策略”},
-{id:9,grid:“grid-biz”,cat:“strategy”,catLabel:“策略規劃”,catClass:“tag-biz”,icon:“♟”,iconBg:”#e8f4ff”,num:“B3”,title:“Tool 3｜SWOT → 策略轉換器”,isNews:false,
-desc:“🎯 讓學員「會想策略」\nSWOT分析 + SO/ST/WO/WT策略轉換 + 三個優先策略 + 行動建議”,
-text:“你是企業策略顧問。請針對以下企業/個人進行 SWOT 分析並轉化為可執行策略：\n\n分析對象：[請填入企業或個人描述]\n\n請輸出：\n1. SWOT分析（各3-4個要素）\n2. 策略矩陣（SO/ST/WO/WT各1-2個策略）\n3. 三個最優先執行的策略（附理由）\n4. 每個策略的具體行動建議\n5. 30天內可立刻開始的第一步”},
-{id:10,grid:“grid-biz”,cat:“biz”,catLabel:“商業設計”,catClass:“tag-biz”,icon:“🏗️”,iconBg:”#e8f4ff”,num:“B4”,title:“Tool 4｜商業模式設計器（BMC）”,isNews:false,
-desc:“🎯 建立完整商業邏輯\n商業模式畫布 + 核心價值主張 + 收入來源 + 成本結構 + 風險優化”,
-text:“你是商業模式設計專家。請針對以下創業概念設計完整的商業模式：\n\n創業概念：[請描述你的產品或服務想法]\n\n請輸出完整的商業模式畫布（BMC）九個要素，並附上三大商業風險與優化建議。”},
-{id:11,grid:“grid-biz”,cat:“biz”,catLabel:“商業設計”,catClass:“tag-biz”,icon:“🎯”,iconBg:”#e8f4ff”,num:“B5”,title:“Tool 5｜需求洞察（JTBD）”,isNews:false,
-desc:“🎯 避免做錯產品\n功能需求 + 情感需求 + 社會需求 + 三個未被滿足的痛點與機會”,
-text:“你是用戶需求洞察專家，擅長 Jobs-To-Be-Done（JTBD）框架。\n\n產品/服務：[請描述你的產品或服務]\n目標用戶：[請描述你的目標用戶]\n\n請輸出：\n1. 功能需求 / 情感需求 / 社會需求\n2. 三個目前未被滿足的核心痛點\n3. 三個對應的產品機會點\n4. 一句話的核心價值主張”},
-{id:12,grid:“grid-biz”,cat:“strategy”,catLabel:“策略規劃”,catClass:“tag-biz”,icon:“💰”,iconBg:”#e8f4ff”,num:“B6”,title:“Tool 6｜定價策略設計器”,isNews:false,
-desc:“🎯 理解「價值＝價格」\n競品定價分析 + 建議定價策略 + 價值支撐邏輯 + 提高願付價格方法”,
-text:“你是定價策略專家。請針對以下產品設計最佳定價策略：\n\n產品描述：[請描述你的產品]\n目標客群：[請描述目標客群]\n目前考慮的價格範圍：[請填入]\n\n請輸出：建議定價策略、具體建議價格與理由、價值支撐邏輯、三個提高客戶願付價格的方法、定價風險與應對方案”},
-{id:13,grid:“grid-biz”,cat:“strategy”,catLabel:“策略規劃”,catClass:“tag-biz”,icon:“📈”,iconBg:”#e8f4ff”,num:“B7”,title:“Tool 7｜成長策略規劃器”,isNews:false,
-desc:“🎯 找成長路徑\n市場擴展 + 產品擴展 + 商業模式創新 + 三條成長路徑 + 風險與條件”,
-text:“你是成長策略顧問。請針對以下企業規劃成長策略：\n\n企業描述：[請描述你的企業現況]\n成長目標：[請填入，例如：3年內營收翻倍]\n\n請輸出：安索夫矩陣分析、三條可行的成長路徑、每條路徑所需資源與條件、主要風險與緩解策略、12個月成長里程碑”},
-{id:14,grid:“grid-biz”,cat:“action”,catLabel:“行動落地”,catClass:“tag-biz”,icon:“🚀”,iconBg:”#e8f4ff”,num:“B8”,title:“Tool 8｜策略行動化引擎（Task Chain）”,isNews:false,
-desc:“🎯 讓策略「落地」\n任務清單 + KPI + 優先順序 + 90 天行動計畫”,
-text:“你是專案管理與策略執行專家。請將以下策略轉化為可執行的行動計畫：\n\n策略目標：[請描述你想達成的策略目標]\n可用資源：[請描述人力/預算/時間等資源]\n期限：[請填入]\n\n請輸出：完整任務清單、每個任務的負責角色與完成標準、關鍵KPI（3-5個）、90天行動計畫、最可能遇到的3個障礙與解決方案、每週檢核清單”},
-{id:15,grid:“grid-biz”,cat:“action”,catLabel:“行動落地”,catClass:“tag-biz”,icon:“✅”,iconBg:”#e8f4ff”,num:“B9”,title:“Tool 9｜新產品評估器（Go / No-Go）”,isNews:false,
-desc:“🎯 做決策判斷\n市場需求 + 競爭 + 商業模式 + 可行性評分 + Go/No-Go建議”,
-text:“你是創投顧問與產品評估專家。請對以下新產品概念進行嚴格評估：\n\n產品概念：[請描述你的產品想法]\n目標市場：[請描述]\n預計投入資源：[請填入]\n\n請從六個維度評分（1-10分）：市場需求強度、市場規模、競爭強度、差異化優勢、商業模式可行性、執行可行性\n\n輸出：評分表 + 最大風險 + 最大機會 + 最終 Go/No-Go 建議與理由”},
-{id:16,grid:“grid-biz”,cat:“action”,catLabel:“行動落地”,catClass:“tag-biz”,icon:“📄”,iconBg:”#e8f4ff”,num:“B10”,title:“Tool 10｜一頁式策略輸出器（高階）”,isNews:false,
-desc:“🎯 產出「能交付的成果」\n問題 + 洞察 + 策略 + 行動 + 成果 → 一頁式策略報告”,
-text:“你是麥肯錫等級的策略顧問。請針對以下情況，產出一份「一頁式策略報告」：\n\n情況描述：[請詳細描述你面臨的問題或機會]\n\n請按以下結構輸出（每部分2-3句話精煉表達）：\n📌 核心問題（What）\n💡 關鍵洞察（Why）\n🎯 策略選擇（How）\n⚡ 優先行動（Do）\n📊 成功指標（Measure）\n⚠️ 最大風險（Risk）”},
-{id:17,grid:“grid-news”,cat:“news”,catLabel:“AI 日報”,catClass:“tag-news”,icon:“📰”,iconBg:”#0a2a4a”,num:“N1”,title:“AI 情報日報 v2.0”,isNews:true,
-desc:“每日搜尋十大區塊 AI 資訊，整理後寄送 Gmail。含名人發言、股市、台灣動態、開源模型、中國 AI 等。”,
-text:AI_DAILY_TEXT},
-{id:18,grid:“grid-news”,cat:“news”,catLabel:“AI 日報”,catClass:“tag-news”,icon:“🔄”,iconBg:”#0a2a4a”,num:“N2”,title:“AI 日報增量更新版”,isNews:true,
-desc:“只回報昨天之後的新消息，略過已知舊聞。每日例行追蹤用，搭配完整版 N1 效果最佳。”,
-text:AI_DAILY_DELTA}
+- 文末附一行：「與昨日相比，今日最值得關注的變化：＿＿＿」`}
 ];
 
-prompts.forEach(p=>{
-const grid=document.getElementById(p.grid);
-const card=document.createElement(“div”);
-card.className=“card”+(p.isNews?” news-card”:””);
-card.dataset.cat=p.cat;card.dataset.id=p.id;
-card.innerHTML=`<div class="card-icon" style="background:${p.iconBg}">${p.icon}</div><div class="card-cat">${p.catLabel}</div><div class="card-title">${p.title}</div><div class="card-desc">${p.desc}</div><div class="card-actions"><button class="btn-copy" onclick="quickCopy(event,${p.id})">⊕ 複製</button><button class="btn-expand" onclick="openModal(${p.id})">展開</button></div>`;
-grid.appendChild(card);
+// ── RENDER ──
+P.forEach(p => {
+  const g = document.getElementById(p.g);
+  if (!g) return;
+  const c = document.createElement('div');
+  c.className = 'card' + (p.news ? ' news-card' : '');
+  c.dataset.cat = p.cat;
+  c.dataset.id = p.id;
+  c.innerHTML =
+    '<div class="c-icon" style="background:' + p.bg + '">' + p.icon + '</div>' +
+    '<div class="c-cat">' + p.cat2 + '</div>' +
+    '<div class="c-title">' + p.title + '</div>' +
+    '<div class="c-desc">' + p.desc + '</div>' +
+    '<div class="c-actions">' +
+      '<button class="btn-copy" onclick="quickCopy(event,' + p.id + ')">&#8853; 複製</button>' +
+      '<button class="btn-expand" onclick="openModal(' + p.id + ')">展開</button>' +
+    '</div>';
+  g.appendChild(c);
 });
 
-function quickCopy(e,id){e.stopPropagation();const btn=e.target;navigator.clipboard.writeText(prompts[id].text).then(()=>{btn.textContent=“✓ 已複製”;btn.classList.add(“copied”);showToast();setTimeout(()=>{btn.textContent=“⊕ 複製”;btn.classList.remove(“copied”)},2000)})}
-function openModal(id){const p=prompts[id];document.getElementById(“modalNum”).textContent=p.num;const tag=document.getElementById(“modalTag”);tag.textContent=p.catLabel;tag.className=“modal-tag “+p.catClass;document.getElementById(“modalTitle”).textContent=p.title;document.getElementById(“modalText”).value=p.text;const box=document.getElementById(“modalBox”);box.className=“modal”+(p.isNews?” news-modal”:””);document.getElementById(“modalOverlay”).classList.add(“open”);document.body.style.overflow=“hidden”}
-function closeModal(){document.getElementById(“modalOverlay”).classList.remove(“open”);document.body.style.overflow=””}
-function closeModalOnOverlay(e){if(e.target===document.getElementById(“modalOverlay”))closeModal()}
-function copyFromModal(){const text=document.getElementById(“modalText”).value;const btn=document.getElementById(“modalCopyBtn”);navigator.clipboard.writeText(text).then(()=>{btn.textContent=“✓ 已複製”;btn.classList.add(“copied”);showToast();setTimeout(()=>{btn.textContent=“⊕ 複製全部”;btn.classList.remove(“copied”)},2000)})}
-function showToast(){const t=document.getElementById(“toast”);t.classList.add(“show”);setTimeout(()=>t.classList.remove(“show”),2200)}
-function filterCat(cat,btn){document.querySelectorAll(”.cat-btn”).forEach(b=>b.classList.remove(“active”));btn.classList.add(“active”);document.querySelectorAll(”.card”).forEach(card=>{card.classList.toggle(“hidden”,cat!==“all”&&card.dataset.cat!==cat)})}
-function filterCards(query){const q=query.toLowerCase();document.querySelectorAll(”.card”).forEach(card=>{const id=parseInt(card.dataset.id);const p=prompts[id];const text=(p.title+p.text+p.catLabel).toLowerCase();card.classList.toggle(“hidden”,q.length>0&&!text.includes(q))})}
-document.addEventListener(“keydown”,e=>{if(e.key===“Escape”)closeModal()});
-</script>
+// ── FUNCTIONS ──
+function quickCopy(e, id) {
+  e.stopPropagation();
+  const btn = e.currentTarget;
+  navigator.clipboard.writeText(P[id].text).then(() => {
+    btn.textContent = '✓ 已複製'; btn.classList.add('copied');
+    showToast();
+    setTimeout(() => { btn.innerHTML = '&#8853; 複製'; btn.classList.remove('copied'); }, 2000);
+  });
+}
 
-<div class="theme-badge" id="themeBadge"></div>
-<script>
+function openModal(id) {
+  const p = P[id];
+  document.getElementById('mNum').textContent = p.num;
+  const tag = document.getElementById('mTag');
+  tag.textContent = p.cat2; tag.className = 'm-tag ' + p.cl;
+  document.getElementById('mTitle').textContent = p.title;
+  document.getElementById('mText').value = p.text;
+  document.getElementById('modalBox').className = 'modal' + (p.news ? ' nm' : '');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function overlayClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
+}
+
+function copyModal() {
+  const btn = document.getElementById('mCopyBtn');
+  navigator.clipboard.writeText(document.getElementById('mText').value).then(() => {
+    btn.textContent = '✓ 已複製'; btn.classList.add('copied');
+    showToast();
+    setTimeout(() => { btn.innerHTML = '&#8853; 複製全部'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function filterCat(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(c => {
+    c.classList.toggle('hidden', cat !== 'all' && c.dataset.cat !== cat);
+  });
+}
+
+function filterCards(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.card').forEach(c => {
+    const p = P[parseInt(c.dataset.id)];
+    const txt = (p.title + p.desc + p.cat2 + p.text).toLowerCase();
+    c.classList.toggle('hidden', q.length > 0 && !txt.includes(q));
+  });
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── 10 THEMES ──
 const THEMES = [
-  // 1. 奶油古典
-  {name:"奶油古典",bg:"#faf6ef",surface:"white",ink:"#1a1208",gold:"#c9a84c",accent:"#8b3a2a",bar:"linear-gradient(90deg,#8b3a2a,#c9a84c,#4a6741,#1e3a5f)"},
-  // 2. 深夜藍調
-  {name:"深夜藍調",bg:"#060d1a",surface:"#0d1829",ink:"#e0eeff",gold:"#4a9eff",accent:"#7ecbff",bar:"linear-gradient(90deg,#0a2a4a,#1a5f8a,#4a9eff,#7ecbff)"},
-  // 3. 翡翠商務
-  {name:"翡翠商務",bg:"#f0f7f4",surface:"white",ink:"#0d2b1e",gold:"#1a8c5a",accent:"#0f6644",bar:"linear-gradient(90deg,#0f6644,#1a8c5a,#2db87a,#0f6644)"},
-  // 4. 玫瑰金
-  {name:"玫瑰金",bg:"#fff8f6",surface:"white",ink:"#2a1510",gold:"#c97050",accent:"#e8a080",bar:"linear-gradient(90deg,#8b3020,#c97050,#e8a080,#c97050)"},
-  // 5. 極簡白
-  {name:"極簡白",bg:"#ffffff",surface:"#f8f8f8",ink:"#111111",gold:"#333333",accent:"#666666",bar:"linear-gradient(90deg,#111,#444,#111,#444)"},
-  // 6. 碳黑極致
-  {name:"碳黑極致",bg:"#0a0a0a",surface:"#141414",ink:"#f0f0f0",gold:"#e8e8e8",accent:"#aaaaaa",bar:"linear-gradient(90deg,#222,#555,#222,#888)"},
-  // 7. 紫羅蘭
-  {name:"紫羅蘭",bg:"#f8f4ff",surface:"white",ink:"#1a0a2e",gold:"#7c3aed",accent:"#a855f7",bar:"linear-gradient(90deg,#4c1d95,#7c3aed,#a855f7,#4c1d95)"},
-  // 8. 午夜紫
-  {name:"午夜紫",bg:"#0d0618",surface:"#160926",ink:"#ede0ff",gold:"#c084fc",accent:"#e879f9",bar:"linear-gradient(90deg,#4c1d95,#7c3aed,#c084fc,#e879f9)"},
-  // 9. 珊瑚活力
-  {name:"珊瑚活力",bg:"#fff5f0",surface:"white",ink:"#1a0a00",gold:"#f97316",accent:"#fb923c",bar:"linear-gradient(90deg,#c2410c,#f97316,#fb923c,#fbbf24)"},
-  // 10. 海洋青
-  {name:"海洋青",bg:"#f0fafa",surface:"white",ink:"#062b2b",gold:"#0891b2",accent:"#06b6d4",bar:"linear-gradient(90deg,#164e63,#0891b2,#06b6d4,#22d3ee)"},
-  // 11. 森林綠
-  {name:"森林綠",bg:"#f1f8f1",surface:"white",ink:"#0a1f0a",gold:"#16a34a",accent:"#22c55e",bar:"linear-gradient(90deg,#14532d,#16a34a,#22c55e,#86efac)"},
-  // 12. 夕陽橘
-  {name:"夕陽橘",bg:"#fff9f0",surface:"white",ink:"#1c0a00",gold:"#ea580c",accent:"#f59e0b",bar:"linear-gradient(90deg,#9a3412,#ea580c,#f59e0b,#fcd34d)"},
-  // 13. 薰衣草
-  {name:"薰衣草",bg:"#faf5ff",surface:"white",ink:"#1e1030",gold:"#8b5cf6",accent:"#a78bfa",bar:"linear-gradient(90deg,#5b21b6,#8b5cf6,#a78bfa,#ddd6fe)"},
-  // 14. 霓虹未來
-  {name:"霓虹未來",bg:"#050510",surface:"#0a0a20",ink:"#f0f0ff",gold:"#00ffcc",accent:"#ff00ff",bar:"linear-gradient(90deg,#00ffcc,#0080ff,#ff00ff,#00ffcc)"},
-  // 15. 麥田金
-  {name:"麥田金",bg:"#fffbeb",surface:"white",ink:"#1c1000",gold:"#d97706",accent:"#f59e0b",bar:"linear-gradient(90deg,#92400e,#d97706,#f59e0b,#fde68a)"},
-  // 16. 丹寧藍
-  {name:"丹寧藍",bg:"#f0f4f8",surface:"white",ink:"#0f172a",gold:"#3b82f6",accent:"#60a5fa",bar:"linear-gradient(90deg,#1e3a8a,#3b82f6,#60a5fa,#1e3a8a)"},
-  // 17. 聖誕節慶
-  {name:"聖誕節慶",bg:"#fff5f5",surface:"white",ink:"#1a0000",gold:"#dc2626",accent:"#16a34a",bar:"linear-gradient(90deg,#dc2626,#16a34a,#dc2626,#fbbf24)"},
-  // 18. 新年煙火
-  {name:"新年煙火",bg:"#0a0800",surface:"#141000",ink:"#fff8e0",gold:"#fbbf24",accent:"#f97316",bar:"linear-gradient(90deg,#fbbf24,#f97316,#ef4444,#fbbf24)"},
-  // 19. 春日粉
-  {name:"春日粉",bg:"#fff0f6",surface:"white",ink:"#2a0a18",gold:"#ec4899",accent:"#f472b6",bar:"linear-gradient(90deg,#be185d,#ec4899,#f472b6,#fbcfe8)"},
-  // 20. 秋楓紅
-  {name:"秋楓紅",bg:"#fff8f0",surface:"white",ink:"#1a0800",gold:"#b45309",accent:"#d97706",bar:"linear-gradient(90deg,#7c2d12,#b45309,#d97706,#fbbf24)"},
-  // 21. 冰雪藍
-  {name:"冰雪藍",bg:"#f0f8ff",surface:"white",ink:"#0a1a2a",gold:"#0ea5e9",accent:"#38bdf8",bar:"linear-gradient(90deg,#0369a1,#0ea5e9,#38bdf8,#bae6fd)"},
-  // 22. 抹茶綠
-  {name:"抹茶綠",bg:"#f5f8f0",surface:"white",ink:"#0a1800",gold:"#65a30d",accent:"#84cc16",bar:"linear-gradient(90deg,#365314,#65a30d,#84cc16,#d9f99d)"},
-  // 23. 頂級黑金
-  {name:"頂級黑金",bg:"#080600",surface:"#120e00",ink:"#f5e6c0",gold:"#d4af37",accent:"#f0d060",bar:"linear-gradient(90deg,#d4af37,#f0d060,#d4af37,#a08020)"},
-  // 24. 摩卡咖啡
-  {name:"摩卡咖啡",bg:"#f5f0eb",surface:"white",ink:"#1a1008",gold:"#6b4226",accent:"#8b5e3c",bar:"linear-gradient(90deg,#3c1f0a,#6b4226,#8b5e3c,#c49a6c)"},
-  // 25. 電競紫
-  {name:"電競紫",bg:"#0a0014",surface:"#110020",ink:"#f0e0ff",gold:"#bf00ff",accent:"#00ffcc",bar:"linear-gradient(90deg,#bf00ff,#6600cc,#00ffcc,#bf00ff)"},
-  // 26. 地中海
-  {name:"地中海",bg:"#f0f6ff",surface:"white",ink:"#0a1428",gold:"#1d4ed8",accent:"#3b82f6",bar:"linear-gradient(90deg,#1e3a8a,#1d4ed8,#3b82f6,#f59e0b)"},
-  // 27. 暖灰簡約
-  {name:"暖灰簡約",bg:"#f5f4f2",surface:"white",ink:"#1c1c1c",gold:"#6b6b6b",accent:"#9b9b9b",bar:"linear-gradient(90deg,#2c2c2c,#6b6b6b,#9b9b9b,#2c2c2c)"},
-  // 28. 霓虹粉紅
-  {name:"霓虹粉紅",bg:"#0a0008",surface:"#150010",ink:"#ffe0f8",gold:"#ff00aa",accent:"#ff80d4",bar:"linear-gradient(90deg,#ff00aa,#cc0088,#ff80d4,#ff00aa)"},
-  // 29. 竹林青
-  {name:"竹林青",bg:"#f2f8f4",surface:"white",ink:"#081810",gold:"#059669",accent:"#10b981",bar:"linear-gradient(90deg,#064e3b,#059669,#10b981,#6ee7b7)"},
-  // 30. 星空深藍
-  {name:"星空深藍",bg:"#020b18",surface:"#051628",ink:"#d0e8ff",gold:"#60a5fa",accent:"#93c5fd",bar:"linear-gradient(90deg,#1e3a5f,#2563eb,#60a5fa,#93c5fd)"},
-  // 31. 琥珀暖光
-  {name:"琥珀暖光",bg:"#fff8e8",surface:"white",ink:"#1a1000",gold:"#b45309",accent:"#fbbf24",bar:"linear-gradient(90deg,#78350f,#b45309,#fbbf24,#78350f)"},
-  // 32. 霜白銀
-  {name:"霜白銀",bg:"#f8f9fa",surface:"white",ink:"#1a1a2e",gold:"#6c757d",accent:"#adb5bd",bar:"linear-gradient(90deg,#343a40,#6c757d,#adb5bd,#343a40)"},
+  {name:'奶油暖陽',  bg:'#faf6ef', ink:'#2a1f0e', gold:'#b8860b', bar:'linear-gradient(90deg,#8b4513,#b8860b,#d4a017,#8b4513)'},
+  {name:'深夜藍調',  bg:'#06101e', ink:'#ddeeff', gold:'#5ba3d9', bar:'linear-gradient(90deg,#1a3a5c,#3d7fbf,#5ba3d9,#1a3a5c)'},
+  {name:'翡翠商務',  bg:'#f2f8f5', ink:'#0d2b1e', gold:'#1a7a50', bar:'linear-gradient(90deg,#0f5c3a,#1a7a50,#2ea36b,#0f5c3a)'},
+  {name:'霧灰簡約',  bg:'#f4f4f2', ink:'#1c1c1c', gold:'#555555', bar:'linear-gradient(90deg,#222,#555,#888,#222)'},
+  {name:'頂級黑金',  bg:'#080600', ink:'#f0e6c0', gold:'#d4af37', bar:'linear-gradient(90deg,#d4af37,#f0d060,#d4af37,#8a6a00)'},
+  {name:'珊瑚活力',  bg:'#fff8f5', ink:'#2a0e00', gold:'#e8622a', bar:'linear-gradient(90deg,#c0400a,#e8622a,#f5954d,#fbbf7a)'},
+  {name:'薰衣草紫',  bg:'#faf6ff', ink:'#1a1030', gold:'#7c5cbf', bar:'linear-gradient(90deg,#5e3a9f,#7c5cbf,#a07dd4,#5e3a9f)'},
+  {name:'湛藍天空',  bg:'#f0f7ff', ink:'#0a1828', gold:'#1a6fbf', bar:'linear-gradient(90deg,#0d52a0,#1a6fbf,#3a90d9,#0d52a0)'},
+  {name:'森林早晨',  bg:'#f3f8f0', ink:'#0a1e08', gold:'#3a8c28', bar:'linear-gradient(90deg,#266018,#3a8c28,#5ab040,#266018)'},
+  {name:'玫瑰金商務',bg:'#fff8f6', ink:'#2a1210', gold:'#b56040', bar:'linear-gradient(90deg,#8c3a20,#b56040,#d4886a,#8c3a20)'},
 ];
 
 function applyTheme(t) {
-const r = document.documentElement.style;
-r.setProperty(’–paper’, t.bg);
-r.setProperty(’–cream’, t.bg);
-r.setProperty(’–ink’, t.ink);
-r.setProperty(’–gold’, t.gold);
-r.setProperty(’–gold-light’, t.gold + ‘55’);
-r.setProperty(’–rust’, t.accent);
-r.setProperty(’–shadow’, ‘rgba(0,0,0,0.15)’);
-// banner
-const banner = document.querySelector(’.banner-unified’);
-if (banner) {
-banner.style.background = t.ink;
-const before = document.getElementById(‘bannerBar’);
-if (before) before.style.background = t.bar;
-}
-// filter bar bg
-const fw = document.querySelector(’.filter-wrap’);
-const sw = document.querySelector(’.search-wrap’);
-if (fw) fw.style.background = t.bg;
-if (sw) sw.style.background = t.bg;
-// badge
-const badge = document.getElementById(‘themeBadge’);
-if (badge) {
-badge.textContent = ’🎨 ’ + t.name;
-badge.style.opacity = ‘1’;
-setTimeout(() => badge.style.opacity = ‘0’, 3000);
-}
+  const r = document.documentElement.style;
+  r.setProperty('--bg', t.bg);
+  r.setProperty('--cream', t.bg);
+  r.setProperty('--ink', t.ink);
+  r.setProperty('--gold', t.gold);
+  r.setProperty('--gold-light', t.gold + '55');
+  r.setProperty('--surface', t.bg === '#080600' || t.bg === '#06101e' ? '#120e04' : '#ffffff');
+  r.setProperty('--bar', t.bar);
+  document.getElementById('mainHeader').style.background = t.ink;
+  document.getElementById('mainHeader').style.setProperty('--bar', t.bar);
+  document.getElementById('filterWrap').style.background = t.bg;
+  document.getElementById('searchWrap').style.background = t.bg;
+  // update card backgrounds for non-news
+  document.querySelectorAll('.card:not(.news-card)').forEach(c => {
+    c.style.background = t.bg === '#080600' || t.bg === '#06101e' ? '#120e04' : '#ffffff';
+  });
+  const badge = document.getElementById('tbadge');
+  badge.textContent = '🎨 ' + t.name;
+  badge.classList.add('show');
+  setTimeout(() => badge.classList.remove('show'), 3000);
 }
 
-// Pick random theme on load
-const t = THEMES[Math.floor(Math.random() * THEMES.length)];
-window.addEventListener(‘DOMContentLoaded’, () => applyTheme(t));
+const theme = THEMES[Math.floor(Math.random() * THEMES.length)];
+applyTheme(theme);
 </script>
 
 </body>
