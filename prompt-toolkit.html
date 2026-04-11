@@ -44,7 +44,7 @@
   .card-icon{font-size:26px;line-height:1;flex-shrink:0;margin-top:2px}
   .card-meta{flex:1}
   .card-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:6px}
-  .tag-ip{background:rgba(120,60,160,.12);color:#7a3ca0}.tag-inner{background:rgba(139,58,42,.12);color:#8b3a2a}.tag-speak{background:rgba(74,103,65,.12);color:#3a6741}.tag-think{background:rgba(30,58,95,.12);color:#1e3a5f}.tag-market{background:rgba(26,106,74,.12);color:#1a6a4a}.tag-strategy{background:rgba(26,74,138,.12);color:#1a4a8a}.tag-design{background:rgba(90,58,143,.12);color:#5a3a8f}.tag-action{background:rgba(138,74,26,.12);color:#8a4a1a}.tag-learn{background:rgba(26,106,138,.12);color:#1a6a8a}
+  .tag-ip{background:rgba(120,60,160,.12);color:#7a3ca0}.tag-inner{background:rgba(139,58,42,.12);color:#8b3a2a}.tag-speak{background:rgba(74,103,65,.12);color:#3a6741}.tag-think{background:rgba(30,58,95,.12);color:#1e3a5f}.tag-market{background:rgba(26,106,74,.12);color:#1a6a4a}.tag-strategy{background:rgba(26,74,138,.12);color:#1a4a8a}.tag-design{background:rgba(90,58,143,.12);color:#5a3a8f}.tag-action{background:rgba(138,74,26,.12);color:#8a4a1a}.tag-learn{background:rgba(26,106,138,.12);color:#1a6a8a}.tag-tool{background:rgba(60,60,60,.1);color:#444}
   .card-title{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}
   .card-purpose{font-size:13px;color:var(--biz-accent);font-weight:600;margin-top:4px}
   .card-body{padding:14px 20px;flex:1}
@@ -96,7 +96,7 @@
 </div>
 
 <div class="tabs-wrap">
-  <button class="tab-btn active-tm" onclick="switchSection('all',this)">全部 (20)</button>
+  <button class="tab-btn active-tm" onclick="switchSection('all',this)">全部 (21)</button>
   <button class="tab-btn" onclick="switchSection('ip',this)">✦ 個人IP</button>
   <button class="tab-btn" onclick="switchSection('inner',this)">🧭 自我探索</button>
   <button class="tab-btn" onclick="switchSection('speak',this)">🎤 演講準備</button>
@@ -106,6 +106,7 @@
   <button class="tab-btn" onclick="switchSection('design',this)">💡 商業設計</button>
   <button class="tab-btn" onclick="switchSection('action',this)">🚀 行動落地</button>
   <button class="tab-btn" onclick="switchSection('learn',this)">🎓 深度學習</button>
+  <button class="tab-btn" onclick="switchSection('tool',this)">🔧 實用工具</button>
 </div>
 
 <div class="container">
@@ -146,6 +147,12 @@
       <div class="card" style="border-top-color:#1a6a8a" data-cat="learn" data-id="19"><div class="card-head"><div class="card-icon">🎯</div><div class="card-meta"><span class="card-tag tag-learn">深度學習</span><div class="card-title">MIT學習法 3｜深度理解測驗</div><div class="card-purpose">🎯 區分真正理解與死背知識</div></div></div><div class="card-body"><div class="card-preview">生成10個能區分深度理解與死背知識的問題。</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(19,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(19)">展開</button></div></div>
     </div>
   </div>
+  <div class="group-section" data-group="tool">
+    <div class="group-label biz-label">🔧 實用工具 · 跨場景輔助指令</div>
+    <div class="cards-grid">
+      <div class="card" style="border-top-color:#444" data-cat="tool" data-id="20"><div class="card-head"><div class="card-icon">📊</div><div class="card-meta"><span class="card-tag tag-tool">實用工具</span><div class="card-title">輸出試算表格式</div><div class="card-purpose">🎯 一鍵貼入 Excel / Google 試算表</div></div></div><div class="card-body"><div class="card-preview">請整理成表格，用純文字程式碼區塊輸出，欄位請用 Tab 隔開，我要直接貼上試算表</div></div><div class="card-foot"><button class="btn-copy" onclick="copyPrompt(20,this)">⊕ 複製</button><button class="btn-expand" onclick="openModal(20)">展開</button></div></div>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
@@ -179,7 +186,8 @@ const prompts=[
 ,
 {id:17,cat:"learn",icon:"🧠",tag:"深度學習",purpose:"🎯 抽出專家耗費多年建立的認知框架",title:"MIT學習法 1｜找出核心心智模型",text:`這個領域所有專家共享的5個核心心智模型是什麼？\n\n（What are the 5 core mental models every expert shares?）\n\n請上傳相關文件、教科書或資料後提問，讓 AI 從龐雜文獻中抽出結構性框架，而非流水帳整理。`},
 {id:18,cat:"learn",icon:"⚡",tag:"深度學習",purpose:"🎯 先摸透知識地圖的輪廓",title:"MIT學習法 2｜找出根本分歧",text:`這個領域的專家在哪3個地方存在根本分歧？各方最強的論點是什麼？\n\n（Now show me the 3 places where experts in this field fundamentally disagree, and what each side's strongest argument is.）\n\n建立基礎框架後，用這個問題釐清學界共識與開放性問題，20分鐘內建構完整學術脈絡。`},
-{id:19,cat:"learn",icon:"🎯",tag:"深度學習",purpose:"🎯 區分真正理解與死背知識",title:"MIT學習法 3｜深度理解測驗",text:`生成10個能區分深度理解與死背知識的問題。\n\n（Generate 10 questions that would expose whether someone deeply understands this subject versus someone who just memorized facts.）\n\n答錯時追問：解釋這個答案為什麼錯，我漏掉了什麼。\n比反覆閱讀更能鞏固長期記憶。`}
+{id:19,cat:"learn",icon:"🎯",tag:"深度學習",purpose:"🎯 區分真正理解與死背知識",title:"MIT學習法 3｜深度理解測驗",text:`生成10個能區分深度理解與死背知識的問題。\n\n（Generate 10 questions that would expose whether someone deeply understands this subject versus someone who just memorized facts.）\n\n答錯時追問：解釋這個答案為什麼錯，我漏掉了什麼。\n比反覆閱讀更能鞏固長期記憶。`},
+{id:20,cat:"tool",icon:"📊",tag:"實用工具",purpose:"🎯 一鍵貼入 Excel / Google 試算表",title:"輸出試算表格式",text:`請整理成表格，用純文字程式碼區塊輸出，欄位請用 Tab 隔開，我要直接貼上試算表`}
 ];
 
 function copyPrompt(id,btn){navigator.clipboard.writeText(prompts[id].text).then(()=>{btn.textContent='✓ 已複製';btn.classList.add('copied');showToast();setTimeout(()=>{btn.textContent='⊕ 複製';btn.classList.remove('copied')},2000)})}
@@ -188,7 +196,7 @@ function closeModal(){document.getElementById('modalOverlay').classList.remove('
 function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
 function copyFromModal(){const text=document.getElementById('modalText').value;navigator.clipboard.writeText(text).then(()=>{const btn=document.getElementById('modalCopyBtn');btn.textContent='✓ 已複製';btn.classList.add('copied');showToast();setTimeout(()=>{btn.textContent='⊕ 複製全部';btn.classList.remove('copied')},2000)})}
 function showToast(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-const bizCats=['market','strategy','design','action','learn'];
+const bizCats=['market','strategy','design','action','learn','tool'];
 const tmCats=['ip','inner','speak','think'];
 function switchSection(cat,btn){
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active-tm','active-biz'));
@@ -202,7 +210,9 @@ function switchSection(cat,btn){
     const grp=g.dataset.group;
     if(cat==='all'){g.classList.remove('hidden');hTm.style.display='';hBiz.style.display='';}
     else if(tmCats.includes(cat)){g.classList.toggle('hidden',grp!=='tm');hTm.style.display='';hBiz.style.display='none';}
-    else{g.classList.toggle('hidden',grp!=='biz'&&grp!=='learn');hTm.style.display='none';hBiz.style.display='';}
+    else if(cat==='learn'){g.classList.toggle('hidden',grp!=='learn');hTm.style.display='none';hBiz.style.display='none';}
+    else if(cat==='tool'){g.classList.toggle('hidden',grp!=='tool');hTm.style.display='none';hBiz.style.display='none';}
+    else{g.classList.toggle('hidden',grp!=='biz');hTm.style.display='none';hBiz.style.display='';}
   });
 }
 function filterCards(q){q=q.toLowerCase();document.querySelectorAll('.card').forEach(card=>{const id=parseInt(card.dataset.id);const p=prompts[id];const t=(p.title+p.text+p.tag).toLowerCase();card.classList.toggle('hidden',q.length>0&&!t.includes(q))})}
