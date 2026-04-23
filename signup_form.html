@@ -99,11 +99,17 @@ gap: 6px;
 .tab-nav {
 display: flex;
 background: var(–white);
-border-bottom: 3px solid var(–gold);
-position: sticky;
-top: 0;
+border-top: 3px solid var(–gold);
+border-bottom: none;
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
 z-index: 100;
-box-shadow: 0 2px 12px var(–shadow);
+box-shadow: 0 -2px 12px var(–shadow);
+}
+body {
+padding-bottom: 80px;
 }
 .tab-btn {
 flex: 1;
@@ -142,12 +148,13 @@ margin: 0 auto;
 
 /* ── CARD ── */
 .card {
-background: var(–white);
+background: #FFFFFF !important;
 border-radius: 16px;
 padding: 24px 20px;
 margin-bottom: 16px;
-box-shadow: 0 2px 16px var(–shadow);
-border: 1px solid var(–border);
+box-shadow: 0 2px 16px rgba(200,146,42,0.15);
+border: 1.5px solid #D4B896 !important;
+-webkit-appearance: none;
 }
 .card-title {
 font-family: ‘Noto Serif TC’, serif;
@@ -185,18 +192,20 @@ margin-left: 4px;
 }
 input[type=“text”],
 input[type=“tel”],
+input[type=“password”],
 select {
 width: 100%;
 padding: 14px 16px;
 font-size: 18px;
 font-family: ‘Noto Sans TC’, sans-serif;
-border: 2px solid var(–border);
+border: 2px solid #D4B896 !important;
 border-radius: 10px;
-background: var(–bg);
-color: var(–dark);
+background: #FBF6EF !important;
+color: #2C1810;
 transition: border-color 0.2s, box-shadow 0.2s;
 -webkit-appearance: none;
 appearance: none;
+box-sizing: border-box;
 }
 input:focus, select:focus {
 outline: none;
