@@ -285,21 +285,6 @@
     transform: none;
   }
 
-  .btn-secondary {
-    width: 100%;
-    padding: 16px;
-    font-size: 18px;
-    font-weight: 700;
-    font-family: 'Noto Sans TC', sans-serif;
-    background: var(--white);
-    color: var(--gold);
-    border: 2px solid var(--gold);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-secondary:hover { background: var(--gold-pale); }
-
   /* ── ALERT ── */
   .alert {
     padding: 16px 18px;
@@ -391,6 +376,26 @@
   .pay-tag.transfer { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
   .pay-tag.cash { background: #FFF8E1; color: #F57F17; border: 1px solid #FFE082; }
 
+  /* 繳款確認按鈕樣式 */
+  .status-btn {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.2s;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .status-btn.paid {
+    background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7;
+  }
+  .status-btn.pending {
+    background: #F5EDE0; color: #6B4C3B; border-color: #D4B896;
+  }
+  .status-btn:hover { filter: brightness(0.95); transform: translateY(-1px); }
+  .status-btn:active { transform: translateY(0); }
+
   .member-list { display: flex; flex-direction: column; gap: 10px; }
   .member-item {
     background: var(--white);
@@ -417,12 +422,6 @@
   .member-info { flex: 1; }
   .member-name { font-size: 17px; font-weight: 700; color: var(--dark); }
   .member-sub { font-size: 13px; color: var(--mid); margin-top: 2px; }
-  .member-pay {
-    font-size: 13px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 12px;
-  }
 
   /* Loading */
   .spinner {
@@ -686,18 +685,15 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5
 // ══════════════════════════════════════════
 // 日期格式化小精靈
 // ══════════════════════════════════════════
-// 將生日格式化為 YYYY-MM-DD
 function formatBirthday(dateStr) {
   if (!dateStr) return '無資料';
-  // 如果包含 'T'，就只取 'T' 前面的部分
   return dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
 }
 
-// 將報名時間格式化為 YYYY-MM-DD HH:mm (並轉為本地時間)
 function formatTimestamp(ts) {
   if (!ts) return '無資料';
   const d = new Date(ts);
-  if (isNaN(d.getTime())) return ts; // 萬一解析失敗，就保持原樣
+  if (isNaN(d.getTime())) return ts;
 
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -723,11 +719,10 @@ function formatTimestamp(ts) {
   updateDays();
 })();
 
-// 依年月更新日期選項（防止2月30日等不合理日期）
 function updateDays() {
   const year  = parseInt(document.getElementById('f-year').value)  || 2000;
   const month = parseInt(document.getElementById('f-month').value) || 1;
-  const maxDay = new Date(year, month, 0).getDate(); // 該月最後一天
+  const maxDay = new Date(year, month, 0).getDate(); 
   const dsel = document.getElementById('f-day');
   const current = dsel.value;
   dsel.innerHTML = '<option value="">── 日 ──</option>';
@@ -736,7 +731,6 @@ function updateDays() {
   }
 }
 
-// 電話即時提示
 function updatePhoneHint(val) {
   const hint = document.getElementById('phone-hint');
   if (!val) {
@@ -754,7 +748,6 @@ function updatePhoneHint(val) {
   }
 }
 
-// 身分證即時提示
 function updateIdHint(val) {
   const hint = document.getElementById('id-hint');
   if (!val) {
@@ -797,9 +790,6 @@ function verifyPassword() {
   }
 }
 
-// ══════════════════════════════════════════
-// Tab 切換
-// ══════════════════════════════════════════
 function switchTab(name) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -808,9 +798,6 @@ function switchTab(name) {
   if (name === 'list' && listUnlocked) loadList();
 }
 
-// ══════════════════════════════════════════
-// 工具：顯示提示 (優化捲動體驗)
-// ══════════════════════════════════════════
 function showAlert(containerId, type, icon, msg) {
   const container = document.getElementById(containerId);
   container.innerHTML =
@@ -818,16 +805,13 @@ function showAlert(containerId, type, icon, msg) {
   container.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// ══════════════════════════════════════════
-// 驗證身分證
-// ══════════════════════════════════════════
 function validateID(id) {
   const reg = /^[A-Z][12]\d{8}$/;
   return reg.test(id.toUpperCase());
 }
 
 // ══════════════════════════════════════════
-// 報名送出 (優化 fetch 連線，繞過 CORS 限制)
+// 報名送出
 // ══════════════════════════════════════════
 async function submitForm() {
   const name    = document.getElementById('f-name').value.trim();
@@ -838,7 +822,6 @@ async function submitForm() {
   const idNum   = document.getElementById('f-id').value.trim().toUpperCase();
   const payment = document.querySelector('input[name="payment"]:checked');
 
-  // 驗證
   if (!name || name.replace(/\s/g,'').length < 2)
     return showAlert('signup-alert', 'error', '⚠️', '請填寫真實姓名（至少2個字）');
   if (!year || !month || !day)
@@ -861,9 +844,7 @@ async function submitForm() {
   try {
     const res = await fetch(GAS_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       redirect: 'follow',
       body: JSON.stringify(payload)
     });
@@ -873,7 +854,6 @@ async function submitForm() {
       showAlert('signup-alert', 'error', '🚫', `此身分證字號已報名過，無需重複報名！<br>如有疑問請聯絡主辦單位。`);
     } else if (data.status === 'success') {
       showAlert('signup-alert', 'success', '🎉', `<strong>${name}</strong> 報名成功！<br>我們將盡速確認您的資料，期待6月20日與您相見 🌿`);
-      // 清空表單
       document.getElementById('f-name').value = '';
       document.getElementById('f-year').value = '';
       document.getElementById('f-month').value = '';
@@ -894,7 +874,7 @@ async function submitForm() {
 }
 
 // ══════════════════════════════════════════
-// 查詢 (加上格式化過濾器)
+// 查詢
 // ══════════════════════════════════════════
 async function queryMember() {
   const val = document.getElementById('q-input').value.trim();
@@ -906,9 +886,7 @@ async function queryMember() {
   try {
     const res = await fetch(GAS_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       redirect: 'follow',
       body: JSON.stringify({ action: 'query', keyword: val })
     });
@@ -918,9 +896,11 @@ async function queryMember() {
       const m = data.member;
       const payClass = m.payment === 'Line Pay' ? 'linepay' : m.payment === '轉帳' ? 'transfer' : 'cash';
       
-      // 使用小精靈轉換日期格式
       const prettyBirthday = formatBirthday(m.birthday);
       const prettyTime = formatTimestamp(m.timestamp);
+      // 顯示是否已付款
+      const isPaid = m.isPaid === 'OK';
+      const paidStatusHtml = isPaid ? `<span style="color:#2E7D32; font-weight:700;">✅ 已確認收款</span>` : `<span style="color:#6B4C3B;">未確認</span>`;
 
       document.getElementById('query-result').innerHTML = `
         <div class="result-card">
@@ -932,6 +912,7 @@ async function queryMember() {
             <span class="result-key">付款方式</span>
             <span class="pay-tag ${payClass}">${m.payment}</span>
           </div>
+          <div class="result-row"><span class="result-key">繳款狀態</span>${paidStatusHtml}</div>
           <div class="result-row"><span class="result-key">報名時間</span><span class="result-val" style="font-size:14px">${prettyTime}</span></div>
         </div>`;
     } else {
@@ -946,8 +927,10 @@ async function queryMember() {
 }
 
 // ══════════════════════════════════════════
-// 名單 (加上格式化過濾器)
+// 名單與繳款切換
 // ══════════════════════════════════════════
+let allMembers = [];
+
 async function loadList() {
   document.getElementById('member-list').innerHTML =
     `<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">載入中…</div></div>`;
@@ -955,9 +938,7 @@ async function loadList() {
   try {
     const res = await fetch(GAS_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       redirect: 'follow',
       body: JSON.stringify({ action: 'list' })
     });
@@ -972,7 +953,6 @@ async function loadList() {
 }
 
 function renderList(members) {
-  // 統計今日新增，使用格式化後的時間來做比對，確保精準
   document.getElementById('total-count').textContent = members.length;
   
   const today = new Date();
@@ -998,9 +978,15 @@ function renderList(members) {
   }
 
   const payClass = p => p === 'Line Pay' ? 'linepay' : p === '轉帳' ? 'transfer' : 'cash';
+  
   document.getElementById('member-list').innerHTML = members.map((m, i) => {
-    // 確保名單上的生日也乾乾淨淨
     const prettyBirthday = formatBirthday(m.birthday);
+    
+    // 判斷是否已付款
+    const isPaid = m.isPaid === 'OK';
+    const statusClass = isPaid ? 'paid' : 'pending';
+    const statusText = isPaid ? '✅ 已收' : '未收款';
+
     return `
       <div class="member-item">
         <div class="member-num">${i + 1}</div>
@@ -1008,10 +994,54 @@ function renderList(members) {
           <div class="member-name">${m.name}</div>
           <div class="member-sub">${m.phone} ｜ ${prettyBirthday}</div>
         </div>
-        <span class="pay-tag ${payClass(m.payment)} member-pay">${m.payment}</span>
+        <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+          <span class="pay-tag ${payClass(m.payment)}" style="font-size:12px; padding:2px 8px;">${m.payment}</span>
+          <button class="status-btn ${statusClass}" onclick="togglePayment('${m.phone}', '${m.isPaid || ''}', this)">
+            ${statusText}
+          </button>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+// 點擊按鈕切換繳款狀態
+async function togglePayment(phone, currentStatus, btnElement) {
+  // 如果是 OK 就變成空，如果是空就變成 OK
+  const newStatus = currentStatus === 'OK' ? '' : 'OK';
+  const originalHtml = btnElement.innerHTML;
+  
+  // 顯示 loading 狀態，避免重複點擊
+  btnElement.innerHTML = '⏳..';
+  btnElement.disabled = true;
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      redirect: 'follow',
+      body: JSON.stringify({ action: 'updatePayment', phone: phone, status: newStatus })
+    });
+    const data = await res.json();
+    
+    if (data.status === 'success') {
+      // 成功後，更新本地的資料並重新繪製名單
+      const member = allMembers.find(m => m.phone === phone);
+      if (member) member.isPaid = newStatus;
+      
+      // 依據搜尋框的內容重新過濾顯示
+      filterList(); 
+    } else {
+      alert('更新失敗，請檢查資料表或重試。');
+      btnElement.innerHTML = originalHtml;
+      btnElement.disabled = false;
+    }
+  } catch(e) {
+    console.error(e);
+    alert('連線失敗，請確認網路後再試。');
+    btnElement.innerHTML = originalHtml;
+    btnElement.disabled = false;
+  }
 }
 
 function filterList() {
@@ -1020,7 +1050,6 @@ function filterList() {
   renderList(allMembers.filter(m => m.name.includes(kw)));
 }
 
-// 進入名單頁自動載入
 document.addEventListener('DOMContentLoaded', () => {});
 </script>
 </body>
