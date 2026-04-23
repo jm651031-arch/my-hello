@@ -819,9 +819,11 @@ function switchTab(name) {
 // 工具：顯示提示
 // ══════════════════════════════════════════
 function showAlert(containerId, type, icon, msg) {
-  document.getElementById(containerId).innerHTML =
+  const el = document.getElementById(containerId);
+  el.innerHTML =
     `<div class="alert alert-${type}"><span class="alert-icon">${icon}</span><span>${msg}</span></div>`;
-  document.getElementById(containerId).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ══════════════════════════════════════════
