@@ -99,17 +99,11 @@ gap: 6px;
 .tab-nav {
 display: flex;
 background: var(–white);
-border-top: 3px solid var(–gold);
-border-bottom: none;
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
+border-bottom: 3px solid var(–gold);
+position: sticky;
+top: 0;
 z-index: 100;
-box-shadow: 0 -2px 12px var(–shadow);
-}
-body {
-padding-bottom: 100px;
+box-shadow: 0 2px 12px var(–shadow);
 }
 .tab-btn {
 flex: 1;
@@ -130,8 +124,8 @@ gap: 6px;
 .tab-btn.active {
 color: var(–gold);
 background: var(–gold-pale);
-border-top: 3px solid var(–gold);
-margin-top: -3px;
+border-bottom: 3px solid var(–gold);
+margin-bottom: -3px;
 }
 .tab-btn:hover:not(.active) {
 background: #F5EDE0;
