@@ -790,7 +790,6 @@ function showAlert(containerId, type, icon, msg) {
   const container = document.getElementById(containerId);
   container.innerHTML =
     `<div class="alert alert-${type}"><span class="alert-icon">${icon}</span><span>${msg}</span></div>`;
-  // 改為 'center'，確保畫面會精準地移動並讓訊息置中，避免被上方導航列遮住
   container.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
@@ -837,11 +836,10 @@ async function submitForm() {
   try {
     const res = await fetch(GAS_URL, {
       method: 'POST',
-      // 加入 headers 將 Content-Type 設為 text/plain，繞過 GAS 的 CORS 預檢限制
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
-      redirect: 'follow', // 允許跟隨 GAS 的重新導向
+      redirect: 'follow',
       body: JSON.stringify(payload)
     });
     const data = await res.json();
