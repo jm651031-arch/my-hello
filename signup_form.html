@@ -684,6 +684,31 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5DWuriGYQSiQqT1l_T4dyvunp1cA_UDGjtpQZcXtgV45jnQ/exec';
 
 // ══════════════════════════════════════════
+// 日期格式化小精靈
+// ══════════════════════════════════════════
+// 將生日格式化為 YYYY-MM-DD
+function formatBirthday(dateStr) {
+  if (!dateStr) return '無資料';
+  // 如果包含 'T'，就只取 'T' 前面的部分
+  return dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+}
+
+// 將報名時間格式化為 YYYY-MM-DD HH:mm (並轉為本地時間)
+function formatTimestamp(ts) {
+  if (!ts) return '無資料';
+  const d = new Date(ts);
+  if (isNaN(d.getTime())) return ts; // 萬一解析失敗，就保持原樣
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+}
+
+// ══════════════════════════════════════════
 // 初始化下拉選單
 // ══════════════════════════════════════════
 (function initDropdowns() {
@@ -869,7 +894,7 @@ async function submitForm() {
 }
 
 // ══════════════════════════════════════════
-// 查詢 (同樣補上 headers 繞過限制)
+// 查詢 (加上格式化過濾器)
 // ══════════════════════════════════════════
 async function queryMember() {
   const val = document.getElementById('q-input').value.trim();
@@ -892,17 +917,22 @@ async function queryMember() {
     if (data.status === 'found') {
       const m = data.member;
       const payClass = m.payment === 'Line Pay' ? 'linepay' : m.payment === '轉帳' ? 'transfer' : 'cash';
+      
+      // 使用小精靈轉換日期格式
+      const prettyBirthday = formatBirthday(m.birthday);
+      const prettyTime = formatTimestamp(m.timestamp);
+
       document.getElementById('query-result').innerHTML = `
         <div class="result-card">
           <div class="result-title">✅ 查詢到報名紀錄</div>
           <div class="result-row"><span class="result-key">姓名</span><span class="result-val">${m.name}</span></div>
-          <div class="result-row"><span class="result-key">生日</span><span class="result-val">${m.birthday}</span></div>
+          <div class="result-row"><span class="result-key">生日</span><span class="result-val">${prettyBirthday}</span></div>
           <div class="result-row"><span class="result-key">電話</span><span class="result-val">${m.phone}</span></div>
           <div class="result-row">
             <span class="result-key">付款方式</span>
             <span class="pay-tag ${payClass}">${m.payment}</span>
           </div>
-          <div class="result-row"><span class="result-key">報名時間</span><span class="result-val" style="font-size:14px">${m.timestamp}</span></div>
+          <div class="result-row"><span class="result-key">報名時間</span><span class="result-val" style="font-size:14px">${prettyTime}</span></div>
         </div>`;
     } else {
       document.getElementById('query-result').innerHTML =
@@ -916,7 +946,7 @@ async function queryMember() {
 }
 
 // ══════════════════════════════════════════
-// 名單 (同樣補上 headers 繞過限制)
+// 名單 (加上格式化過濾器)
 // ══════════════════════════════════════════
 async function loadList() {
   document.getElementById('member-list').innerHTML =
@@ -942,10 +972,13 @@ async function loadList() {
 }
 
 function renderList(members) {
-  // 統計
+  // 統計今日新增，使用格式化後的時間來做比對，確保精準
   document.getElementById('total-count').textContent = members.length;
-  const today = new Date().toLocaleDateString('zh-TW');
-  const todayCount = members.filter(m => m.timestamp && m.timestamp.startsWith(today.replace(/\//g,'-'))).length;
+  
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  
+  const todayCount = members.filter(m => m.timestamp && formatTimestamp(m.timestamp).startsWith(todayStr)).length;
   document.getElementById('today-count').textContent = todayCount || 0;
 
   const linepay  = members.filter(m => m.payment === 'Line Pay').length;
@@ -965,16 +998,20 @@ function renderList(members) {
   }
 
   const payClass = p => p === 'Line Pay' ? 'linepay' : p === '轉帳' ? 'transfer' : 'cash';
-  document.getElementById('member-list').innerHTML = members.map((m, i) => `
-    <div class="member-item">
-      <div class="member-num">${i + 1}</div>
-      <div class="member-info">
-        <div class="member-name">${m.name}</div>
-        <div class="member-sub">${m.phone} ｜ ${m.birthday}</div>
+  document.getElementById('member-list').innerHTML = members.map((m, i) => {
+    // 確保名單上的生日也乾乾淨淨
+    const prettyBirthday = formatBirthday(m.birthday);
+    return `
+      <div class="member-item">
+        <div class="member-num">${i + 1}</div>
+        <div class="member-info">
+          <div class="member-name">${m.name}</div>
+          <div class="member-sub">${m.phone} ｜ ${prettyBirthday}</div>
+        </div>
+        <span class="pay-tag ${payClass(m.payment)} member-pay">${m.payment}</span>
       </div>
-      <span class="pay-tag ${payClass(m.payment)} member-pay">${m.payment}</span>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function filterList() {
