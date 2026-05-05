@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- 🪄 關閉手機瀏覽器的自動電話號碼偵測 -->
+<meta name="format-detection" content="telephone=no">
 <title>竹北社90期第一次會外會 報名表</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -260,7 +262,7 @@
 
   /* 轉帳專屬資訊動態展示區 */
   .transfer-info-box {
-    display: none; /* 預設隱藏 */
+    display: none;
     background: var(--gold-pale);
     border: 1.5px dashed var(--gold);
     border-radius: 10px;
@@ -286,11 +288,21 @@
     color: #C0392B;
     letter-spacing: 1px;
     background: #FFFFFF;
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
     display: inline-block;
     margin-top: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bank-details .highlight:hover {
+    background: #FDF3E3;
+  }
+  .bank-details .highlight:active {
+    transform: scale(0.96);
   }
 
   /* ── BUTTONS ── */
@@ -630,19 +642,16 @@
     <div class="card-title">付款方式</div>
     <div class="pay-group">
       <label class="pay-option">
-        <!-- 加上 onchange 觸發判斷是否要顯示 QR code -->
         <input type="radio" name="payment" value="Line Pay" onchange="toggleTransferInfo()">
         <span class="pay-label-text">Line Pay</span>
         <span class="pay-icon">💚</span>
       </label>
       <label class="pay-option">
-        <!-- 加上 onchange 觸發判斷是否要顯示 QR code -->
         <input type="radio" name="payment" value="轉帳" onchange="toggleTransferInfo()">
         <span class="pay-label-text">轉帳</span>
         <span class="pay-icon">🏦</span>
       </label>
       <label class="pay-option">
-        <!-- 加上 onchange 觸發判斷是否要顯示 QR code -->
         <input type="radio" name="payment" value="現金" onchange="toggleTransferInfo()">
         <span class="pay-label-text">現金</span>
         <span class="pay-icon">💵</span>
@@ -653,9 +662,10 @@
     <div id="transfer-info" class="transfer-info-box">
       <div class="bank-details">
         銀行：第一銀行 (007)<br>
-        帳號：<span class="highlight">31357158186</span>
+        <!-- 🪄 加入一鍵複製功能，並加上 &#8203; (零寬度空格) 阻擋 iPhone 自動變電話 -->
+        帳號：<span class="highlight" id="bank-acc-btn" onclick="copyAccount('31357158186')">31357&#8203;158186 <span style="font-size:13px; color:var(--mid); font-weight:500;">📋複製</span></span>
       </div>
-      <!-- 如果你有將圖片上傳至 GitHub，此處會自動讀取 qrcode.png -->
+      <!-- 自動讀取 GitHub 中的 qrcode.png -->
       <img src="qrcode.png" alt="轉帳QRcode" style="width: 100%; max-width: 220px; border-radius: 12px; border: 2px solid var(--border); margin-bottom: 8px;">
       <div style="font-size: 14px; font-weight: 700; color: var(--mid);">麻煩您撥空轉帳給我喔！🌿</div>
     </div>
@@ -744,12 +754,53 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5DWuriGYQSiQqT1l_T4dyvunp1cA_UDGjtpQZcXtgV45jnQ/exec';
 
 // ══════════════════════════════════════════
-// 判斷是否顯示轉帳 QR Code 的小魔法
+// 🪄 帳號一鍵複製小魔法
+// ══════════════════════════════════════════
+function copyAccount(text) {
+  // 使用最穩定的瀏覽器剪貼簿 API
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(showCopiedStatus);
+  } else {
+    // 備用方案：適用於較舊的手機瀏覽器
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showCopiedStatus();
+    } catch (err) {
+      alert('複製失敗，請手動選取複製');
+    }
+    textArea.remove();
+  }
+
+  // 複製成功後的視覺回饋
+  function showCopiedStatus() {
+    const btn = document.getElementById('bank-acc-btn');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製！';
+    btn.style.color = '#27AE60';
+    btn.style.borderColor = '#27AE60';
+    btn.style.backgroundColor = '#E8F8EF';
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+      btn.style.color = '#C0392B';
+      btn.style.borderColor = 'var(--border)';
+      btn.style.backgroundColor = '#FFFFFF';
+    }, 2000);
+  }
+}
+
+// ══════════════════════════════════════════
+// 判斷是否顯示轉帳 QR Code
 // ══════════════════════════════════════════
 function toggleTransferInfo() {
   const payment = document.querySelector('input[name="payment"]:checked');
   const transferInfo = document.getElementById('transfer-info');
-  // 如果勾選的是「轉帳」，就把它顯示出來，否則隱藏
   if (payment && payment.value === '轉帳') {
     transferInfo.style.display = 'block';
   } else {
