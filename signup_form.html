@@ -281,28 +281,23 @@
     line-height: 1.6;
     margin-bottom: 12px;
   }
-  .bank-details .highlight {
+  /* 複製按鈕的優雅樣式 */
+  .copy-btn {
     font-family: 'Noto Sans TC', sans-serif;
-    font-weight: 900;
-    font-size: 18px;
-    color: #C0392B;
-    letter-spacing: 1px;
-    background: #FFFFFF;
-    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mid);
+    background: #F5EDE0;
+    border: 1.5px solid #D4B896;
     border-radius: 8px;
-    border: 1.5px solid var(--border);
-    display: inline-block;
-    margin-top: 6px;
+    padding: 4px 10px;
+    margin-left: 6px;
     cursor: pointer;
     transition: all 0.2s;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    vertical-align: middle;
   }
-  .bank-details .highlight:hover {
-    background: #FDF3E3;
-  }
-  .bank-details .highlight:active {
-    transform: scale(0.96);
+  .copy-btn:active {
+    transform: scale(0.95);
   }
 
   /* ── BUTTONS ── */
@@ -662,8 +657,10 @@
     <div id="transfer-info" class="transfer-info-box">
       <div class="bank-details">
         銀行：第一銀行 (007)<br>
-        <!-- 🪄 加入一鍵複製功能，並加上 &#8203; (零寬度空格) 阻擋 iPhone 自動變電話 -->
-        帳號：<span class="highlight" id="bank-acc-btn" onclick="copyAccount('31357158186')">31357&#8203;158186 <span style="font-size:13px; color:var(--mid); font-weight:500;">📋複製</span></span>
+        <div style="margin-top: 8px;">
+          帳號：<span style="font-weight: 900; font-size: 18px; color: #C0392B; letter-spacing: 1px;">31357&#8203;158186</span>
+          <button id="bank-acc-btn" class="copy-btn" onclick="copyAccount('31357158186')">📋 複製</button>
+        </div>
       </div>
       <!-- 自動讀取 GitHub 中的 qrcode.png -->
       <img src="qrcode.png" alt="轉帳QRcode" style="width: 100%; max-width: 220px; border-radius: 12px; border: 2px solid var(--border); margin-bottom: 8px;">
@@ -754,14 +751,12 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5DWuriGYQSiQqT1l_T4dyvunp1cA_UDGjtpQZcXtgV45jnQ/exec';
 
 // ══════════════════════════════════════════
-// 🪄 帳號一鍵複製小魔法
+// 🪄 帳號一鍵複製小魔法 (優化版：只改按鈕外觀)
 // ══════════════════════════════════════════
 function copyAccount(text) {
-  // 使用最穩定的瀏覽器剪貼簿 API
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(showCopiedStatus);
   } else {
-    // 備用方案：適用於較舊的手機瀏覽器
     const textArea = document.createElement("textarea");
     textArea.value = text;
     textArea.style.position = "fixed";
@@ -778,19 +773,18 @@ function copyAccount(text) {
     textArea.remove();
   }
 
-  // 複製成功後的視覺回饋
   function showCopiedStatus() {
     const btn = document.getElementById('bank-acc-btn');
     const originalHtml = btn.innerHTML;
-    btn.innerHTML = '✅ 已複製！';
+    btn.innerHTML = '✅ 已複製';
     btn.style.color = '#27AE60';
     btn.style.borderColor = '#27AE60';
     btn.style.backgroundColor = '#E8F8EF';
     setTimeout(() => {
       btn.innerHTML = originalHtml;
-      btn.style.color = '#C0392B';
-      btn.style.borderColor = 'var(--border)';
-      btn.style.backgroundColor = '#FFFFFF';
+      btn.style.color = 'var(--mid)';
+      btn.style.borderColor = '#D4B896';
+      btn.style.backgroundColor = '#F5EDE0';
     }, 2000);
   }
 }
@@ -966,7 +960,6 @@ async function submitForm() {
 
   const birthday = `${year}/${String(month).padStart(2,'0')}/${String(day).padStart(2,'0')}`;
   
-  // 🪄 這裡就是確保 Google Sheets 不會吞掉 0 的防護魔法！
   const payload = { action: 'signup', name, birthday, phone: "'" + phone, idNum, payment: payment.value };
 
   try {
