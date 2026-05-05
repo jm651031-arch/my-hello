@@ -75,36 +75,57 @@
   .header h1 span {
     color: var(--gold-light);
   }
-  .header-info {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 14px;
+
+  /* ── 雙欄資訊區塊 (新排版) ── */
+  .header-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
     position: relative;
+    text-align: left;
   }
-  .info-chip {
-    background: rgba(200,146,42,0.2);
-    border: 1px solid rgba(200,146,42,0.4);
-    color: var(--gold-light);
-    font-size: 14px;
-    font-weight: 500;
-    padding: 6px 14px;
-    border-radius: 8px;
+  .info-col {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .info-item {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(200,146,42,0.3);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.4;
+    text-decoration: none;
     transition: all 0.2s;
   }
-  a.info-chip:hover {
+  a.info-item {
+    background: rgba(200,146,42,0.18);
+    color: #F5D78E;
+    cursor: pointer;
+  }
+  a.info-item:hover {
     background: rgba(200,146,42,0.3);
     transform: translateY(-1px);
   }
+  .info-icon {
+    margin-right: 6px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .info-text {
+    flex: 1;
+  }
   .click-hint {
+    display: block;
     font-size: 11px;
-    opacity: 0.85;
-    font-weight: 400;
-    margin-left: 2px;
+    color: #E8B84B;
+    margin-top: 3px;
+    opacity: 0.9;
   }
 
   /* ── TAB NAV ── */
@@ -575,26 +596,47 @@
   <div class="header-badge">竹北社 90期</div>
   <h1>第一次<span>會外會</span><br>報名系統</h1>
   <div class="header-divider"></div>
-  <div class="header-info">
-    <div class="info-chip">📅 6月20日（六）</div>
-    <!-- 🪄 加上視覺引導的小標籤 -->
-    <a href="https://www.facebook.com/windsugar/" target="_blank" class="info-chip" style="text-decoration:none; cursor:pointer;">
-      📍 新城風糖休閒園區 <span class="click-hint">👆點選查看</span>
-    </a>
+  
+  <!-- 雙欄資訊區塊 -->
+  <div class="header-grid">
+    <!-- 左邊欄：時間、地點、地址、費用 -->
+    <div class="info-col">
+      <div class="info-item">
+        <span class="info-icon">📅</span>
+        <span class="info-text">6月20日（六）</span>
+      </div>
+      <a href="https://www.facebook.com/windsugar/" target="_blank" class="info-item">
+        <span class="info-icon">📍</span>
+        <span class="info-text">新城風糖休閒園區<span class="click-hint">👆點選查看</span></span>
+      </a>
+      <div class="info-item">
+        <span class="info-icon">🗺️</span>
+        <span class="info-text">新竹縣寶山鄉寶新路二段</span>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">💰</span>
+        <span class="info-text">費用 $550<br><span style="font-size:11px; opacity:0.7">（含保險）</span></span>
+      </div>
+    </div>
+
+    <!-- 右邊欄：活動、午餐 -->
+    <div class="info-col">
+      <div class="info-item">
+        <span class="info-icon">🍞</span>
+        <span class="info-text">DIY黑糖爆漿包</span>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">🌿</span>
+        <span class="info-text">休閒園區走走</span>
+      </div>
+      <a href="https://www.facebook.com/xinminzen/?locale=zh_TW" target="_blank" class="info-item">
+        <span class="info-icon">🍽️</span>
+        <span class="info-text">新明人客家菜<span class="click-hint">👆點選查看</span></span>
+      </a>
+    </div>
   </div>
-  <div style="margin-top:14px; color:rgba(255,255,255,0.55); font-size:13px; position:relative;">
-    新竹縣寶山鄉寶新路二段
-  </div>
-  <div style="margin-top:14px; display:flex; flex-wrap:wrap; justify-content:center; gap:8px; position:relative;">
-    <div style="background:rgba(200,146,42,0.18);border:1px solid rgba(200,146,42,0.35);color:#F5D78E;font-size:13px;padding:5px 12px;border-radius:8px;">🍞 DIY黑糖爆漿包</div>
-    <div style="background:rgba(200,146,42,0.18);border:1px solid rgba(200,146,42,0.35);color:#F5D78E;font-size:13px;padding:5px 12px;border-radius:8px;">🌿 休閒園區走走</div>
-    <!-- 🪄 加上視覺引導的小標籤 -->
-    <a href="https://www.facebook.com/xinminzen/?locale=zh_TW" target="_blank" style="background:rgba(200,146,42,0.18);border:1px solid rgba(200,146,42,0.35);color:#F5D78E;font-size:13px;padding:5px 12px;border-radius:8px;text-decoration:none;transition:all 0.2s;">
-      🍽️ 新明人客家菜 <span class="click-hint">👆點選查看</span>
-    </a>
-    <div style="background:rgba(200,146,42,0.18);border:1px solid rgba(200,146,42,0.35);color:#F5D78E;font-size:13px;padding:5px 12px;border-radius:8px;">💰 費用 $550（含保險）</div>
-  </div>
-  <div style="margin-top:14px; color:rgba(255,255,255,0.75); font-size:14px; letter-spacing:1px; position:relative;">
+
+  <div style="margin-top:20px; color:rgba(255,255,255,0.75); font-size:14px; letter-spacing:1px; position:relative;">
     曾湘雯 社長 ／ 張曉蘋 總幹事　敬邀
   </div>
 </div>
