@@ -258,6 +258,35 @@
     margin-left: auto;
   }
 
+  /* 始終顯示的轉帳資訊區塊 */
+  .transfer-info-box {
+    background: var(--gold-pale);
+    border: 1.5px dashed var(--gold);
+    border-radius: 10px;
+    padding: 18px 16px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .bank-details {
+    font-size: 16px;
+    color: var(--dark);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .bank-details .highlight {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: #C0392B;
+    letter-spacing: 1px;
+    background: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    display: inline-block;
+    margin-top: 6px;
+  }
+
   /* ── BUTTONS ── */
   .btn-primary {
     width: 100%;
@@ -296,10 +325,6 @@
     align-items: flex-start;
     gap: 10px;
     animation: slideIn 0.3s ease;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
   }
   .alert-success { background: #E8F8EF; border: 1.5px solid #27AE60; color: #1A7A3F; }
   .alert-error   { background: #FDECEA; border: 1.5px solid #C0392B; color: #922B21; }
@@ -509,6 +534,7 @@
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="deco-bar">
     <div class="deco-item">🌿</div>
@@ -538,12 +564,16 @@
   </div>
 </div>
 
+<!-- TAB NAV -->
 <div class="tab-nav">
   <button class="tab-btn active" onclick="switchTab('signup')">✍️ 報名</button>
   <button class="tab-btn" onclick="switchTab('query')">🔍 查詢</button>
   <button class="tab-btn" onclick="switchTab('list')">📋 名單</button>
 </div>
 
+<!-- ════════════════════════════════════════
+     TAB 1: 報名
+════════════════════════════════════════ -->
 <div id="tab-signup" class="tab-panel active">
 
   <div id="signup-alert"></div>
@@ -592,6 +622,18 @@
 
   <div class="card">
     <div class="card-title">付款方式</div>
+    
+    <!-- 直接永久顯示的轉帳資訊區塊 -->
+    <div class="transfer-info-box">
+      <div class="bank-details">
+        銀行：第一銀行 (007)<br>
+        帳號：<span class="highlight">31357158186</span>
+      </div>
+      <!-- 如果你有將圖片上傳至 GitHub，此處會自動讀取 qrcode.png -->
+      <img src="qrcode.png" alt="轉帳QRcode" style="width: 100%; max-width: 220px; border-radius: 12px; border: 2px solid var(--border); margin-bottom: 8px;">
+      <div style="font-size: 14px; font-weight: 700; color: var(--mid);">麻煩您撥空轉帳給我喔！🌿</div>
+    </div>
+
     <div class="pay-group">
       <label class="pay-option">
         <input type="radio" name="payment" value="Line Pay">
@@ -617,6 +659,9 @@
 
 </div>
 
+<!-- ════════════════════════════════════════
+     TAB 2: 查詢
+════════════════════════════════════════ -->
 <div id="tab-query" class="tab-panel">
 
   <div class="card">
@@ -633,8 +678,12 @@
 
 </div>
 
+<!-- ════════════════════════════════════════
+     TAB 3: 名單
+════════════════════════════════════════ -->
 <div id="tab-list" class="tab-panel">
 
+  <!-- 密碼驗證區 -->
   <div id="list-lock" class="card" style="text-align:center; padding:32px 20px;">
     <div style="font-size:48px; margin-bottom:12px;">🔒</div>
     <div class="card-title" style="justify-content:center; margin-bottom:8px;">幹部專區</div>
@@ -647,6 +696,7 @@
     <div id="pw-error" style="color:var(--red); font-size:14px; margin-top:12px;"></div>
   </div>
 
+  <!-- 名單內容（解鎖後顯示）-->
   <div id="list-content" style="display:none;">
     <div id="list-stats" class="stats-row">
       <div class="stat-box">
@@ -676,6 +726,9 @@
 
 </div>
 
+<!-- ════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
 <script>
 // ══════════════════════════════════════════
 // 🔧 設定區 — 這裡放你原本的 GAS URL
