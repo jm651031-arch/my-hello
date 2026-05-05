@@ -260,20 +260,14 @@
     margin-left: auto;
   }
 
-  /* 轉帳專屬資訊動態展示區 */
+  /* 轉帳專屬資訊動態展示區 (改為常駐顯示樣式) */
   .transfer-info-box {
-    display: none;
     background: var(--gold-pale);
     border: 1.5px dashed var(--gold);
     border-radius: 10px;
     padding: 18px 16px;
-    margin-top: 14px;
+    margin-bottom: 16px;
     text-align: center;
-    animation: fadeIn 0.3s ease;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
   }
   .bank-details {
     font-size: 16px;
@@ -635,25 +629,8 @@
 
   <div class="card">
     <div class="card-title">付款方式</div>
-    <div class="pay-group">
-      <label class="pay-option">
-        <input type="radio" name="payment" value="Line Pay" onchange="toggleTransferInfo()">
-        <span class="pay-label-text">Line Pay</span>
-        <span class="pay-icon">💚</span>
-      </label>
-      <label class="pay-option">
-        <input type="radio" name="payment" value="轉帳" onchange="toggleTransferInfo()">
-        <span class="pay-label-text">轉帳</span>
-        <span class="pay-icon">🏦</span>
-      </label>
-      <label class="pay-option">
-        <input type="radio" name="payment" value="現金" onchange="toggleTransferInfo()">
-        <span class="pay-label-text">現金</span>
-        <span class="pay-icon">💵</span>
-      </label>
-    </div>
-
-    <!-- 這是專屬於轉帳的提示區塊，預設是隱藏的 -->
+    
+    <!-- 轉帳資訊常駐顯示區塊 -->
     <div id="transfer-info" class="transfer-info-box">
       <div class="bank-details">
         銀行：第一銀行 (007)<br>
@@ -665,6 +642,24 @@
       <!-- 自動讀取 GitHub 中的 qrcode.png -->
       <img src="qrcode.png" alt="轉帳QRcode" style="width: 100%; max-width: 220px; border-radius: 12px; border: 2px solid var(--border); margin-bottom: 8px;">
       <div style="font-size: 14px; font-weight: 700; color: var(--mid);">麻煩您撥空轉帳給我喔！🌿</div>
+    </div>
+
+    <div class="pay-group">
+      <label class="pay-option">
+        <input type="radio" name="payment" value="Line Pay">
+        <span class="pay-label-text">Line Pay</span>
+        <span class="pay-icon">💚</span>
+      </label>
+      <label class="pay-option">
+        <input type="radio" name="payment" value="轉帳">
+        <span class="pay-label-text">轉帳</span>
+        <span class="pay-icon">🏦</span>
+      </label>
+      <label class="pay-option">
+        <input type="radio" name="payment" value="現金">
+        <span class="pay-label-text">現金</span>
+        <span class="pay-icon">💵</span>
+      </label>
     </div>
   </div>
 
@@ -786,19 +781,6 @@ function copyAccount(text) {
       btn.style.borderColor = '#D4B896';
       btn.style.backgroundColor = '#F5EDE0';
     }, 2000);
-  }
-}
-
-// ══════════════════════════════════════════
-// 判斷是否顯示轉帳 QR Code
-// ══════════════════════════════════════════
-function toggleTransferInfo() {
-  const payment = document.querySelector('input[name="payment"]:checked');
-  const transferInfo = document.getElementById('transfer-info');
-  if (payment && payment.value === '轉帳') {
-    transferInfo.style.display = 'block';
-  } else {
-    transferInfo.style.display = 'none';
   }
 }
 
@@ -982,8 +964,6 @@ async function submitForm() {
       document.getElementById('f-phone').value = '';
       document.getElementById('f-id').value = '';
       document.querySelectorAll('input[name="payment"]').forEach(r => r.checked = false);
-      // 清空表單後，順便把 QR Code 區塊收起來
-      document.getElementById('transfer-info').style.display = 'none';
     } else {
       showAlert('signup-alert', 'error', '❌', '送出失敗，請稍後再試或聯絡主辦單位。');
     }
