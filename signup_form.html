@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- 🪄 關閉手機瀏覽器的自動電話號碼偵測 -->
+<meta name="format-detection" content="telephone=no">
 <title>竹北社90期第一次會外會 報名表</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -258,14 +260,20 @@
     margin-left: auto;
   }
 
-  /* 始終顯示的轉帳資訊區塊 */
+  /* 轉帳專屬資訊動態展示區 */
   .transfer-info-box {
+    display: none;
     background: var(--gold-pale);
     border: 1.5px dashed var(--gold);
     border-radius: 10px;
     padding: 18px 16px;
-    margin-bottom: 16px;
+    margin-top: 14px;
     text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .bank-details {
     font-size: 16px;
@@ -280,11 +288,21 @@
     color: #C0392B;
     letter-spacing: 1px;
     background: #FFFFFF;
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
     display: inline-block;
     margin-top: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bank-details .highlight:hover {
+    background: #FDF3E3;
+  }
+  .bank-details .highlight:active {
+    transform: scale(0.96);
   }
 
   /* ── BUTTONS ── */
@@ -622,34 +640,34 @@
 
   <div class="card">
     <div class="card-title">付款方式</div>
-    
-    <!-- 直接永久顯示的轉帳資訊區塊 -->
-    <div class="transfer-info-box">
-      <div class="bank-details">
-        銀行：第一銀行 (007)<br>
-        帳號：<span class="highlight">31357158186</span>
-      </div>
-      <!-- 如果你有將圖片上傳至 GitHub，此處會自動讀取 qrcode.png -->
-      <img src="qrcode.png" alt="轉帳QRcode" style="width: 100%; max-width: 220px; border-radius: 12px; border: 2px solid var(--border); margin-bottom: 8px;">
-      <div style="font-size: 14px; font-weight: 700; color: var(--mid);">麻煩您撥空轉帳給我喔！🌿</div>
-    </div>
-
     <div class="pay-group">
       <label class="pay-option">
-        <input type="radio" name="payment" value="Line Pay">
+        <input type="radio" name="payment" value="Line Pay" onchange="toggleTransferInfo()">
         <span class="pay-label-text">Line Pay</span>
         <span class="pay-icon">💚</span>
       </label>
       <label class="pay-option">
-        <input type="radio" name="payment" value="轉帳">
+        <input type="radio" name="payment" value="轉帳" onchange="toggleTransferInfo()">
         <span class="pay-label-text">轉帳</span>
         <span class="pay-icon">🏦</span>
       </label>
       <label class="pay-option">
-        <input type="radio" name="payment" value="現金">
+        <input type="radio" name="payment" value="現金" onchange="toggleTransferInfo()">
         <span class="pay-label-text">現金</span>
         <span class="pay-icon">💵</span>
       </label>
+    </div>
+
+    <!-- 這是專屬於轉帳的提示區塊，預設是隱藏的 -->
+    <div id="transfer-info" class="transfer-info-box">
+      <div class="bank-details">
+        銀行：第一銀行 (007)<br>
+        <!-- 🪄 加入一鍵複製功能 -->
+        帳號：<span class="highlight" id="bank-acc-btn" onclick="copyAccount('31357158186')">31357158186 <span style="font-size:13px; color:var(--mid); font-weight:500;">📋複製</span></span>
+      </div>
+      <!-- 自動讀取 GitHub 中的 qrcode.png -->
+      <img src="qrcode.png" alt="轉帳QRcode" style="width: 100%; max-width: 220px; border-radius: 12px; border: 2px solid var(--border); margin-bottom: 8px;">
+      <div style="font-size: 14px; font-weight: 700; color: var(--mid);">麻煩您撥空轉帳給我喔！🌿</div>
     </div>
   </div>
 
@@ -734,6 +752,61 @@
 // 🔧 設定區 — 這裡放你原本的 GAS URL
 // ══════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5DWuriGYQSiQqT1l_T4dyvunp1cA_UDGjtpQZcXtgV45jnQ/exec';
+
+// ══════════════════════════════════════════
+// 🪄 帳號一鍵複製小魔法
+// ══════════════════════════════════════════
+function copyAccount(text) {
+  // 使用最穩定的瀏覽器剪貼簿 API
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(showCopiedStatus);
+  } else {
+    // 備用方案：適用於較舊的手機瀏覽器
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showCopiedStatus();
+    } catch (err) {
+      alert('複製失敗，請手動選取複製');
+    }
+    textArea.remove();
+  }
+
+  // 複製成功後的視覺回饋
+  function showCopiedStatus() {
+    const btn = document.getElementById('bank-acc-btn');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製！';
+    btn.style.color = '#27AE60';
+    btn.style.borderColor = '#27AE60';
+    btn.style.backgroundColor = '#E8F8EF';
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+      btn.style.color = '#C0392B';
+      btn.style.borderColor = 'var(--border)';
+      btn.style.backgroundColor = '#FFFFFF';
+    }, 2000);
+  }
+}
+
+// ══════════════════════════════════════════
+// 判斷是否顯示轉帳 QR Code
+// ══════════════════════════════════════════
+function toggleTransferInfo() {
+  const payment = document.querySelector('input[name="payment"]:checked');
+  const transferInfo = document.getElementById('transfer-info');
+  if (payment && payment.value === '轉帳') {
+    transferInfo.style.display = 'block';
+  } else {
+    transferInfo.style.display = 'none';
+  }
+}
 
 // ══════════════════════════════════════════
 // 日期格式化小精靈
@@ -916,6 +989,8 @@ async function submitForm() {
       document.getElementById('f-phone').value = '';
       document.getElementById('f-id').value = '';
       document.querySelectorAll('input[name="payment"]').forEach(r => r.checked = false);
+      // 清空表單後，順便把 QR Code 區塊收起來
+      document.getElementById('transfer-info').style.display = 'none';
     } else {
       showAlert('signup-alert', 'error', '❌', '送出失敗，請稍後再試或聯絡主辦單位。');
     }
