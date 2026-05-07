@@ -633,6 +633,86 @@
     color: var(--grass-deep);
   }
 
+  /* === 社團小角落（留言板） === */
+  .community-corner {
+    background: linear-gradient(135deg, var(--cream) 0%, #fef7e0 100%);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 var(--earth);
+    position: relative;
+  }
+
+  .community-corner-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--earth);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .community-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .community-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 10px;
+    background: var(--warm-white, #fffaf0);
+    border: 2px solid var(--earth);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--earth);
+    box-shadow: 3px 3px 0 var(--earth);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .community-link.write {
+    background: linear-gradient(135deg, #fff5db 0%, var(--sun) 100%);
+  }
+
+  .community-link.read {
+    background: linear-gradient(135deg, #e8f5d8 0%, var(--grass-light) 100%);
+  }
+
+  .community-link:hover,
+  .community-link:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--earth);
+  }
+
+  .community-link-emoji {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .community-link-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--earth);
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .community-link-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--earth-light);
+  }
+
   /* === 組員名單 === */
   .member-list {
     background: var(--cream);
@@ -1325,8 +1405,27 @@
   function renderMembers(rows) {
     const container = document.getElementById('membersList');
 
+    // 社團小角落（永遠顯示）
+    const communityHtml = `
+      <div class="community-corner">
+        <div class="community-corner-title">🌳 社團小角落</div>
+        <div class="community-grid">
+          <a class="community-link write" href="https://tally.so/r/Np8Gbb" target="_blank" rel="noopener">
+            <div class="community-link-emoji">💬</div>
+            <div class="community-link-title">跟湘雯說話</div>
+            <div class="community-link-sub">90 期社長</div>
+          </a>
+          <a class="community-link read" href="https://curved-lyre-1a1.notion.site/90-3595d63cfe3380c781d9cafe8713594e?pvs=143" target="_blank" rel="noopener">
+            <div class="community-link-emoji">📖</div>
+            <div class="community-link-title">看看留言區</div>
+            <div class="community-link-sub">大家的回饋</div>
+          </a>
+        </div>
+      </div>
+    `;
+
     if (!rows || rows.length === 0) {
-      container.innerHTML = '<div class="empty-state"><div class="text">名單建立中</div></div>';
+      container.innerHTML = communityHtml + '<div class="empty-state"><div class="text">名單建立中</div></div>';
       return;
     }
 
@@ -1338,7 +1437,7 @@
       '前社長': 'role-senior'
     };
 
-    const html = '<div class="member-list">' + rows.map(r => {
+    const memberListHtml = '<div class="member-list">' + rows.map(r => {
       const role = r['分類'] || '';
       const name = r['姓名'] || '';
       const note = r['備註'] || '';
@@ -1356,7 +1455,7 @@
       `;
     }).join('') + '</div>';
 
-    container.innerHTML = html;
+    container.innerHTML = communityHtml + memberListHtml;
   }
 
   // ============= 載入所有資料 =============
