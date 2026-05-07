@@ -390,6 +390,71 @@
     box-shadow: 0 2px 4px rgba(74, 53, 32, 0.2);
   }
 
+  /* === 報名按鈕 === */
+  .signup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--pink) 0%, #f093b8 100%);
+    color: var(--earth);
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid var(--earth);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--earth);
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .signup-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    50%, 100% { left: 200%; }
+  }
+
+  .signup-btn:hover,
+  .signup-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--earth);
+  }
+
+  .signup-icon {
+    font-size: 20px;
+  }
+
+  .signup-text {
+    letter-spacing: 1.5px;
+    font-family: inherit;
+  }
+
+  .signup-arrow {
+    font-size: 18px;
+    font-weight: 900;
+    transition: transform 0.2s;
+  }
+
+  .signup-btn:hover .signup-arrow {
+    transform: translateX(3px);
+  }
+
   /* === 拍照輪值 === */
   .photo-row {
     display: flex;
@@ -1112,6 +1177,7 @@
       const topic = r['活動/課程主題'] || '';
       const role = r['關鍵角色'] || '';
       const location = r['地點'] || '';
+      const signupUrl = r['報名連結'] || '';
       const photo1 = r['主拍'] || '';
       const photo2 = r['機動'] || '';
       const tm1Topic = r['TM1題目'] || '';
@@ -1133,6 +1199,11 @@
       // 地點顯示（點擊開地圖）
       const locationHtml = location
         ? `<a class="card-location" href="https://www.google.com/maps/search/${encodeURIComponent(location)}" target="_blank" rel="noopener">📍 ${esc(location)}</a>`
+        : '';
+
+      // 報名連結
+      const signupHtml = signupUrl
+        ? `<a class="signup-btn" href="${esc(signupUrl)}" target="_blank" rel="noopener"><span class="signup-icon">📝</span><span class="signup-text">我要報名</span><span class="signup-arrow">→</span></a>`
         : '';
 
       // 拍照區塊（兩個都空白才隱藏）
@@ -1202,6 +1273,7 @@
           ${photoHtml}
           ${tm1Html}
           ${tm2Html}
+          ${signupHtml}
         </div>
       `;
     }).join('');
