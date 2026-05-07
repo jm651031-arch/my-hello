@@ -672,6 +672,108 @@
     color: var(--grass-deep);
   }
 
+
+  /* === 拍照統計卡片 === */
+  .photo-stats {
+    background: linear-gradient(135deg, #fdfcf3 0%, var(--cream) 100%);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 var(--earth);
+    position: relative;
+  }
+
+  .photo-stats-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed var(--grass-mid);
+  }
+
+  .photo-stats-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--earth);
+  }
+
+  .photo-stats-summary {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--grass-deep);
+  }
+
+  .stats-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(214, 240, 74, 0.15);
+    border-radius: 10px;
+    border-left: 3px solid var(--grass-mid);
+  }
+
+  .stats-row.is-me {
+    background: rgba(244, 168, 200, 0.2);
+    border-left-color: var(--pink);
+  }
+
+  .stats-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--earth);
+  }
+
+  .stats-name .me-mark {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--grass-deep);
+    margin-left: 4px;
+  }
+
+  .stats-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 8px;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .stats-main {
+    background: var(--grass-bright);
+    color: var(--grass-deep);
+  }
+
+  .stats-backup {
+    background: var(--sun);
+    color: #8b5a1c;
+  }
+
+  .stats-total {
+    background: var(--earth);
+    color: var(--cream);
+    font-size: 13px;
+    min-width: 38px;
+  }
+
+  .stats-empty-msg {
+    text-align: center;
+    color: var(--earth-light);
+    font-size: 13px;
+    padding: 8px;
+    font-style: italic;
+  }
+
   .loading-state {
     text-align: center;
     padding: 30px 20px;
@@ -718,6 +820,7 @@
   <!-- 1. 課程 -->
   <section class="section active" id="schedule">
     <h2 class="section-title">課程</h2>
+    <div id="photoStats"></div>
     <div id="scheduleList">
       <div class="loading-state">📡 載入中...</div>
     </div>
@@ -881,6 +984,89 @@
         </div>
       `;
     }).join('');
+  }
+
+  // ============= 渲染：拍照統計 =============
+  function renderPhotoStats(rows) {
+    const container = document.getElementById('photoStats');
+    if (!rows || rows.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    // 統計每人主拍/機動次數
+    const stats = {};
+    let totalSessions = 0;
+    let assignedSessions = 0;
+
+    rows.forEach(r => {
+      const main = (r['主拍'] || '').trim();
+      const backup = (r['機動'] || '').trim();
+
+      // 算這場有沒有「需要拍照」
+      // 條件：主拍或機動其中一個有填字的，就算需要拍照的場次
+      if (main || backup) {
+        totalSessions++;
+        if (main && backup) assignedSessions++;
+      }
+
+      if (main) {
+        if (!stats[main]) stats[main] = { main: 0, backup: 0 };
+        stats[main].main++;
+      }
+      if (backup) {
+        if (!stats[backup]) stats[backup] = { main: 0, backup: 0 };
+        stats[backup].backup++;
+      }
+    });
+
+    const names = Object.keys(stats);
+    if (names.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    // 排序：總場次多的優先
+    names.sort((a, b) => {
+      const ta = stats[a].main + stats[a].backup;
+      const tb = stats[b].main + stats[b].backup;
+      return tb - ta;
+    });
+
+    const totalAssigned = names.reduce((sum, n) => sum + stats[n].main + stats[n].backup, 0);
+    const avg = (totalAssigned / names.length).toFixed(1);
+
+    let html = `
+      <div class="photo-stats">
+        <div class="photo-stats-header">
+          <span class="photo-stats-title">📸 拍照統計</span>
+          <span class="photo-stats-summary">${names.length} 人 · 平均 ${avg} 場</span>
+        </div>
+        <div class="stats-grid">
+    `;
+
+    names.forEach(name => {
+      const s = stats[name];
+      const total = s.main + s.backup;
+      const isMe = name === '吳怡樺';
+      const meMark = isMe ? '<span class="me-mark">← me</span>' : '';
+
+      html += `
+        <div class="stats-row${isMe ? ' is-me' : ''}">
+          <span class="stats-name">${esc(name)}${meMark}</span>
+          <span class="stats-badge stats-main">主 ${s.main}</span>
+          <span class="stats-badge stats-backup">機 ${s.backup}</span>
+          <span class="stats-badge stats-total">${total}</span>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
   }
 
   // ============= 渲染：課程 =============
@@ -1079,8 +1265,10 @@
         fetchCSV(CSV_URLS.members)
       ]);
 
+      const scheduleData = csvToObjects(scheduleCSV);
       renderNews(csvToObjects(newsCSV));
-      renderSchedule(csvToObjects(scheduleCSV));
+      renderPhotoStats(scheduleData);
+      renderSchedule(scheduleData);
       renderMeetup(csvToObjects(meetupCSV));
       renderMembers(csvToObjects(membersCSV));
 
