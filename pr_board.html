@@ -361,6 +361,19 @@
     margin-right: 4px;
   }
 
+  /* 地點顯示 */
+  .card-location {
+    display: inline-block;
+    font-size: 14px;
+    color: var(--grass-deep);
+    background: rgba(214, 240, 74, 0.3);
+    padding: 5px 12px;
+    border-radius: 12px;
+    margin: 6px 0 12px;
+    font-weight: 600;
+    border: 1.5px solid var(--grass-mid);
+  }
+
   /* === 拍照輪值 === */
   .photo-row {
     display: flex;
@@ -1082,6 +1095,7 @@
       const date = r['日期'] || '';
       const topic = r['活動/課程主題'] || '';
       const role = r['關鍵角色'] || '';
+      const location = r['地點'] || '';
       const photo1 = r['主拍'] || '';
       const photo2 = r['機動'] || '';
       const tm1Topic = r['TM1題目'] || '';
@@ -1098,6 +1112,11 @@
       // 關鍵角色（直接顯示原文）
       const roleHtml = role
         ? `<div class="card-meta">${esc(role)}</div>`
+        : '';
+
+      // 地點顯示
+      const locationHtml = location
+        ? `<div class="card-location">📍 ${esc(location)}</div>`
         : '';
 
       // 拍照區塊（兩個都空白才隱藏）
@@ -1162,6 +1181,7 @@
           ${tagHtml}
           <div class="card-date">${esc(formatDate(date))}</div>
           <div class="card-title">${esc(topic)}</div>
+          ${locationHtml}
           ${roleHtml}
           ${photoHtml}
           ${tm1Html}
