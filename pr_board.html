@@ -361,17 +361,33 @@
     margin-right: 4px;
   }
 
-  /* 地點顯示 */
+  /* 地點顯示（右上角浮動，點擊開地圖）*/
   .card-location {
-    display: inline-block;
-    font-size: 14px;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 12px;
     color: var(--grass-deep);
-    background: rgba(214, 240, 74, 0.3);
-    padding: 5px 12px;
+    background: rgba(214, 240, 74, 0.4);
+    padding: 4px 10px;
     border-radius: 12px;
-    margin: 6px 0 12px;
     font-weight: 600;
     border: 1.5px solid var(--grass-mid);
+    max-width: 45%;
+    text-align: center;
+    line-height: 1.3;
+    z-index: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card-location:hover,
+  .card-location:active {
+    background: rgba(214, 240, 74, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(74, 53, 32, 0.2);
   }
 
   /* === 拍照輪值 === */
@@ -1114,9 +1130,9 @@
         ? `<div class="card-meta">${esc(role)}</div>`
         : '';
 
-      // 地點顯示
+      // 地點顯示（點擊開地圖）
       const locationHtml = location
-        ? `<div class="card-location">📍 ${esc(location)}</div>`
+        ? `<a class="card-location" href="https://www.google.com/maps/search/${encodeURIComponent(location)}" target="_blank" rel="noopener">📍 ${esc(location)}</a>`
         : '';
 
       // 拍照區塊（兩個都空白才隱藏）
