@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
@@ -23,966 +22,939 @@
     --shadow: rgba(74, 53, 32, 0.15);
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-font-family: ‘Noto Sans TC’, sans-serif;
-background: linear-gradient(180deg, var(–sky) 0%, var(–sky) 25%, #e8f5d8 50%, var(–grass-light) 100%);
-background-attachment: fixed;
-color: var(–earth);
-min-height: 100vh;
-line-height: 1.7;
-padding-bottom: 80px;
-overflow-x: hidden;
-font-size: 17px;
-}
-
-/* 雲朵裝飾 */
-body::before {
-content: ‘’;
-position: fixed;
-top: 30px;
-left: -40px;
-width: 140px;
-height: 50px;
-background: white;
-border-radius: 50px;
-box-shadow:
-60px 30px 0 -10px white,
-200px 10px 0 -5px white,
-280px 50px 0 -15px white;
-opacity: 0.85;
-z-index: 0;
-pointer-events: none;
-}
-
-/* 草地底部 */
-body::after {
-content: ‘’;
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-height: 100px;
-background:
-radial-gradient(ellipse at 20% 100%, var(–grass-deep) 0%, transparent 50%),
-radial-gradient(ellipse at 80% 100%, var(–grass-deep) 0%, transparent 50%),
-linear-gradient(180deg, transparent 0%, var(–grass-mid) 100%);
-pointer-events: none;
-z-index: 0;
-}
-
-.container {
-max-width: 480px;
-margin: 0 auto;
-padding: 24px 20px;
-position: relative;
-z-index: 1;
-}
-
-/* === Header === */
-header {
-text-align: center;
-margin-bottom: 32px;
-padding-top: 20px;
-}
-
-.badge {
-display: inline-block;
-background: var(–grass-bright);
-color: var(–grass-deep);
-font-family: ‘Caveat’, cursive;
-font-size: 22px;
-padding: 4px 18px;
-border-radius: 20px;
-transform: rotate(-3deg);
-box-shadow: 3px 3px 0 var(–earth);
-margin-bottom: 12px;
-border: 2px solid var(–earth);
-}
-
-h1 {
-font-family: ‘Fraunces’, serif;
-font-size: 36px;
-font-weight: 900;
-color: var(–earth);
-line-height: 1.2;
-margin-bottom: 8px;
-letter-spacing: -0.5px;
-}
-
-.subtitle {
-font-size: 15px;
-color: var(–earth-light);
-font-weight: 500;
-}
-
-.last-update {
-display: inline-block;
-margin-top: 10px;
-font-family: ‘Caveat’, cursive;
-font-size: 18px;
-color: var(–grass-deep);
-background: var(–sun);
-padding: 3px 14px;
-border-radius: 12px;
-transform: rotate(1deg);
-}
-
-/* === 最新消息區 === */
-.news-board {
-background: var(–cream);
-border: 3px solid var(–earth);
-border-radius: 20px;
-padding: 16px 18px;
-margin-bottom: 24px;
-box-shadow: 5px 5px 0 var(–earth);
-position: relative;
-}
-
-.news-board::before {
-content: ‘📢’;
-position: absolute;
-top: -18px;
-left: 16px;
-background: var(–sun);
-border: 2px solid var(–earth);
-border-radius: 50%;
-width: 36px;
-height: 36px;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 18px;
-}
-
-.news-header {
-display: flex;
-align-items: baseline;
-justify-content: space-between;
-margin-bottom: 10px;
-padding-left: 32px;
-}
-
-.news-title {
-font-family: ‘Fraunces’, serif;
-font-size: 22px;
-font-weight: 900;
-color: var(–earth);
-}
-
-.news-count {
-font-family: ‘Caveat’, cursive;
-font-size: 18px;
-color: var(–grass-deep);
-}
-
-.news-list {
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-.news-item {
-display: flex;
-gap: 12px;
-padding: 12px 14px;
-background: linear-gradient(90deg, rgba(214, 240, 74, 0.15) 0%, transparent 100%);
-border-radius: 10px;
-font-size: 16px;
-line-height: 1.6;
-border-left: 3px solid var(–grass-mid);
-}
-
-.news-item.hot {
-background: linear-gradient(90deg, rgba(244, 168, 200, 0.3) 0%, transparent 100%);
-border-left-color: var(–pink);
-}
-
-.news-item .news-date {
-flex-shrink: 0;
-font-family: ‘Fraunces’, serif;
-font-weight: 900;
-color: var(–grass-deep);
-min-width: 44px;
-font-size: 17px;
-}
-
-.news-item.hot .news-date {
-color: #c14b7e;
-}
-
-.news-item .news-text {
-color: var(–earth);
-flex: 1;
-}
-
-.news-item .hot-tag {
-display: inline-block;
-font-size: 12px;
-background: var(–pink);
-color: var(–earth);
-padding: 2px 8px;
-border-radius: 6px;
-font-weight: 700;
-margin-right: 6px;
-vertical-align: middle;
-}
-
-/* === Tab Navigation === */
-.tabs {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 6px;
-margin-bottom: 24px;
-background: rgba(253, 252, 243, 0.95);
-padding: 6px;
-border-radius: 16px;
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
-border: 2px solid var(–earth);
-box-shadow: 4px 4px 0 var(–earth);
-position: sticky;
-top: 10px;
-z-index: 100;
-}
-
-.tab {
-padding: 16px 4px;
-text-align: center;
-border-radius: 12px;
-font-size: 18px;
-font-weight: 700;
-color: var(–earth);
-cursor: pointer;
-transition: all 0.2s;
-background: transparent;
-border: none;
-font-family: inherit;
-line-height: 1.3;
-}
-
-.tab .icon { display: block; font-size: 32px; margin-bottom: 6px; }
-
-.tab.active {
-background: var(–grass-deep);
-color: var(–cream);
-transform: translateY(-2px);
-}
-
-/* === Section === */
-.section {
-display: none;
-animation: fadeIn 0.4s ease;
-}
-.section.active { display: block; }
-
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-.section-title {
-font-family: ‘Fraunces’, serif;
-font-size: 26px;
-font-weight: 700;
-margin-bottom: 18px;
-color: var(–earth);
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-.section-title::after {
-content: ‘’;
-flex: 1;
-height: 3px;
-background: repeating-linear-gradient(90deg, var(–grass-mid) 0 8px, transparent 8px 14px);
-border-radius: 2px;
-}
-
-/* === Card 通用樣式 === */
-.card {
-background: var(–cream);
-border: 2px solid var(–earth);
-border-radius: 18px;
-padding: 16px;
-margin-bottom: 14px;
-box-shadow: 4px 4px 0 var(–earth);
-position: relative;
-transition: transform 0.2s;
-}
-
-.card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(–earth); }
-
-.card-tag {
-display: inline-block;
-font-size: 13px;
-font-weight: 700;
-padding: 4px 12px;
-border-radius: 10px;
-margin-bottom: 10px;
-letter-spacing: 0.5px;
-}
-
-.tag-tm { background: var(–grass-bright); color: var(–grass-deep); }
-.tag-special { background: var(–pink); color: var(–earth); }
-.tag-edu { background: var(–sun); color: var(–earth); }
-.tag-out { background: var(–sky); color: var(–earth); }
-
-.card-date {
-font-family: ‘Fraunces’, serif;
-font-size: 22px;
-font-weight: 900;
-color: var(–grass-deep);
-margin-bottom: 6px;
-}
-
-.card-title {
-font-size: 18px;
-font-weight: 700;
-color: var(–earth);
-margin-bottom: 12px;
-line-height: 1.4;
-}
-
-.card-meta {
-font-size: 16px;
-color: var(–earth);
-line-height: 2;
-background: rgba(255, 249, 160, 0.3);
-padding: 12px 14px;
-border-radius: 10px;
-border-left: 3px solid var(–grass-mid);
-}
-
-.card-meta strong {
-color: var(–grass-deep);
-font-weight: 700;
-margin-right: 4px;
-}
-
-/* 地點顯示（右上角浮動，點擊開地圖）*/
-.card-location {
-position: absolute;
-top: 14px;
-right: 14px;
-font-size: 12px;
-color: var(–grass-deep);
-background: rgba(214, 240, 74, 0.4);
-padding: 4px 10px;
-border-radius: 12px;
-font-weight: 600;
-border: 1.5px solid var(–grass-mid);
-max-width: 45%;
-text-align: center;
-line-height: 1.3;
-z-index: 1;
-text-decoration: none;
-cursor: pointer;
-transition: all 0.15s;
--webkit-tap-highlight-color: transparent;
-}
-
-.card-location:hover,
-.card-location:active {
-background: rgba(214, 240, 74, 0.7);
-transform: translateY(-1px);
-box-shadow: 0 2px 4px rgba(74, 53, 32, 0.2);
-}
-
-/* 外連結箭頭符號 */
-.ext-arrow {
-display: inline-block;
-margin-left: 2px;
-font-size: 11px;
-font-weight: 900;
-color: var(–grass-deep);
-transform: translateY(-1px);
-}
-
-.ext-arrow-sm {
-display: inline-block;
-margin-left: 2px;
-font-size: 11px;
-font-weight: 900;
-color: var(–grass-deep);
-opacity: 0.7;
-}
-
-/* 點擊時箭頭往右上飛 */
-.card-location:hover .ext-arrow,
-.card-location:active .ext-arrow,
-.community-link:hover .ext-arrow-sm,
-.community-link:active .ext-arrow-sm {
-transform: translate(2px, -3px);
-opacity: 1;
-transition: transform 0.2s, opacity 0.2s;
-}
-
-/* === 報名按鈕 === */
-.signup-btn {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-width: 100%;
-margin-top: 14px;
-padding: 14px 18px;
-background: linear-gradient(135deg, var(–pink) 0%, #f093b8 100%);
-color: var(–earth);
-font-size: 17px;
-font-weight: 700;
-text-decoration: none;
-border: 2px solid var(–earth);
-border-radius: 14px;
-box-shadow: 4px 4px 0 var(–earth);
-cursor: pointer;
-transition: all 0.15s;
--webkit-tap-highlight-color: transparent;
-position: relative;
-overflow: hidden;
-}
-
-.signup-btn::before {
-content: ‘’;
-position: absolute;
-top: 0;
-left: -100%;
-width: 50%;
-height: 100%;
-background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-animation: shimmer 2.5s infinite;
-}
-
-@keyframes shimmer {
-0% { left: -100%; }
-50%, 100% { left: 200%; }
-}
-
-.signup-btn:hover,
-.signup-btn:active {
-transform: translate(2px, 2px);
-box-shadow: 2px 2px 0 var(–earth);
-}
-
-.signup-icon {
-font-size: 20px;
-}
-
-.signup-text {
-letter-spacing: 1.5px;
-font-family: inherit;
-}
-
-.signup-arrow {
-font-size: 18px;
-font-weight: 900;
-transition: transform 0.2s;
-}
-
-.signup-btn:hover .signup-arrow {
-transform: translateX(3px);
-}
-
-/* === 拍照輪值 === */
-.photo-row {
-display: flex;
-gap: 8px;
-margin-top: 12px;
-}
-
-.photo-slot {
-flex: 1;
-background: var(–grass-light);
-border: 2px solid var(–earth);
-border-radius: 12px;
-padding: 12px 8px;
-text-align: center;
-}
-
-.photo-slot .label {
-font-size: 16px;
-color: var(–grass-deep);
-font-weight: 700;
-margin-bottom: 6px;
-letter-spacing: 1px;
-}
-
-.photo-slot .name {
-font-family: ‘Caveat’, cursive;
-font-size: 26px;
-color: var(–earth);
-font-weight: 700;
-line-height: 1.1;
-}
-
-.photo-slot.tbd { background: #f0f0e8; }
-.photo-slot.tbd .name { color: var(–earth-light); font-style: italic; }
-
-.no-photo {
-margin-top: 10px;
-font-size: 14px;
-color: var(–earth-light);
-font-style: italic;
-padding: 8px 12px;
-background: #f0f0e8;
-border-radius: 8px;
-text-align: center;
-}
-
-/* === 認領雙格（正 / 候補） === */
-.claim-row {
-display: flex;
-gap: 8px;
-margin-top: 12px;
-}
-
-.claim-slot {
-flex: 1;
-background: var(–grass-light);
-border: 2px solid var(–earth);
-border-radius: 12px;
-padding: 12px 8px;
-text-align: center;
-}
-
-.claim-slot.backup {
-background: var(–sun);
-}
-
-.claim-slot .label {
-font-size: 16px;
-color: var(–grass-deep);
-font-weight: 700;
-margin-bottom: 6px;
-letter-spacing: 1px;
-}
-
-.claim-slot.backup .label {
-color: #8b5a1c;
-}
-
-.claim-slot .name {
-font-family: ‘Caveat’, cursive;
-font-size: 26px;
-color: var(–earth);
-font-weight: 700;
-line-height: 1.1;
-}
-
-.claim-slot.tbd { background: #f0f0e8; }
-.claim-slot.tbd .name { color: var(–earth-light); font-style: italic; }
-
-/* === 區塊小標題（一張卡片內的 📸 拍照 / 🎤 TM 認領） === */
-.block-label {
-font-size: 14px;
-font-weight: 700;
-color: var(–grass-deep);
-margin-top: 14px;
-padding-top: 14px;
-border-top: 1px dashed var(–earth-light);
-display: flex;
-align-items: center;
-gap: 6px;
-}
-
-.block-label:first-of-type {
-margin-top: 16px;
-}
-
-/* === 認領狀態 === */
-.status-pill {
-display: inline-block;
-font-size: 13px;
-font-weight: 700;
-padding: 3px 12px;
-border-radius: 10px;
-margin-left: 6px;
-}
-
-.status-confirmed { background: var(–grass-bright); color: var(–grass-deep); }
-.status-pending { background: #ffd9a3; color: #8b5a1c; }
-.status-empty { background: #f0f0e8; color: var(–earth-light); }
-
-/* === 組聚 === */
-.meetup-next {
-background: linear-gradient(135deg, var(–grass-bright) 0%, var(–sun) 100%);
-border: 3px solid var(–earth);
-border-radius: 20px;
-padding: 22px;
-box-shadow: 5px 5px 0 var(–earth);
-margin-bottom: 16px;
-position: relative;
-}
-
-.meetup-next::before {
-content: ‘🌳’;
-position: absolute;
-top: -16px;
-right: 16px;
-font-size: 36px;
-}
-
-.meetup-next .label {
-font-family: ‘Caveat’, cursive;
-font-size: 24px;
-color: var(–grass-deep);
-margin-bottom: 8px;
-}
-
-.meetup-next .when {
-font-family: ‘Fraunces’, serif;
-font-size: 28px;
-font-weight: 900;
-color: var(–earth);
-margin-bottom: 6px;
-}
-
-.meetup-next .where {
-font-size: 16px;
-color: var(–earth);
-font-weight: 500;
-}
-
-.meetup-history {
-margin-top: 20px;
-}
-
-.meetup-item {
-background: var(–cream);
-border: 2px solid var(–earth-light);
-border-radius: 12px;
-padding: 12px 16px;
-margin-bottom: 10px;
-font-size: 15px;
-}
-
-.meetup-item .date {
-font-weight: 700;
-color: var(–grass-deep);
-}
-
-/* === 社團小角落（留言板） === */
-.community-corner {
-background: linear-gradient(135deg, var(–cream) 0%, #fef7e0 100%);
-border: 2px solid var(–earth);
-border-radius: 18px;
-padding: 16px;
-margin-bottom: 20px;
-box-shadow: 4px 4px 0 var(–earth);
-position: relative;
-}
-
-.community-corner-title {
-font-family: ‘Fraunces’, serif;
-font-size: 16px;
-font-weight: 900;
-color: var(–earth);
-margin-bottom: 12px;
-display: flex;
-align-items: center;
-gap: 6px;
-}
-
-.community-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-}
-
-.community-link {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-padding: 16px 10px;
-background: var(–warm-white, #fffaf0);
-border: 2px solid var(–earth);
-border-radius: 14px;
-text-decoration: none;
-color: var(–earth);
-box-shadow: 3px 3px 0 var(–earth);
-transition: all 0.15s;
--webkit-tap-highlight-color: transparent;
-text-align: center;
-position: relative;
-overflow: hidden;
-}
-
-.community-link.write {
-background: linear-gradient(135deg, #fff5db 0%, var(–sun) 100%);
-}
-
-.community-link.read {
-background: linear-gradient(135deg, #e8f5d8 0%, var(–grass-light) 100%);
-}
-
-.community-link:hover,
-.community-link:active {
-transform: translate(2px, 2px);
-box-shadow: 1px 1px 0 var(–earth);
-}
-
-.community-link-emoji {
-font-size: 28px;
-margin-bottom: 6px;
-}
-
-.community-link-title {
-font-size: 15px;
-font-weight: 700;
-color: var(–earth);
-margin-bottom: 3px;
-letter-spacing: 0.5px;
-}
-
-.community-link-sub {
-font-family: ‘Caveat’, cursive;
-font-size: 14px;
-color: var(–earth-light);
-}
-
-/* === 組員名單 === */
-.member-list {
-background: var(–cream);
-border: 2px solid var(–earth);
-border-radius: 18px;
-padding: 8px;
-box-shadow: 4px 4px 0 var(–earth);
-}
-
-.member-row {
-display: flex;
-align-items: center;
-gap: 10px;
-padding: 14px 12px;
-border-bottom: 1px dashed var(–earth-light);
-}
-
-.member-row:last-child {
-border-bottom: none;
-}
-
-.member-tag {
-display: inline-block;
-font-size: 13px;
-font-weight: 700;
-padding: 4px 12px;
-border-radius: 10px;
-flex-shrink: 0;
-min-width: 64px;
-text-align: center;
-border: 1.5px solid var(–earth);
-}
-
-/* 5 種分類顏色 */
-.role-leader { background: var(–grass-bright); color: var(–grass-deep); }
-.role-deputy { background: var(–sun); color: #8b5a1c; }
-.role-member { background: var(–sky); color: var(–earth); }
-.role-newbie { background: var(–pink); color: var(–earth); }
-.role-senior { background: #e0d4f0; color: #553a7a; }
-.role-default { background: #f0f0e8; color: var(–earth-light); }
-
-.member-name {
-font-size: 18px;
-font-weight: 700;
-color: var(–earth);
-flex: 1;
-}
-
-.member-name .me-mark {
-font-family: ‘Caveat’, cursive;
-font-size: 16px;
-color: var(–grass-deep);
-margin-left: 6px;
-}
-
-.member-note {
-font-size: 13px;
-color: var(–earth-light);
-font-weight: 500;
-flex-shrink: 0;
-background: rgba(255, 249, 160, 0.4);
-padding: 3px 10px;
-border-radius: 8px;
-border: 1px solid var(–earth-light);
-}
-
-/* 組員區塊小標題（自動分隔線） */
-.member-section-label {
-font-family: ‘Fraunces’, serif;
-font-size: 14px;
-font-weight: 700;
-color: var(–earth-light);
-padding: 14px 12px 6px;
-letter-spacing: 1px;
-}
-
-.member-section-label:first-child {
-padding-top: 8px;
-}
-
-/* === 比賽 === */
-.race-card {
-background: var(–cream);
-border: 2px solid var(–earth);
-border-left: 6px solid var(–pink);
-border-radius: 14px;
-padding: 16px;
-margin-bottom: 12px;
-box-shadow: 3px 3px 0 var(–earth);
-}
-
-.race-date {
-font-family: ‘Fraunces’, serif;
-font-size: 18px;
-font-weight: 900;
-color: var(–earth);
-}
-
-.race-name {
-font-size: 16px;
-font-weight: 700;
-margin: 6px 0;
-}
-
-.race-cheer {
-background: var(–sun);
-border-radius: 10px;
-padding: 8px 12px;
-margin-top: 10px;
-font-size: 14px;
-color: var(–earth);
-}
-
-/* === 空狀態 === */
-.empty-state {
-text-align: center;
-padding: 40px 20px;
-color: var(–earth-light);
-}
-
-.empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
-.empty-state .text { font-size: 16px; line-height: 1.8; }
-
-/* === Footer === */
-footer {
-text-align: center;
-margin-top: 40px;
-padding: 20px;
-font-family: ‘Caveat’, cursive;
-font-size: 18px;
-color: var(–grass-deep);
-}
-
-/* === 拍照統計卡片 === */
-.photo-stats {
-background: linear-gradient(135deg, #fdfcf3 0%, var(–cream) 100%);
-border: 2px solid var(–earth);
-border-radius: 18px;
-padding: 18px 18px 16px;
-margin-bottom: 20px;
-box-shadow: 4px 4px 0 var(–earth);
-position: relative;
-}
-
-.photo-stats-header {
-display: flex;
-align-items: baseline;
-justify-content: space-between;
-margin-bottom: 14px;
-padding-bottom: 10px;
-border-bottom: 2px dashed var(–grass-mid);
-}
-
-.photo-stats-title {
-font-family: ‘Fraunces’, serif;
-font-size: 18px;
-font-weight: 900;
-color: var(–earth);
-}
-
-.photo-stats-summary {
-font-family: ‘Caveat’, cursive;
-font-size: 16px;
-color: var(–grass-deep);
-}
-
-.stats-grid {
-display: grid;
-gap: 8px;
-}
-
-.stats-row {
-display: grid;
-grid-template-columns: 1fr auto auto auto;
-gap: 8px;
-align-items: center;
-padding: 8px 10px;
-background: rgba(214, 240, 74, 0.12);
-border-radius: 8px;
-}
-
-.stats-row.is-me {
-background: rgba(244, 168, 200, 0.18);
-}
-
-.stats-name {
-font-size: 16px;
-font-weight: 700;
-color: var(–earth);
-}
-
-.stats-name .me-mark {
-font-family: ‘Caveat’, cursive;
-font-size: 14px;
-color: var(–grass-deep);
-margin-left: 4px;
-}
-
-.stats-badge {
-font-size: 12px;
-font-weight: 700;
-padding: 3px 9px;
-border-radius: 8px;
-min-width: 50px;
-text-align: center;
-}
-
-.stats-main {
-background: var(–grass-bright);
-color: var(–grass-deep);
-}
-
-.stats-backup {
-background: var(–sun);
-color: #8b5a1c;
-}
-
-.stats-total {
-background: var(–earth);
-color: var(–cream);
-font-size: 13px;
-min-width: 38px;
-}
-
-.stats-empty-msg {
-text-align: center;
-color: var(–earth-light);
-font-size: 13px;
-padding: 8px;
-font-style: italic;
-}
-
-.loading-state {
-text-align: center;
-padding: 30px 20px;
-color: var(–earth-light);
-font-size: 14px;
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(180deg, var(--sky) 0%, var(--sky) 25%, #e8f5d8 50%, var(--grass-light) 100%);
+    background-attachment: fixed;
+    color: var(--earth);
+    min-height: 100vh;
+    line-height: 1.7;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+    font-size: 17px;
+  }
+
+  /* 雲朵裝飾 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 30px;
+    left: -40px;
+    width: 140px;
+    height: 50px;
+    background: white;
+    border-radius: 50px;
+    box-shadow:
+      60px 30px 0 -10px white,
+      200px 10px 0 -5px white,
+      280px 50px 0 -15px white;
+    opacity: 0.85;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* 草地底部 */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background:
+      radial-gradient(ellipse at 20% 100%, var(--grass-deep) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, var(--grass-deep) 0%, transparent 50%),
+      linear-gradient(180deg, transparent 0%, var(--grass-mid) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === Header === */
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-top: 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--grass-bright);
+    color: var(--grass-deep);
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    padding: 4px 18px;
+    border-radius: 20px;
+    transform: rotate(-3deg);
+    box-shadow: 3px 3px 0 var(--earth);
+    margin-bottom: 12px;
+    border: 2px solid var(--earth);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--earth);
+    line-height: 1.2;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--earth-light);
+    font-weight: 500;
+  }
+
+  .last-update {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--grass-deep);
+    background: var(--sun);
+    padding: 3px 14px;
+    border-radius: 12px;
+    transform: rotate(1deg);
+  }
+
+  /* === 最新消息區 === */
+  .news-board {
+    background: var(--cream);
+    border: 3px solid var(--earth);
+    border-radius: 20px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    box-shadow: 5px 5px 0 var(--earth);
+    position: relative;
+  }
+
+  .news-board::before {
+    content: '📢';
+    position: absolute;
+    top: -18px;
+    left: 16px;
+    background: var(--sun);
+    border: 2px solid var(--earth);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .news-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-left: 32px;
+  }
+
+  .news-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--earth);
+  }
+
+  .news-count {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--grass-deep);
+  }
+
+  .news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .news-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    background: linear-gradient(90deg, rgba(214, 240, 74, 0.15) 0%, transparent 100%);
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 1.6;
+    border-left: 3px solid var(--grass-mid);
+  }
+
+  .news-item.hot {
+    background: linear-gradient(90deg, rgba(244, 168, 200, 0.3) 0%, transparent 100%);
+    border-left-color: var(--pink);
+  }
+
+  .news-item .news-date {
+    flex-shrink: 0;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    color: var(--grass-deep);
+    min-width: 44px;
+    font-size: 17px;
+  }
+
+  .news-item.hot .news-date {
+    color: #c14b7e;
+  }
+
+  .news-item .news-text {
+    color: var(--earth);
+    flex: 1;
+  }
+
+  .news-item .hot-tag {
+    display: inline-block;
+    font-size: 12px;
+    background: var(--pink);
+    color: var(--earth);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* === Tab Navigation === */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 24px;
+    background: rgba(253, 252, 243, 0.95);
+    padding: 6px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid var(--earth);
+    box-shadow: 4px 4px 0 var(--earth);
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+  }
+
+  .tab {
+    padding: 16px 4px;
+    text-align: center;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--earth);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    line-height: 1.3;
+  }
+
+  .tab .icon { display: block; font-size: 32px; margin-bottom: 6px; }
+
+  .tab.active {
+    background: var(--grass-deep);
+    color: var(--cream);
+    transform: translateY(-2px);
+  }
+
+  /* === Section === */
+  .section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: var(--earth);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 3px;
+    background: repeating-linear-gradient(90deg, var(--grass-mid) 0 8px, transparent 8px 14px);
+    border-radius: 2px;
+  }
+
+  /* === Card 通用樣式 === */
+  .card {
+    background: var(--cream);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 4px 4px 0 var(--earth);
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--earth); }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-tm { background: var(--grass-bright); color: var(--grass-deep); }
+  .tag-special { background: var(--pink); color: var(--earth); }
+  .tag-edu { background: var(--sun); color: var(--earth); }
+  .tag-out { background: var(--sky); color: var(--earth); }
+
+  .card-date {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--grass-deep);
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--earth);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .card-meta {
+    font-size: 16px;
+    color: var(--earth);
+    line-height: 2;
+    background: rgba(255, 249, 160, 0.3);
+    padding: 12px 14px;
+    border-radius: 10px;
+    border-left: 3px solid var(--grass-mid);
+  }
+
+  .card-meta strong {
+    color: var(--grass-deep);
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  /* 地點顯示（右上角浮動，點擊開地圖）*/
+  .card-location {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 12px;
+    color: var(--grass-deep);
+    background: rgba(214, 240, 74, 0.4);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1.5px solid var(--grass-mid);
+    max-width: 45%;
+    text-align: center;
+    line-height: 1.3;
+    z-index: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card-location:hover,
+  .card-location:active {
+    background: rgba(214, 240, 74, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(74, 53, 32, 0.2);
+  }
+
+  /* === 報名按鈕 === */
+  .signup-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--pink) 0%, #f093b8 100%);
+    color: var(--earth);
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid var(--earth);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--earth);
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .signup-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    50%, 100% { left: 200%; }
+  }
+
+  .signup-btn:hover,
+  .signup-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--earth);
+  }
+
+  .signup-icon {
+    font-size: 20px;
+  }
+
+  .signup-text {
+    letter-spacing: 1.5px;
+    font-family: inherit;
+  }
+
+  .signup-arrow {
+    font-size: 18px;
+    font-weight: 900;
+    transition: transform 0.2s;
+  }
+
+  .signup-btn:hover .signup-arrow {
+    transform: translateX(3px);
+  }
+
+  /* === 拍照輪值 === */
+  .photo-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .photo-slot {
+    flex: 1;
+    background: var(--grass-light);
+    border: 2px solid var(--earth);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .photo-slot .label {
+    font-size: 16px;
+    color: var(--grass-deep);
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .photo-slot .name {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    color: var(--earth);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .photo-slot.tbd { background: #f0f0e8; }
+  .photo-slot.tbd .name { color: var(--earth-light); font-style: italic; }
+
+  .no-photo {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--earth-light);
+    font-style: italic;
+    padding: 8px 12px;
+    background: #f0f0e8;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  /* === 認領雙格（正 / 候補） === */
+  .claim-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .claim-slot {
+    flex: 1;
+    background: var(--grass-light);
+    border: 2px solid var(--earth);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .claim-slot.backup {
+    background: var(--sun);
+  }
+
+  .claim-slot .label {
+    font-size: 16px;
+    color: var(--grass-deep);
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .claim-slot.backup .label {
+    color: #8b5a1c;
+  }
+
+  .claim-slot .name {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    color: var(--earth);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .claim-slot.tbd { background: #f0f0e8; }
+  .claim-slot.tbd .name { color: var(--earth-light); font-style: italic; }
+
+  /* === 區塊小標題（一張卡片內的 📸 拍照 / 🎤 TM 認領） === */
+  .block-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--grass-deep);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--earth-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .block-label:first-of-type {
+    margin-top: 16px;
+  }
+
+  /* === 認領狀態 === */
+  .status-pill {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 10px;
+    margin-left: 6px;
+  }
+
+  .status-confirmed { background: var(--grass-bright); color: var(--grass-deep); }
+  .status-pending { background: #ffd9a3; color: #8b5a1c; }
+  .status-empty { background: #f0f0e8; color: var(--earth-light); }
+
+  /* === 組聚 === */
+  .meetup-next {
+    background: linear-gradient(135deg, var(--grass-bright) 0%, var(--sun) 100%);
+    border: 3px solid var(--earth);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 5px 5px 0 var(--earth);
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .meetup-next::before {
+    content: '🌳';
+    position: absolute;
+    top: -16px;
+    right: 16px;
+    font-size: 36px;
+  }
+
+  .meetup-next .label {
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    color: var(--grass-deep);
+    margin-bottom: 8px;
+  }
+
+  .meetup-next .when {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--earth);
+    margin-bottom: 6px;
+  }
+
+  .meetup-next .where {
+    font-size: 16px;
+    color: var(--earth);
+    font-weight: 500;
+  }
+
+  .meetup-history {
+    margin-top: 20px;
+  }
+
+  .meetup-item {
+    background: var(--cream);
+    border: 2px solid var(--earth-light);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+
+  .meetup-item .date {
+    font-weight: 700;
+    color: var(--grass-deep);
+  }
+
+  /* === 社團小角落（留言板） === */
+  .community-corner {
+    background: linear-gradient(135deg, var(--cream) 0%, #fef7e0 100%);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 var(--earth);
+    position: relative;
+  }
+
+  .community-corner-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--earth);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .community-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .community-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 10px;
+    background: var(--warm-white, #fffaf0);
+    border: 2px solid var(--earth);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--earth);
+    box-shadow: 3px 3px 0 var(--earth);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .community-link.write {
+    background: linear-gradient(135deg, #fff5db 0%, var(--sun) 100%);
+  }
+
+  .community-link.read {
+    background: linear-gradient(135deg, #e8f5d8 0%, var(--grass-light) 100%);
+  }
+
+  .community-link:hover,
+  .community-link:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--earth);
+  }
+
+  .community-link-emoji {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .community-link-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--earth);
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .community-link-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--earth-light);
+  }
+
+  /* === 組員名單 === */
+  .member-list {
+    background: var(--cream);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 8px;
+    box-shadow: 4px 4px 0 var(--earth);
+  }
+
+  .member-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 12px;
+    border-bottom: 1px dashed var(--earth-light);
+  }
+
+  .member-row:last-child {
+    border-bottom: none;
+  }
+
+  .member-tag {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    min-width: 64px;
+    text-align: center;
+    border: 1.5px solid var(--earth);
+  }
+
+  /* 5 種分類顏色 */
+  .role-leader { background: var(--grass-bright); color: var(--grass-deep); }
+  .role-deputy { background: var(--sun); color: #8b5a1c; }
+  .role-member { background: var(--sky); color: var(--earth); }
+  .role-newbie { background: var(--pink); color: var(--earth); }
+  .role-senior { background: #e0d4f0; color: #553a7a; }
+  .role-default { background: #f0f0e8; color: var(--earth-light); }
+
+  .member-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--earth);
+    flex: 1;
+  }
+
+  .member-name .me-mark {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--grass-deep);
+    margin-left: 6px;
+  }
+
+  .member-note {
+    font-size: 13px;
+    color: var(--earth-light);
+    font-weight: 500;
+    flex-shrink: 0;
+    background: rgba(255, 249, 160, 0.4);
+    padding: 3px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--earth-light);
+  }
+
+  /* 組員區塊小標題（自動分隔線） */
+  .member-section-label {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--earth-light);
+    padding: 14px 12px 6px;
+    letter-spacing: 1px;
+  }
+
+  .member-section-label:first-child {
+    padding-top: 8px;
+  }
+
+  /* === 比賽 === */
+  .race-card {
+    background: var(--cream);
+    border: 2px solid var(--earth);
+    border-left: 6px solid var(--pink);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 3px 3px 0 var(--earth);
+  }
+
+  .race-date {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--earth);
+  }
+
+  .race-name {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 6px 0;
+  }
+
+  .race-cheer {
+    background: var(--sun);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--earth);
+  }
+
+  /* === 空狀態 === */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--earth-light);
+  }
+
+  .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+  .empty-state .text { font-size: 16px; line-height: 1.8; }
+
+  /* === Footer === */
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--grass-deep);
+  }
+
+
+  /* === 拍照統計卡片 === */
+  .photo-stats {
+    background: linear-gradient(135deg, #fdfcf3 0%, var(--cream) 100%);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 var(--earth);
+    position: relative;
+  }
+
+  .photo-stats-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed var(--grass-mid);
+  }
+
+  .photo-stats-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--earth);
+  }
+
+  .photo-stats-summary {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--grass-deep);
+  }
+
+  .stats-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(214, 240, 74, 0.15);
+    border-radius: 10px;
+    border-left: 3px solid var(--grass-mid);
+  }
+
+  .stats-row.is-me {
+    background: rgba(244, 168, 200, 0.2);
+    border-left-color: var(--pink);
+  }
+
+  .stats-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--earth);
+  }
+
+  .stats-name .me-mark {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--grass-deep);
+    margin-left: 4px;
+  }
+
+  .stats-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 8px;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .stats-main {
+    background: var(--grass-bright);
+    color: var(--grass-deep);
+  }
+
+  .stats-backup {
+    background: var(--sun);
+    color: #8b5a1c;
+  }
+
+  .stats-total {
+    background: var(--earth);
+    color: var(--cream);
+    font-size: 13px;
+    min-width: 38px;
+  }
+
+  .stats-empty-msg {
+    text-align: center;
+    color: var(--earth-light);
+    font-size: 13px;
+    padding: 8px;
+    font-style: italic;
+  }
+
+  .loading-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--earth-light);
+    font-size: 14px;
+  }
 </style>
-
 </head>
 <body>
 
@@ -996,7 +968,6 @@ font-size: 14px;
   </header>
 
   <!-- 最新消息區 -->
-
   <div class="news-board">
     <div class="news-header">
       <span class="news-title">最新消息</span>
@@ -1008,7 +979,6 @@ font-size: 14px;
   </div>
 
   <!-- Tab 導航 -->
-
   <nav class="tabs">
     <button class="tab active" data-target="schedule">
       <span class="icon">📅</span>課程
@@ -1022,7 +992,6 @@ font-size: 14px;
   </nav>
 
   <!-- 1. 課程 -->
-
   <section class="section active" id="schedule">
     <h2 class="section-title">課程</h2>
     <div id="photoStats"></div>
@@ -1032,7 +1001,6 @@ font-size: 14px;
   </section>
 
   <!-- 2. 組聚 -->
-
   <section class="section" id="meetup">
     <h2 class="section-title">組聚資訊</h2>
     <div id="meetupContent">
@@ -1041,7 +1009,6 @@ font-size: 14px;
   </section>
 
   <!-- 3. 組員 -->
-
   <section class="section" id="members">
     <h2 class="section-title">公關組組員</h2>
     <div id="membersList">
@@ -1311,7 +1278,7 @@ font-size: 14px;
 
       // 地點顯示（點擊開地圖）
       const locationHtml = location
-        ? `<a class="card-location" href="https://www.google.com/maps/search/${encodeURIComponent(location)}" target="_blank" rel="noopener">📍 ${esc(location)} <span class="ext-arrow">↗</span></a>`
+        ? `<a class="card-location" href="https://www.google.com/maps/search/${encodeURIComponent(location)}" target="_blank" rel="noopener">📍 ${esc(location)}</a>`
         : '';
 
       // 報名連結
@@ -1445,12 +1412,12 @@ font-size: 14px;
         <div class="community-grid">
           <a class="community-link write" href="https://tally.so/r/Np8Gbb" target="_blank" rel="noopener">
             <div class="community-link-emoji">💬</div>
-            <div class="community-link-title">跟湘雯說話 <span class="ext-arrow-sm">↗</span></div>
+            <div class="community-link-title">跟湘雯說話</div>
             <div class="community-link-sub">90 期社長</div>
           </a>
           <a class="community-link read" href="https://curved-lyre-1a1.notion.site/90-3595d63cfe3380c781d9cafe8713594e?pvs=143" target="_blank" rel="noopener">
             <div class="community-link-emoji">📖</div>
-            <div class="community-link-title">看看留言區 <span class="ext-arrow-sm">↗</span></div>
+            <div class="community-link-title">看看留言區</div>
             <div class="community-link-sub">大家的回饋</div>
           </a>
         </div>
@@ -1536,14 +1503,6 @@ font-size: 14px;
       tab.classList.add('active');
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(target).classList.add('active');
-
-      // 切 Tab 後，自動捲動到 Tab 列上方一點點（讓使用者看到該 Tab 的最頂部）
-      const tabsEl = document.querySelector('.tabs');
-      if (tabsEl) {
-        const rect = tabsEl.getBoundingClientRect();
-        const targetY = window.scrollY + rect.top - 10;
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }
     });
   });
 
