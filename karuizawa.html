@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -613,7 +612,6 @@
 </div>
 
 <!-- 下一站浮動列 -->
-
 <div class="next-bar" id="nextBar" style="display:none;">
   <span class="icon">📍</span>
   <div class="content">
@@ -623,7 +621,6 @@
 </div>
 
 <!-- 分頁 -->
-
 <div class="day-tabs">
   <button class="day-tab active" data-day="1">
     <div class="day-num">DAY 1</div>
@@ -659,14 +656,12 @@
 </div>
 
 <!-- 浮動按鈕 -->
-
 <div class="floating-btns">
   <button class="float-btn emergency" onclick="openEmergency()" title="緊急聯絡">📞</button>
   <button class="float-btn top" onclick="scrollToTop()" title="回頂部">↑</button>
 </div>
 
 <!-- Modal -->
-
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -679,7 +674,6 @@
 </div>
 
 <!-- Toast 訊息 -->
-
 <div class="toast" id="toast"></div>
 
 <div class="footer">
@@ -887,172 +881,225 @@ function renderTimeline(dayKey) {
       <div class="note-area">
         <div class="note-label">📝 我的小筆記</div>
         <textarea data-note="${cardId}" placeholder="例:吃藥、買水、提醒自己..."></textarea>
-
-```
-    <div class="note-hint">自動儲存,只存在你的手機</div>
-  </div>
-`;
-html += `</div></div>`;
-```
-
-});
-container.innerHTML = html;
+        <div class="note-hint">自動儲存,只存在你的手機</div>
+      </div>
+    `;
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
 }
 
-renderTimeline(“day1”);
-renderTimeline(“day2”);
+renderTimeline("day1");
+renderTimeline("day2");
 
 // ============================================
 // 互動邏輯
 // ============================================
 
 // 分頁切換
-document.querySelectorAll(”.day-tab”).forEach(tab => {
-tab.addEventListener(“click”, () => {
-document.querySelectorAll(”.day-tab”).forEach(t => t.classList.remove(“active”));
-document.querySelectorAll(”.timeline”).forEach(t => t.classList.remove(“active”));
-tab.classList.add(“active”);
-document.getElementById(“day” + tab.dataset.day).classList.add(“active”);
-window.scrollTo({ top: 0, behavior: “smooth” });
-updateNextStop();
-});
+document.querySelectorAll(".day-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".day-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".timeline").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("day" + tab.dataset.day).classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    updateNextStop();
+  });
 });
 
 // 勾選 + 載入儲存狀態
-document.querySelectorAll(”.check-btn”).forEach(btn => {
-const id = btn.dataset.check;
-try {
-if (localStorage.getItem(“kz_check_” + id) === “1”) {
-btn.classList.add(“checked”);
-btn.closest(”.card”).classList.add(“done”);
-}
-} catch (e) {}
-btn.addEventListener(“click”, () => {
-btn.classList.toggle(“checked”);
-btn.closest(”.card”).classList.toggle(“done”);
-try {
-localStorage.setItem(“kz_check_” + id, btn.classList.contains(“checked”) ? “1” : “0”);
-} catch (e) {}
-updateNextStop();
-});
+document.querySelectorAll(".check-btn").forEach(btn => {
+  const id = btn.dataset.check;
+  try {
+    if (localStorage.getItem("kz_check_" + id) === "1") {
+      btn.classList.add("checked");
+      btn.closest(".card").classList.add("done");
+    }
+  } catch (e) {}
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("checked");
+    btn.closest(".card").classList.toggle("done");
+    try {
+      localStorage.setItem("kz_check_" + id, btn.classList.contains("checked") ? "1" : "0");
+    } catch (e) {}
+    updateNextStop();
+  });
 });
 
 // 筆記 - 載入 + 自動儲存
-document.querySelectorAll(“textarea[data-note]”).forEach(ta => {
-const id = ta.dataset.note;
-try { ta.value = localStorage.getItem(“kz_note_” + id) || “”; } catch (e) {}
-let timer;
-ta.addEventListener(“input”, () => {
-clearTimeout(timer);
-timer = setTimeout(() => {
-try { localStorage.setItem(“kz_note_” + id, ta.value); } catch (e) {}
-}, 500);
-});
+document.querySelectorAll("textarea[data-note]").forEach(ta => {
+  const id = ta.dataset.note;
+  try { ta.value = localStorage.getItem("kz_note_" + id) || ""; } catch (e) {}
+  let timer;
+  ta.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try { localStorage.setItem("kz_note_" + id, ta.value); } catch (e) {}
+    }, 500);
+  });
 });
 
 // 設提醒
-document.querySelectorAll(”.action-btn.remind”).forEach(btn => {
-btn.addEventListener(“click”, () => {
-const event = btn.dataset.event;
-const time = btn.dataset.time;
-const startDate = new Date(time);
-const endDate = new Date(startDate.getTime() + 30 * 60000);
-const fmt = d => d.toISOString().replace(/[-:]/g, “”).replace(/.\d{3}/, “”).replace(/Z$/, “”);
-const startStr = fmt(startDate);
-const endStr = fmt(endDate);
-const ics = `BEGIN:VCALENDAR VERSION:2.0 PRODID:-//Karuizawa Trip//ZH-TW BEGIN:VEVENT UID:${Date.now()}@karuizawa DTSTAMP:${startStr} DTSTART:${startStr} DTEND:${endStr} SUMMARY:輕井澤 ・ ${event} DESCRIPTION:輕井澤二日旅伴 自動提醒 BEGIN:VALARM TRIGGER:-PT15M ACTION:DISPLAY DESCRIPTION:即將開始 - ${event} END:VALARM END:VEVENT END:VCALENDAR`;
-const blob = new Blob([ics], { type: “text/calendar;charset=utf-8” });
-const url = URL.createObjectURL(blob);
-const a = document.createElement(“a”);
-a.href = url;
-a.download = `karuizawa_${event}.ics`;
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
-URL.revokeObjectURL(url);
-showToast(“✅ 已下載提醒,請點開檔案加入手機行事曆”);
-});
+document.querySelectorAll(".action-btn.remind").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const event = btn.dataset.event;
+    const time = btn.dataset.time;
+    const startDate = new Date(time);
+    const endDate = new Date(startDate.getTime() + 30 * 60000);
+    const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "").replace(/Z$/, "");
+    const startStr = fmt(startDate);
+    const endStr = fmt(endDate);
+    const ics = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Karuizawa Trip//ZH-TW
+BEGIN:VEVENT
+UID:${Date.now()}@karuizawa
+DTSTAMP:${startStr}
+DTSTART:${startStr}
+DTEND:${endStr}
+SUMMARY:輕井澤 ・ ${event}
+DESCRIPTION:輕井澤二日旅伴 自動提醒
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:即將開始 - ${event}
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `karuizawa_${event}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("✅ 已下載提醒,請點開檔案加入手機行事曆");
+  });
 });
 
 // 開地圖
 function openMap(query) {
-window.open(“https://www.google.com/maps/search/?api=1&query=” + encodeURIComponent(query), “_blank”);
+  window.open("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query), "_blank");
 }
 
 // 開「指著看」小卡
 function openCard(key) {
-const data = CARDS[key];
-if (!data) return;
-document.getElementById(“modalTitle”).textContent = data.title;
-let html = `<div class="modal-intro">${data.intro}</div>`;
-data.items.forEach(item => {
-html += `<div class="point-card"> <div class="zh">${item.zh}</div> <div class="jp">${item.jp}</div> <div class="hint">${item.hint}</div> </div>`;
-});
-document.getElementById(“modalBody”).innerHTML = html;
-document.getElementById(“modal”).classList.add(“show”);
+  const data = CARDS[key];
+  if (!data) return;
+  document.getElementById("modalTitle").textContent = data.title;
+  let html = `<div class="modal-intro">${data.intro}</div>`;
+  data.items.forEach(item => {
+    html += `
+      <div class="point-card">
+        <div class="zh">${item.zh}</div>
+        <div class="jp">${item.jp}</div>
+        <div class="hint">${item.hint}</div>
+      </div>
+    `;
+  });
+  document.getElementById("modalBody").innerHTML = html;
+  document.getElementById("modal").classList.add("show");
 }
 
 // 開緊急聯絡
 function openEmergency() {
-document.getElementById(“modalTitle”).textContent = “📞 緊急聯絡”;
-let html = `<div class="modal-intro">遇到狀況時,<strong>點電話號碼可直撥</strong>。</div>`;
-EMERGENCY.forEach(e => {
-const cleanPhone = e.phone.replace(/[^\d+]/g, “”);
-html += `<div class="emergency-card"> <div class="emergency-icon">${e.icon}</div> <div class="emergency-info"> <div class="emergency-name">${e.name}</div> <div class="emergency-phone">${e.phone}</div> </div> <a class="call-btn" href="tel:${cleanPhone}">📞 撥打</a> </div>`;
-});
-html += `<div class="emergency-tip"> <strong>提醒:</strong>在日本撥打 110/119 免費, 不會說日文也可說「<strong>I need help. English please.</strong>」 或請周圍的人協助通話。 </div>`;
-document.getElementById(“modalBody”).innerHTML = html;
-document.getElementById(“modal”).classList.add(“show”);
+  document.getElementById("modalTitle").textContent = "📞 緊急聯絡";
+  let html = `<div class="modal-intro">遇到狀況時,<strong>點電話號碼可直撥</strong>。</div>`;
+  EMERGENCY.forEach(e => {
+    const cleanPhone = e.phone.replace(/[^\d+]/g, "");
+    html += `
+      <div class="emergency-card">
+        <div class="emergency-icon">${e.icon}</div>
+        <div class="emergency-info">
+          <div class="emergency-name">${e.name}</div>
+          <div class="emergency-phone">${e.phone}</div>
+        </div>
+        <a class="call-btn" href="tel:${cleanPhone}">📞 撥打</a>
+      </div>
+    `;
+  });
+  html += `
+    <div class="emergency-tip">
+      <strong>提醒:</strong>在日本撥打 110/119 免費,
+      不會說日文也可說「<strong>I need help. English please.</strong>」
+      或請周圍的人協助通話。
+    </div>
+  `;
+  document.getElementById("modalBody").innerHTML = html;
+  document.getElementById("modal").classList.add("show");
 }
 
 function closeModal() {
-document.getElementById(“modal”).classList.remove(“show”);
+  document.getElementById("modal").classList.remove("show");
 }
-document.getElementById(“modal”).addEventListener(“click”, e => {
-if (e.target.id === “modal”) closeModal();
+document.getElementById("modal").addEventListener("click", e => {
+  if (e.target.id === "modal") closeModal();
 });
 
 // 回頂部
 function scrollToTop() {
-window.scrollTo({ top: 0, behavior: “smooth” });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // Toast 訊息
 function showToast(msg) {
-const t = document.getElementById(“toast”);
-t.textContent = msg;
-t.classList.add(“show”);
-setTimeout(() => t.classList.remove(“show”), 3000);
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
 }
 
 // 「下一站」顯示 - 找出當前 active day 中,第一個未勾選的卡片
 function updateNextStop() {
-const activeDay = document.querySelector(”.timeline.active”);
-if (!activeDay) return;
-const firstUndone = activeDay.querySelector(”.card:not(.done)”);
-const bar = document.getElementById(“nextBar”);
-if (firstUndone) {
-const time = firstUndone.dataset.time;
-const title = firstUndone.dataset.title;
-document.getElementById(“nextInfo”).innerHTML = `<span class="time">${time}</span>${title}`;
-bar.style.display = “flex”;
-} else {
-document.getElementById(“nextInfo”).textContent = “🎉 今天行程全部完成!”;
-bar.style.display = “flex”;
-}
+  const activeDay = document.querySelector(".timeline.active");
+  if (!activeDay) return;
+  const firstUndone = activeDay.querySelector(".card:not(.done)");
+  const bar = document.getElementById("nextBar");
+  if (firstUndone) {
+    const time = firstUndone.dataset.time;
+    const title = firstUndone.dataset.title;
+    document.getElementById("nextInfo").innerHTML = `<span class="time">${time}</span>${title}`;
+    bar.style.display = "flex";
+  } else {
+    document.getElementById("nextInfo").textContent = "🎉 今天行程全部完成!";
+    bar.style.display = "flex";
+  }
 }
 updateNextStop();
 
 // ============================================
 // PWA - 離線可用
 // ============================================
-if (“serviceWorker” in navigator) {
-const swCode = `const CACHE = "karuizawa-v1"; self.addEventListener("install", e => { self.skipWaiting(); }); self.addEventListener("activate", e => { e.waitUntil(self.clients.claim()); }); self.addEventListener("fetch", e => { if (e.request.method !== "GET") return; e.respondWith( caches.match(e.request).then(cached => { const fetched = fetch(e.request).then(resp => { const copy = resp.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}); return resp; }).catch(() => cached); return cached || fetched; }) ); });`;
-const swBlob = new Blob([swCode], { type: “text/javascript” });
-const swUrl = URL.createObjectURL(swBlob);
-navigator.serviceWorker.register(swUrl).catch(() => {});
+if ("serviceWorker" in navigator) {
+  const swCode = `
+    const CACHE = "karuizawa-v1";
+    self.addEventListener("install", e => {
+      self.skipWaiting();
+    });
+    self.addEventListener("activate", e => {
+      e.waitUntil(self.clients.claim());
+    });
+    self.addEventListener("fetch", e => {
+      if (e.request.method !== "GET") return;
+      e.respondWith(
+        caches.match(e.request).then(cached => {
+          const fetched = fetch(e.request).then(resp => {
+            const copy = resp.clone();
+            caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
+            return resp;
+          }).catch(() => cached);
+          return cached || fetched;
+        })
+      );
+    });
+  `;
+  const swBlob = new Blob([swCode], { type: "text/javascript" });
+  const swUrl = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
 }
 </script>
-
 </body>
 </html>
