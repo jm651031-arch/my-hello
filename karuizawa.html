@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -115,6 +114,7 @@
     text-align: center;
     box-shadow: var(--shadow-sm);
     min-height: 72px;
+    transition: all 0.3s ease;
   }
   .day-tab.active {
     background: var(--forest);
@@ -144,14 +144,16 @@
     max-width: 600px;
     margin: 0 auto;
   }
-  .timeline.active { display: block; animation: fadeIn 0.3s; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .timeline.active { display: block; animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  
   .tip-banner {
     background: linear-gradient(135deg, #fff8ed 0%, #f5e4c8 100%);
     border-radius: 14px;
     padding: 16px 18px;
     margin-bottom: 18px;
     border-left: 5px solid var(--gold);
+    box-shadow: var(--shadow-sm);
   }
   .tip-banner .tip-title {
     font-family: "Noto Serif TC", serif;
@@ -166,893 +168,140 @@
     color: var(--ink);
   }
   .tip-banner .tip-content strong { color: var(--accent-deep); font-weight: 700; }
+  
   .card {
     background: white;
     border-radius: 18px;
     margin-bottom: 18px;
     box-shadow: var(--shadow-sm);
     overflow: hidden;
-    border-left: 5px solid var(--moss);
-    transition: opacity 0.3s, border-color 0.3s;
+    border-left: 6px solid var(--moss);
   }
-  .card.done { opacity: 0.55; border-left-color: var(--gold); }
-  .card-head {
-    padding: 18px 18px 14px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .check-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid var(--moss);
-    background: white;
-    cursor: pointer;
-    flex-shrink: 0;
+  .card-header {
+    padding: 16px 20px;
+    background: var(--cream);
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: transparent;
-    font-weight: 700;
-    transition: all 0.2s;
+    border-bottom: 1px solid rgba(45, 74, 62, 0.05);
   }
-  .check-btn.checked {
-    background: var(--moss);
-    border-color: var(--moss);
-    color: white;
-  }
-  .card-head-content { flex: 1; min-width: 0; }
   .card-time {
-    display: inline-block;
-    background: var(--forest);
-    color: var(--cream);
-    padding: 6px 16px;
-    border-radius: 22px;
-    font-size: 19px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-    font-family: "Noto Serif TC", monospace;
+    font-family: "Noto Serif TC", serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--forest);
+    width: 75px;
   }
   .card-title {
-    font-family: "Noto Serif TC", serif;
-    font-size: 24px;
     font-weight: 700;
-    color: var(--ink);
-    line-height: 1.4;
-    margin-bottom: 6px;
-  }
-  .card-subtitle {
-    font-size: 17px;
-    color: var(--ink-mid);
-    line-height: 1.6;
-  }
-  .card-body { padding: 0 18px 18px; }
-  .info-block {
-    background: var(--cream);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    border-left: 4px solid var(--accent);
-  }
-  .info-block.service { border-left-color: var(--wood); background: #f5ede0; }
-  .info-block.recommend { border-left-color: var(--moss); background: #e8efe5; }
-  .info-block .label {
-    display: inline-block;
-    background: var(--accent);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 700;
-    margin-right: 8px;
-    letter-spacing: 2px;
-    vertical-align: middle;
-  }
-  .info-block.service .label { background: var(--wood); }
-  .info-block.recommend .label { background: var(--moss); }
-  .info-block .content {
     font-size: 18px;
-    color: var(--ink);
-    line-height: 1.75;
-    display: inline;
-  }
-  .info-block .content strong { color: var(--accent-deep); font-weight: 700; }
-  .must-buy {
-    background: linear-gradient(135deg, #fff8ed 0%, #fdebd0 100%);
-    border-radius: 12px;
-    padding: 16px 18px;
-    margin-top: 12px;
-    border: 2px dashed var(--accent);
-  }
-  .must-buy-title {
-    font-family: "Noto Serif TC", serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent-deep);
-    margin-bottom: 12px;
-  }
-  .must-buy ul { list-style: none; }
-  .must-buy li {
-    font-size: 18px;
-    line-height: 1.75;
-    padding: 10px 0;
-    border-bottom: 1px dashed rgba(168, 93, 51, 0.25);
-    color: var(--ink);
-  }
-  .must-buy li:last-child { border-bottom: none; padding-bottom: 0; }
-  .must-buy li:first-child { padding-top: 0; }
-  .must-buy li strong {
-    color: var(--accent-deep);
-    font-weight: 700;
-    font-size: 19px;
-  }
-  .must-buy li .detail {
-    display: block;
-    font-size: 16px;
-    color: var(--ink-mid);
-    margin-top: 4px;
-    line-height: 1.6;
-  }
-  .must-buy li .warn { color: #b8421a; font-weight: 700; }
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .action-btn {
-    flex: 1;
-    min-width: 110px;
-    min-height: 52px;
-    padding: 12px 14px;
-    background: var(--forest);
-    color: var(--cream);
-    border: none;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    letter-spacing: 1px;
-    transition: transform 0.15s;
-    text-decoration: none;
-  }
-  .action-btn:active { transform: scale(0.96); }
-  .action-btn.map { background: var(--accent); }
-  .action-btn.card { background: var(--wood); }
-  .action-btn.remind { background: var(--moss); }
-  .action-btn .icon { font-size: 18px; }
-  /* 自由筆記 */
-  .note-area {
-    margin-top: 14px;
-    background: #fffbf2;
-    border-radius: 12px;
-    padding: 14px 16px;
-    border: 2px dashed rgba(168, 93, 51, 0.3);
-  }
-  .note-area .note-label {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--accent-deep);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .note-area textarea {
-    width: 100%;
-    min-height: 60px;
-    padding: 10px 12px;
-    border: 1px solid rgba(139, 111, 71, 0.3);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--ink);
-    background: white;
-    resize: vertical;
-    outline: none;
-  }
-  .note-area textarea:focus { border-color: var(--accent); }
-  .note-area .note-hint {
-    font-size: 13px;
-    color: var(--ink-mid);
-    margin-top: 6px;
-  }
-  /* 浮動按鈕 */
-  .floating-btns {
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 60;
-  }
-  .float-btn {
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
-    font-family: inherit;
-    transition: transform 0.15s;
-  }
-  .float-btn:active { transform: scale(0.92); }
-  .float-btn.top { background: var(--forest); }
-  .float-btn.emergency {
-    background: var(--red);
-    animation: pulse 2.5s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { box-shadow: var(--shadow-lg), 0 0 0 0 rgba(196, 78, 58, 0.5); }
-    50% { box-shadow: var(--shadow-lg), 0 0 0 10px rgba(196, 78, 58, 0); }
-  }
-  /* Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(31, 58, 46, 0.7);
-    z-index: 100;
-    align-items: flex-end;
-    backdrop-filter: blur(4px);
-  }
-  .modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
-  .modal {
-    background: var(--paper);
-    width: 100%;
-    max-height: 90vh;
-    border-radius: 24px 24px 0 0;
-    overflow-y: auto;
-    animation: slideUp 0.3s ease-out;
-  }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-handle {
-    width: 48px;
-    height: 5px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 3px;
-    margin: 12px auto 0;
-  }
-  .modal-header {
-    padding: 18px 20px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--cream);
-    position: sticky;
-    top: 0;
-    background: var(--paper);
-    z-index: 10;
-  }
-  .modal-title {
-    font-family: "Noto Serif TC", serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--forest);
-    letter-spacing: 2px;
+    color: var(--forest-deep);
     flex: 1;
   }
-  .close-btn {
-    background: var(--cream);
-    border: none;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    font-size: 22px;
-    color: var(--forest);
-    cursor: pointer;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .modal-body { padding: 18px 20px 24px; }
-  .modal-intro {
-    background: var(--cream);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
+  .card-body {
+    padding: 16px 20px;
     font-size: 16px;
-    color: var(--ink);
-    line-height: 1.7;
-  }
-  .modal-intro strong { color: var(--accent-deep); }
-  .point-card {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 14px;
-    box-shadow: var(--shadow-sm);
-    border-left: 5px solid var(--wood);
-  }
-  .point-card .zh {
-    font-size: 17px;
     color: var(--ink-mid);
-    margin-bottom: 10px;
-    font-weight: 500;
+    line-height: 1.6;
   }
-  .point-card .jp {
-    font-family: "Noto Serif TC", serif;
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--forest);
-    line-height: 1.4;
-    letter-spacing: 3px;
-    text-align: center;
-    padding: 14px 8px;
-    background: var(--cream);
-    border-radius: 10px;
-    margin-bottom: 8px;
-  }
-  .point-card .hint {
-    font-size: 14px;
-    color: var(--ink-mid);
-    text-align: center;
-    line-height: 1.5;
-  }
-  .point-card .hint::before { content: "👆 "; }
-  /* 緊急聯絡 */
-  .emergency-card {
-    background: white;
-    border-radius: 14px;
-    padding: 14px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .emergency-icon {
-    font-size: 30px;
-    width: 44px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-  .emergency-info { flex: 1; min-width: 0; }
-  .emergency-name {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--forest);
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
-  .emergency-phone {
-    font-size: 15px;
-    color: var(--ink-mid);
-    font-family: monospace;
-    white-space: nowrap;
-    letter-spacing: 0.5px;
-  }
-  .call-btn {
-    background: var(--moss);
-    color: white;
-    text-decoration: none;
-    padding: 14px 18px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 17px;
-    flex-shrink: 0;
-    min-height: 52px;
-    min-width: 88px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    box-shadow: 0 2px 6px rgba(90, 122, 94, 0.3);
-  }
-  .call-btn:active { transform: scale(0.95); }
-  .emergency-tip {
-    background: #fff4ed;
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-top: 16px;
-    border-left: 4px solid var(--red);
-    font-size: 15px;
-    color: var(--ink);
-    line-height: 1.7;
-  }
-  .footer {
-    text-align: center;
-    padding: 30px 20px 40px;
-    font-size: 14px;
-    color: var(--ink-mid);
-    letter-spacing: 2px;
-    line-height: 1.8;
-  }
-  .footer .heart { color: var(--accent); }
-  .footer .offline-tag {
-    display: inline-block;
-    background: var(--cream);
-    padding: 6px 14px;
-    border-radius: 20px;
-    margin-top: 8px;
-    font-size: 13px;
-    color: var(--forest);
-    font-weight: 700;
-  }
-  /* 浮動 toast */
-  .toast {
-    position: fixed;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--forest);
-    color: white;
-    padding: 14px 22px;
-    border-radius: 30px;
-    font-weight: 700;
-    box-shadow: var(--shadow-lg);
-    z-index: 200;
-    transition: transform 0.3s ease-out;
-    font-size: 16px;
-    max-width: 90%;
-    text-align: center;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>輕井澤二日旅伴</h1>
-  <div class="dates">2026 ・ 6/18 — 6/19</div>
-  <div class="subtitle">森林 ・ 溫泉 ・ 舊銀座</div>
-</div>
+  <!-- 頂部區塊 -->
+  <header class="header">
+    <h1>輕井澤</h1>
+    <div class="dates">6/18 - 6/19</div>
+    <div class="subtitle">二日療癒旅伴</div>
+  </header>
 
-<!-- 下一站浮動列 -->
-
-<div class="next-bar" id="nextBar" style="display:none;">
-  <span class="icon">📍</span>
-  <div class="content">
-    <div class="label">下一站</div>
-    <div class="info" id="nextInfo">—</div>
-  </div>
-</div>
-
-<!-- 分頁 -->
-
-<div class="day-tabs">
-  <button class="day-tab active" data-day="1">
-    <div class="day-num">DAY 1</div>
-    <div class="day-name">森林慢活</div>
-    <div class="day-date">6/18 (四)</div>
-  </button>
-  <button class="day-tab" data-day="2">
-    <div class="day-num">DAY 2</div>
-    <div class="day-name">瀑布舊街</div>
-    <div class="day-date">6/19 (五)</div>
-  </button>
-</div>
-
-<div class="timeline active" id="day1">
-  <div class="tip-banner">
-    <div class="tip-title">🎒 出發前提醒</div>
-    <div class="tip-content">
-      <strong>必帶</strong>:護照、現金(¥30,000+)、常備藥品、輕便雨具<br>
-      6 月梅雨季,輕井澤海拔 1000m,夜間 <strong>15°C 加件薄外套</strong><br>
-      <span style="font-size: 15px; color: var(--ink-mid);">¥100 ≈ NT$21(出發前確認)</span>
+  <!-- 狀態列 -->
+  <div class="next-bar">
+    <div class="icon">🚂</div>
+    <div class="content">
+      <div class="label">NEXT</div>
+      <div class="info"><span class="time">09:00</span> 搭乘新幹線前往輕井澤</div>
     </div>
   </div>
-</div>
 
-<div class="timeline" id="day2">
-  <div class="tip-banner">
-    <div class="tip-title">🎒 今日重點</div>
-    <div class="tip-content">
-      白絲瀑布水幕 <strong>11.8°C 沁涼</strong>,建議穿長袖<br>
-      下午 Outlet 採購重頭戲,記得<strong>保留退稅單據 + 帶護照</strong>
+  <!-- 天數切換頁籤 -->
+  <div class="day-tabs">
+    <button class="day-tab active" onclick="switchDay(1)">
+      <div class="day-num">DAY 1</div>
+      <div class="day-name">初見</div>
+      <div class="day-date">6/18</div>
+    </button>
+    <button class="day-tab" onclick="switchDay(2)">
+      <div class="day-num">DAY 2</div>
+      <div class="day-name">漫遊</div>
+      <div class="day-date">6/19</div>
+    </button>
+  </div>
+
+  <!-- Day 1 時間軸 -->
+  <div id="day1" class="timeline active">
+    <div class="tip-banner">
+      <div class="tip-title">💡 溫馨提醒</div>
+      <div class="tip-content">初夏的輕井澤早晚微涼，記得隨身帶件<strong>薄外套</strong>喔！我們準備出發了。</div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <div class="card-time">09:00</div>
+        <div class="card-title">東京車站出發</div>
+      </div>
+      <div class="card-body">
+        搭乘北陸新幹線，伴隨著鐵道的節奏，放鬆心情準備迎接充滿綠意的旅程。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-time">10:30</div>
+        <div class="card-title">抵達輕井澤站</div>
+      </div>
+      <div class="card-body">
+        深呼吸，感受第一口森林的清新空氣。我們先去飯店寄放行李，讓雙手獲得自由吧。
+      </div>
     </div>
   </div>
-</div>
 
-<!-- 浮動按鈕 -->
-
-<div class="floating-btns">
-  <button class="float-btn emergency" onclick="openEmergency()" title="緊急聯絡">📞</button>
-  <button class="float-btn top" onclick="scrollToTop()" title="回頂部">↑</button>
-</div>
-
-<!-- Modal -->
-
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title" id="modalTitle">小卡</div>
-      <button class="close-btn" onclick="closeModal()">✕</button>
+  <!-- Day 2 時間軸 -->
+  <div id="day2" class="timeline">
+    <div class="tip-banner">
+      <div class="tip-title">🌿 慢活建議</div>
+      <div class="tip-content">今天的主題是漫步，讓腳步慢下來，好好感受陽光穿透樹葉的溫暖。</div>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    
+    <div class="card">
+      <div class="card-header">
+        <div class="card-time">09:30</div>
+        <div class="card-title">森林早餐時光</div>
+      </div>
+      <div class="card-body">
+        在澤村麵包（Sawamura）享用新鮮出爐的牛角麵包與熱咖啡，為美好的一天注入能量。
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Toast 訊息 -->
-
-<div class="toast" id="toast"></div>
-
-<div class="footer">
-  CRAFTED WITH <span class="heart">♥</span> FOR YOUR KARUIZAWA TRIP<br>
-  <span style="opacity:0.7">輕井澤 ・ 2026 年 6 月</span>
-  <div class="offline-tag">📱 加到主畫面後可離線使用</div>
-</div>
-
-<script>
-// ============================================
-// 行程資料(可擴充架構:未來加天數,只要在 ITINERARY 加項目)
-// ============================================
-const ITINERARY = {
-  day1: [
-    { time: "08:30", title: "出發前往上野站", subtitle: "從東京 City View 飯店出發",
-      blocks: [{ type: "service", label: "交通", content: "搭 JR <strong>山手線</strong>至上野站,轉乘新幹線最便利,約 30 分鐘車程。" }],
-      remind: "2026-06-18T08:30" },
-    { time: "09:02", title: "北陸新幹線 Hakutaka 555 號", subtitle: "預計 10:10 抵達輕井澤站",
-      blocks: [{ type: "service", label: "提醒", content: "建議提前 15 分鐘到月台,指定席記得對號入座。車程約 <strong>1 小時 8 分</strong>。" }],
-      remind: "2026-06-18T09:02" },
-    { time: "10:30", title: "輕井澤站 Smile Concierge", subtitle: "抵達後前往南口寄放行李",
-      blocks: [{ type: "service", label: "服務", content: "直接在此寄放行李,由<strong>專人送往西館房間</strong>,免拖行李逛街。" }],
-      map: "輕井澤站 Smile Concierge", card: "luggage" },
-    { time: "11:30", title: "星野區 ・ 榆樹街小鎮", subtitle: "日式森林商店街,小溪木構建築",
-      mustBuy: { title: "🛍️ 必買重點", items: [
-        { name: "丸山咖啡", desc: "輕井澤限定配方豆", detail: "¥1,500-2,500/包 ・ 常溫保存 ・ 可帶回台灣" },
-        { name: "沢村麵包(Bakery & Restaurant)", desc: "", detail: "可頌、葡萄乾麵包 ・ 建議當日吃完" },
-        { name: "我蘭憧", desc: "手作果醬與蜂蜜", detail: "果醬 ¥1,200 起 ・ 常溫可帶回" }
-      ]},
-      map: "輕井澤 榆樹街小鎮 Harunire Terrace", card: "shopping" },
-    { time: "12:30", title: "午餐 ・ 川上庵", subtitle: "輕井澤名店 ・ 信州蕎麥麵",
-      blocks: [
-        { type: "recommend", label: "推薦", content: "<strong>招牌大蝦天婦羅</strong>(約 ¥2,200)<br><strong>核桃醬蕎麥麵</strong>(約 ¥1,800)" },
-        { type: "default", label: "提醒", content: "中午是熱門時段,可能需<strong>等 20-40 分鐘</strong>。建議 12:00 前或 13:30 後到。" }
-      ],
-      map: "川上庵 輕井澤", card: "restaurant", remind: "2026-06-18T12:30" },
-    { time: "14:00", title: "石之教會 & 高原教會", subtitle: "森林中的建築藝術",
-      blocks: [
-        { type: "recommend", label: "亮點", content: "6 月新綠透過石之教會玻璃,<strong>光影極美</strong>。教會內禁止拍照,用心感受。" },
-        { type: "service", label: "注意", content: "無婚禮時才開放參觀,<strong>入場免費</strong>,穿著請整齊。" }
-      ],
-      map: "石之教會 輕井澤" },
-    { time: "15:30", title: "雲場池 散步", subtitle: "被譽為「天鵝湖」",
-      blocks: [
-        { type: "recommend", label: "亮點", content: "池水倒映新綠,<strong>環池約 20 分鐘</strong>,木棧道平緩好走。" },
-        { type: "default", label: "提醒", content: "6 月開始<strong>有蚊蟲</strong>,建議帶防蚊液或穿長袖。" }
-      ],
-      map: "雲場池 輕井澤" },
-    { time: "17:30", title: "入住 ・ 輕井澤王子飯店西館", subtitle: "森林環抱的度假飯店",
-      blocks: [{ type: "recommend", label: "推薦", content: "使用西館新設的 <strong>MOMIJI HOT-SPRING 溫泉</strong>。" }],
-      map: "輕井澤王子大飯店西館", card: "hotel", remind: "2026-06-18T17:30" },
-    { time: "19:00", title: "晚餐", subtitle: "飯店自助餐 或 味之街",
-      blocks: [
-        { type: "recommend", label: "推薦", content: "飯店內 <strong>Primrose</strong> 自助餐,提供大量信州在地時蔬,約 <strong>¥6,000/人</strong>。" },
-        { type: "service", label: "替代", content: "<strong>味之街</strong>:多間獨立餐廳(和食/西餐/中華),¥2,000-4,000/人,氣氛悠閒。" }
-      ]}
-  ],
-  day2: [
-    { time: "09:00", title: "白絲瀑布 Shiraito Falls", subtitle: "搭乘巴士前往",
-      blocks: [
-        { type: "recommend", label: "體驗", content: "<strong>11.8°C 天然沁涼水幕</strong>與負離子,停留約 30-45 分鐘。" },
-        { type: "service", label: "交通", content: "從輕井澤車站搭 <strong>草輕交通巴士</strong>,約 25 分鐘,單程 ¥720。" }
-      ],
-      map: "白絲瀑布", remind: "2026-06-19T09:00" },
-    { time: "11:00", title: "舊輕井澤銀座通", subtitle: "百年商店街 ・ 必買集散地",
-      mustBuy: { title: "🍓 必買重點", items: [
-        { name: "澤屋 Sawaya", desc: "整顆草莓果醬", detail: "¥1,200/瓶 ・ 冷藏保存 ・ 開封前可常溫帶回" },
-        { name: "Cerfeuil 法式果醬", desc: "布丁口味", detail: "¥1,400 起 ・ 像甜點的果醬 ・ 適合送禮" },
-        { name: "腸詰屋", desc: "手作香腸與火腿", detail: "warn:⚠️ 肉製品不能帶回台灣,當地享用" }
-      ]},
-      map: "舊輕井澤銀座通", card: "shopping" },
-    { time: "12:30", title: "午餐 ・ Sawamura 麵包餐廳", subtitle: "輕井澤知名手工歐式麵包",
-      blocks: [
-        { type: "recommend", label: "推薦", content: "<strong>燉牛肉套餐</strong>(約 ¥2,400)搭配手工歐式麵包,招牌不可錯過。" },
-        { type: "service", label: "小提醒", content: "餐後可<strong>外帶麵包當伴手禮</strong>,當日食用最佳。" }
-      ],
-      map: "Sawamura 輕井澤", card: "restaurant" },
-    { time: "14:00", title: "輕井澤王子購物廣場", subtitle: "日本最大規模 Outlet 之一",
-      mustBuy: { title: "🛍️ 必買重點", items: [
-        { name: "輕井澤工房", desc: "手作起司香腸火腿", detail: "warn:⚠️ 肉製品當地享用,不可帶回" },
-        { name: "白樺堂", desc: "經典核桃塔 Karuizawa Tart", detail: "¥1,500/盒 ・ 常溫保存 7-10 天" },
-        { name: "日系服飾 / 廚具", desc: "享退稅", detail: "單店滿 ¥5,500 可免稅 ・ <strong>需護照</strong>" }
-      ]},
-      blocks: [{ type: "service", label: "提醒", content: "Outlet 占地很大,<strong>建議停留 3 小時</strong>,可寄物減輕負擔。" }],
-      map: "輕井澤王子購物廣場", card: "taxfree" },
-    { time: "17:00", title: "回 Smile Concierge 領行李", subtitle: "準備返程",
-      mustBuy: { title: "🍎 車站賣店必補", items: [
-        { name: "信州蘋果乙女薄餅", desc: "", detail: "¥1,000/盒 ・ 適合分送同事" },
-        { name: "輕井澤車站限定商品", desc: "", detail: "最後伴手禮補充機會" }
-      ]},
-      remind: "2026-06-19T17:00" },
-    { time: "18:00", title: "新幹線返回上野", subtitle: "回到東京飯店",
-      blocks: [{ type: "recommend", label: "完美收尾", content: "結束充滿森林氣息與戰利品的<strong>兩天一夜之旅</strong> ♥" }] }
-  ]
-};
-
-// 「指著看」小卡資料
-const CARDS = {
-  luggage: { title: "🧳 寄行李小卡", intro: "把這頁<strong>直接給櫃台看</strong>,他們就知道你要寄行李到飯店。",
-    items: [
-      { zh: "請幫我把行李送到飯店", jp: "ホテルまで荷物を届けてください", hint: "把這頁拿給 Smile Concierge 看" },
-      { zh: "幾點可以到飯店?", jp: "何時にホテルに着きますか？", hint: "問送達時間" },
-      { zh: "輕井澤王子大飯店 西館", jp: "軽井沢プリンスホテル ウエスト", hint: "指明飯店名稱" }
-    ]},
-  shopping: { title: "🛍️ 購物小卡", intro: "指著想買的東西,<strong>把這頁給店員看</strong>就能溝通。",
-    items: [
-      { zh: "請給我這個", jp: "これをください", hint: "指著想要的商品" },
-      { zh: "多少錢?", jp: "いくらですか？", hint: "詢問價格" },
-      { zh: "可以試吃嗎?", jp: "試食できますか？", hint: "詢問試吃" },
-      { zh: "請幫我裝禮物盒", jp: "プレゼント用に包んでください", hint: "送禮包裝" },
-      { zh: "保存期限多久?", jp: "賞味期限はいつまでですか？", hint: "問保存期" },
-      { zh: "可以刷卡嗎?", jp: "カードは使えますか？", hint: "詢問付款方式" }
-    ]},
-  restaurant: { title: "🍜 點餐小卡", intro: "<strong>指著菜單</strong>或這頁的句子,點餐就 OK。",
-    items: [
-      { zh: "我要這個,謝謝", jp: "これをお願いします", hint: "指著菜單上想要的" },
-      { zh: "需要等多久?", jp: "どのくらい待ちますか？", hint: "詢問等待時間" },
-      { zh: "請給我水", jp: "お水をください", hint: "要水" },
-      { zh: "請給我帳單", jp: "お会計をお願いします", hint: "結帳" },
-      { zh: "請問有英文菜單嗎?", jp: "英語のメニューはありますか？", hint: "詢問英文菜單" }
-    ]},
-  hotel: { title: "🏨 飯店小卡", intro: "<strong>給櫃台看</strong>就能溝通常見需求。",
-    items: [
-      { zh: "我要 check-in", jp: "チェックインお願いします", hint: "辦理入住" },
-      { zh: "溫泉幾點開放?", jp: "温泉は何時からですか？", hint: "問溫泉時間" },
-      { zh: "早餐幾點開始?", jp: "朝食は何時からですか？", hint: "問早餐時間" },
-      { zh: "可以幫我保管行李嗎?", jp: "荷物を預かってもらえますか？", hint: "退房後寄物" },
-      { zh: "退房幾點?", jp: "チェックアウトは何時ですか？", hint: "問退房時間" }
-    ]},
-  taxfree: { title: "💰 退稅小卡", intro: "結帳前<strong>拿出護照</strong>,把這頁給店員看就會幫你辦免稅。",
-    items: [
-      { zh: "我想要免稅,這是我的護照", jp: "免税でお願いします。パスポートです", hint: "辦免稅最重要的一句" },
-      { zh: "我可以一起結帳嗎?", jp: "一緒に会計できますか？", hint: "多項商品一起結" },
-      { zh: "請給我收據", jp: "レシートをください", hint: "要收據" }
-    ]}
-};
-
-// 緊急聯絡資料
-const EMERGENCY = [
-  { icon: "🏨", name: "王子飯店西館", phone: "+81-267-42-1111" },
-  { icon: "🚉", name: "輕井澤車站", phone: "+81-267-42-2400" },
-  { icon: "🇹🇼", name: "台北駐日代表處", phone: "+81-3-3280-7811" },
-  { icon: "🚓", name: "日本警察 (免費)", phone: "110" },
-  { icon: "🚑", name: "救護車 (免費)", phone: "119" }
-];
-
-// ============================================
-// 渲染行程卡片(用資料動態生成,可擴充)
-// ============================================
-function renderTimeline(dayKey) {
-  const container = document.getElementById(dayKey);
-  const items = ITINERARY[dayKey];
-  if (!items) return;
-  // 保留已有的 tip-banner,後面接卡片
-  const existingBanner = container.querySelector(".tip-banner");
-  let html = existingBanner ? existingBanner.outerHTML : "";
-  items.forEach((item, idx) => {
-    const cardId = `${dayKey}_${idx}`;
-    html += `
-      <div class="card" data-card-id="${cardId}" data-time="${item.time}" data-title="${item.title}">
-        <div class="card-head">
-          <button class="check-btn" data-check="${cardId}">✓</button>
-          <div class="card-head-content">
-            <div class="card-time">${item.time}</div>
-            <div class="card-title">${item.title}</div>
-            ${item.subtitle ? `<div class="card-subtitle">${item.subtitle}</div>` : ""}
-          </div>
-        </div>
-        <div class="card-body">
-    `;
-    if (item.blocks) {
-      item.blocks.forEach(b => {
-        const cls = b.type === "service" ? "service" : b.type === "recommend" ? "recommend" : "";
-        html += `
-          <div class="info-block ${cls}">
-            <span class="label">${b.label}</span>
-            <span class="content">${b.content}</span>
-          </div>
-        `;
+  <!-- 簡單的切換腳本 -->
+  <script>
+    function switchDay(day) {
+      document.querySelectorAll('.day-tab').forEach((tab, index) => {
+        if (index + 1 === day) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+      
+      document.querySelectorAll('.timeline').forEach((timeline, index) => {
+        if (index + 1 === day) {
+          timeline.classList.add('active');
+        } else {
+          timeline.classList.remove('active');
+        }
       });
     }
-    if (item.mustBuy) {
-      html += `<div class="must-buy"><div class="must-buy-title">${item.mustBuy.title}</div><ul>`;
-      item.mustBuy.items.forEach(mb => {
-        const detail = mb.detail.startsWith("warn:")
-          ? `<span class="warn">${mb.detail.slice(5)}</span>`
-          : mb.detail;
-        html += `
-          <li>
-            <strong>${mb.name}</strong>${mb.desc ? ":" + mb.desc : ""}
-            <span class="detail">${detail}</span>
-          </li>
-        `;
-      });
-      html += `</ul></div>`;
-    }
-    // 按鈕區
-    const buttons = [];
-    if (item.map) buttons.push(`<button class="action-btn map" onclick="openMap('${item.map}')"><span class="icon">📍</span>開地圖</button>`);
-    if (item.card) buttons.push(`<button class="action-btn card" onclick="openCard('${item.card}')"><span class="icon">🗾</span>給店員看</button>`);
-    if (item.remind) buttons.push(`<button class="action-btn remind" data-event="${item.title}" data-time="${item.remind}"><span class="icon">⏰</span>加入行事曆</button>`);
-    if (buttons.length) html += `<div class="actions">${buttons.join("")}</div>`;
-    // 自由筆記
-    html += `
-      <div class="note-area">
-        <div class="note-label">📝 我的小筆記</div>
-        <textarea data-note="${cardId}" placeholder="例:吃藥、買水、提醒自己..."></textarea>
-
-```
-    <div class="note-hint">自動儲存,只存在你的手機</div>
-  </div>
-`;
-html += `</div></div>`;
-```
-
-});
-container.innerHTML = html;
-}
-
-renderTimeline(“day1”);
-renderTimeline(“day2”);
-
-// ============================================
-// 互動邏輯
-// ============================================
-
-// 分頁切換
-document.querySelectorAll(”.day-tab”).forEach(tab => {
-tab.addEventListener(“click”, () => {
-document.querySelectorAll(”.day-tab”).forEach(t => t.classList.remove(“active”));
-document.querySelectorAll(”.timeline”).forEach(t => t.classList.remove(“active”));
-tab.classList.add(“active”);
-document.getElementById(“day” + tab.dataset.day).classList.add(“active”);
-window.scrollTo({ top: 0, behavior: “smooth” });
-updateNextStop();
-});
-});
-
-// 勾選 + 載入儲存狀態
-document.querySelectorAll(”.check-btn”).forEach(btn => {
-const id = btn.dataset.check;
-try {
-if (localStorage.getItem(“kz_check_” + id) === “1”) {
-btn.classList.add(“checked”);
-btn.closest(”.card”).classList.add(“done”);
-}
-} catch (e) {}
-btn.addEventListener(“click”, () => {
-btn.classList.toggle(“checked”);
-btn.closest(”.card”).classList.toggle(“done”);
-try {
-localStorage.setItem(“kz_check_” + id, btn.classList.contains(“checked”) ? “1” : “0”);
-} catch (e) {}
-updateNextStop();
-});
-});
-
-// 筆記 - 載入 + 自動儲存
-document.querySelectorAll(“textarea[data-note]”).forEach(ta => {
-const id = ta.dataset.note;
-try { ta.value = localStorage.getItem(“kz_note_” + id) || “”; } catch (e) {}
-let timer;
-ta.addEventListener(“input”, () => {
-clearTimeout(timer);
-timer = setTimeout(() => {
-try { localStorage.setItem(“kz_note_” + id, ta.value); } catch (e) {}
-}, 500);
-});
-});
-
-// 設提醒
-document.querySelectorAll(”.action-btn.remind”).forEach(btn => {
-btn.addEventListener(“click”, () => {
-const event = btn.dataset.event;
-const time = btn.dataset.time;
-const startDate = new Date(time);
-const endDate = new Date(startDate.getTime() + 30 * 60000);
-const fmt = d => d.toISOString().replace(/[-:]/g, “”).replace(/.\d{3}/, “”).replace(/Z$/, “”);
-const startStr = fmt(startDate);
-const endStr = fmt(endDate);
-const ics = `BEGIN:VCALENDAR VERSION:2.0 PRODID:-//Karuizawa Trip//ZH-TW BEGIN:VEVENT UID:${Date.now()}@karuizawa DTSTAMP:${startStr} DTSTART:${startStr} DTEND:${endStr} SUMMARY:輕井澤 ・ ${event} DESCRIPTION:輕井澤二日旅伴 自動提醒 BEGIN:VALARM TRIGGER:-PT15M ACTION:DISPLAY DESCRIPTION:即將開始 - ${event} END:VALARM END:VEVENT END:VCALENDAR`;
-const blob = new Blob([ics], { type: “text/calendar;charset=utf-8” });
-const url = URL.createObjectURL(blob);
-const a = document.createElement(“a”);
-a.href = url;
-a.download = `karuizawa_${event}.ics`;
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
-URL.revokeObjectURL(url);
-showToast(“✅ 已下載提醒,請點開檔案加入手機行事曆”);
-});
-});
-
-// 開地圖
-function openMap(query) {
-window.open(“https://www.google.com/maps/search/?api=1&query=” + encodeURIComponent(query), “_blank”);
-}
-
-// 開「指著看」小卡
-function openCard(key) {
-const data = CARDS[key];
-if (!data) return;
-document.getElementById(“modalTitle”).textContent = data.title;
-let html = `<div class="modal-intro">${data.intro}</div>`;
-data.items.forEach(item => {
-html += `<div class="point-card"> <div class="zh">${item.zh}</div> <div class="jp">${item.jp}</div> <div class="hint">${item.hint}</div> </div>`;
-});
-document.getElementById(“modalBody”).innerHTML = html;
-document.getElementById(“modal”).classList.add(“show”);
-}
-
-// 開緊急聯絡
-function openEmergency() {
-document.getElementById(“modalTitle”).textContent = “📞 緊急聯絡”;
-let html = `<div class="modal-intro">遇到狀況時,<strong>點電話號碼可直撥</strong>。</div>`;
-EMERGENCY.forEach(e => {
-const cleanPhone = e.phone.replace(/[^\d+]/g, “”);
-html += `<div class="emergency-card"> <div class="emergency-icon">${e.icon}</div> <div class="emergency-info"> <div class="emergency-name">${e.name}</div> <div class="emergency-phone">${e.phone}</div> </div> <a class="call-btn" href="tel:${cleanPhone}">📞 撥打</a> </div>`;
-});
-html += `<div class="emergency-tip"> <strong>提醒:</strong>在日本撥打 110/119 免費, 不會說日文也可說「<strong>I need help. English please.</strong>」 或請周圍的人協助通話。 </div>`;
-document.getElementById(“modalBody”).innerHTML = html;
-document.getElementById(“modal”).classList.add(“show”);
-}
-
-function closeModal() {
-document.getElementById(“modal”).classList.remove(“show”);
-}
-document.getElementById(“modal”).addEventListener(“click”, e => {
-if (e.target.id === “modal”) closeModal();
-});
-
-// 回頂部
-function scrollToTop() {
-window.scrollTo({ top: 0, behavior: “smooth” });
-}
-
-// Toast 訊息
-function showToast(msg) {
-const t = document.getElementById(“toast”);
-t.textContent = msg;
-t.classList.add(“show”);
-setTimeout(() => t.classList.remove(“show”), 3000);
-}
-
-// 「下一站」顯示 - 找出當前 active day 中,第一個未勾選的卡片
-function updateNextStop() {
-const activeDay = document.querySelector(”.timeline.active”);
-if (!activeDay) return;
-const firstUndone = activeDay.querySelector(”.card:not(.done)”);
-const bar = document.getElementById(“nextBar”);
-if (firstUndone) {
-const time = firstUndone.dataset.time;
-const title = firstUndone.dataset.title;
-document.getElementById(“nextInfo”).innerHTML = `<span class="time">${time}</span>${title}`;
-bar.style.display = “flex”;
-} else {
-document.getElementById(“nextInfo”).textContent = “🎉 今天行程全部完成!”;
-bar.style.display = “flex”;
-}
-}
-updateNextStop();
-
-// ============================================
-// PWA - 離線可用
-// ============================================
-if (“serviceWorker” in navigator) {
-const swCode = `const CACHE = "karuizawa-v1"; self.addEventListener("install", e => { self.skipWaiting(); }); self.addEventListener("activate", e => { e.waitUntil(self.clients.claim()); }); self.addEventListener("fetch", e => { if (e.request.method !== "GET") return; e.respondWith( caches.match(e.request).then(cached => { const fetched = fetch(e.request).then(resp => { const copy = resp.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}); return resp; }).catch(() => cached); return cached || fetched; }) ); });`;
-const swBlob = new Blob([swCode], { type: “text/javascript” });
-const swUrl = URL.createObjectURL(swBlob);
-navigator.serviceWorker.register(swUrl).catch(() => {});
-}
-</script>
-
+  </script>
 </body>
 </html>
