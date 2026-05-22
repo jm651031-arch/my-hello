@@ -623,21 +623,6 @@
     </div>
 
     <div class="field">
-      <label>所屬社團 <span class="req">*</span></label>
-      <select id="f-club">
-        <option value="" disabled selected>請選擇下拉社團</option>
-        <option value="諄言社">諄言社</option>
-        <option value="三重社">三重社</option>
-        <option value="三峽社">三峽社</option>
-        <option value="鶯歌社">鶯歌社</option>
-        <option value="竹北社">竹北社</option>
-        <option value="新竹社">新竹社</option>
-        <option value="中壢社">中壢社</option>
-        <option value="湖口社">湖口社</option>
-      </select>
-    </div>
-
-    <div class="field">
       <label>出生年月日 <span class="req">*</span> <span style="font-size:13px; color:var(--mid); font-weight:normal;">(備註：6/9 前報名者填寫以利投保)</span></label>
       <div class="birthday-row">
         <div>
@@ -860,8 +845,7 @@ function formatTimestamp(ts) {
 
 (function initDropdowns() {
   const ysel = document.getElementById('f-year');
-  const currentYear = new Date().getFullYear();
-  for (let y = currentYear; y >= 1930; y--) {
+  for (let y = 1940; y <= 2005; y++) {
     ysel.innerHTML += `<option value="${y}">${y} 年</option>`;
   }
   const msel = document.getElementById('f-month');
@@ -961,20 +945,16 @@ function validateID(id) {
 
 async function submitForm() {
   const name    = document.getElementById('f-name').value.trim();
-  const club    = document.getElementById('f-club').value;
   const year    = document.getElementById('f-year').value;
   const month   = document.getElementById('f-month').value;
   const day     = document.getElementById('f-day').value;
   const phone   = document.getElementById('f-phone').value.trim().replace(/-/g, '');
   const idNum   = document.getElementById('f-id').value.trim().toUpperCase();
-  const meal    = document.querySelector('input[name="meal"]:checked');
-// 🪄 取得餐點資料
+  const meal    = document.querySelector('input[name="meal"]:checked'); // 🪄 取得餐點資料
   const payment = document.querySelector('input[name="payment"]:checked');
 
   if (!name || name.replace(/\s/g,'').length < 2)
     return showAlert('signup-alert', 'error', '⚠️', '請填寫真實姓名（至少2個字）');
-  if (!club)
-    return showAlert('signup-alert', 'error', '⚠️', '請選擇所屬社團');
   if (!year || !month || !day)
     return showAlert('signup-alert', 'error', '⚠️', '請選擇完整出生年月日');
   const cleanPhone = phone.replace(/[^0-9]/g,'');
@@ -993,8 +973,8 @@ async function submitForm() {
 
   const birthday = `${year}/${String(month).padStart(2,'0')}/${String(day).padStart(2,'0')}`;
   
-  // 🪄 將 meal 與 club 加入送給後端的包裹中
-  const payload = { action: 'signup', name, club, birthday, phone: "'" + phone, idNum, payment: payment.value, meal: meal.value };
+  // 🪄 將 meal 加入送給後端的包裹中
+  const payload = { action: 'signup', name, birthday, phone: "'" + phone, idNum, payment: payment.value, meal: meal.value };
 
   try {
     const res = await fetch(GAS_URL, {
@@ -1010,7 +990,6 @@ async function submitForm() {
     } else if (data.status === 'success') {
       showAlert('signup-alert', 'success', '🎉', `<strong>${name}</strong> 報名成功！<br>我們將盡速確認您的資料，期待6月20日與您相見 🌿`);
       document.getElementById('f-name').value = '';
-      document.getElementById('f-club').value = '';
       document.getElementById('f-year').value = '';
       document.getElementById('f-month').value = '';
       document.getElementById('f-day').value = '';
