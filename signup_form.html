@@ -291,9 +291,9 @@
     margin-left: auto;
   }
 
-  /* 轉帳專屬資訊動態展示區 */
+  /* 轉帳專屬資訊動態展示區 (改為常態顯示) */
   .transfer-info-box {
-    display: none;
+    display: block; /* 🪄 在這裡改成了常態顯示 */
     background: var(--gold-pale);
     border: 1.5px dashed var(--gold);
     border-radius: 10px;
@@ -677,17 +677,17 @@
       <label>付款方式 <span class="req">*</span></label>
       <div class="pay-group">
         <label class="pay-option">
-          <input type="radio" name="payment" value="Line Pay" onchange="toggleTransferInfo()">
+          <input type="radio" name="payment" value="Line Pay">
           <span class="pay-label-text">Line Pay</span>
           <span class="pay-icon">💚</span>
         </label>
         <label class="pay-option">
-          <input type="radio" name="payment" value="轉帳" onchange="toggleTransferInfo()">
+          <input type="radio" name="payment" value="轉帳">
           <span class="pay-label-text">轉帳</span>
           <span class="pay-icon">🏦</span>
         </label>
         <label class="pay-option">
-          <input type="radio" name="payment" value="現金" onchange="toggleTransferInfo()">
+          <input type="radio" name="payment" value="現金">
           <span class="pay-label-text">現金</span>
           <span class="pay-icon">💵</span>
         </label>
@@ -811,16 +811,6 @@ function copyAccount(text) {
       btn.style.borderColor = 'var(--border)';
       btn.style.backgroundColor = '#FFFFFF';
     }, 2000);
-  }
-}
-
-function toggleTransferInfo() {
-  const payment = document.querySelector('input[name="payment"]:checked');
-  const transferInfo = document.getElementById('transfer-info');
-  if (payment && payment.value === '轉帳') {
-    transferInfo.style.display = 'block';
-  } else {
-    transferInfo.style.display = 'none';
   }
 }
 
@@ -950,7 +940,7 @@ async function submitForm() {
   const day     = document.getElementById('f-day').value;
   const phone   = document.getElementById('f-phone').value.trim().replace(/-/g, '');
   const idNum   = document.getElementById('f-id').value.trim().toUpperCase();
-  const meal    = document.querySelector('input[name="meal"]:checked'); // 🪄 取得餐點資料
+  const meal    = document.querySelector('input[name="meal"]:checked');
   const payment = document.querySelector('input[name="payment"]:checked');
 
   if (!name || name.replace(/\s/g,'').length < 2)
@@ -973,7 +963,6 @@ async function submitForm() {
 
   const birthday = `${year}/${String(month).padStart(2,'0')}/${String(day).padStart(2,'0')}`;
   
-  // 🪄 將 meal 加入送給後端的包裹中
   const payload = { action: 'signup', name, birthday, phone: "'" + phone, idNum, payment: payment.value, meal: meal.value };
 
   try {
@@ -997,7 +986,6 @@ async function submitForm() {
       document.getElementById('f-id').value = '';
       document.querySelectorAll('input[name="payment"]').forEach(r => r.checked = false);
       document.querySelectorAll('input[name="meal"]').forEach(r => r.checked = false);
-      document.getElementById('transfer-info').style.display = 'none';
     } else {
       showAlert('signup-alert', 'error', '❌', '送出失敗，請稍後再試或聯絡主辦單位。');
     }
@@ -1035,7 +1023,6 @@ async function queryMember() {
       const isPaid = m.isPaid === 'OK';
       const paidStatusHtml = isPaid ? `<span style="color:#2E7D32; font-weight:700;">✅ 已確認收款</span>` : `<span style="color:#6B4C3B;">未確認</span>`;
 
-      // 🪄 查詢結果也加上餐點顯示
       document.getElementById('query-result').innerHTML = `
         <div class="result-card">
           <div class="result-title">✅ 查詢到報名紀錄</div>
@@ -1117,7 +1104,6 @@ function renderList(members) {
     const statusClass = isPaid ? 'paid' : 'pending';
     const statusText = isPaid ? '✅ 已收' : '未收款';
 
-    // 🪄 名單總覽也加上餐點顯示
     return `
       <div class="member-item">
         <div class="member-num">${i + 1}</div>
