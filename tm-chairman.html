@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TM 主席須知 · 竹北健言社</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Caveat:wght@600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --grass-deep: #2d5a1f;
+    --grass-mid: #5fa830;
+    --grass-light: #b6e25c;
+    --grass-bright: #d4f04a;
+    --sun: #fff9a0;
+    --earth: #4a3520;
+    --earth-light: #8b6f47;
+    --sky: #c8e8f0;
+    --cream: #fdfcf3;
+    --pink: #f4a8c8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(180deg, var(--sky) 0%, var(--sky) 22%, #e8f5d8 48%, var(--grass-light) 100%);
+    background-attachment: fixed;
+    color: var(--earth);
+    min-height: 100vh;
+    line-height: 1.7;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+    font-size: 17px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 30px;
+    left: -40px;
+    width: 140px;
+    height: 50px;
+    background: white;
+    border-radius: 50px;
+    box-shadow: 60px 30px 0 -10px white, 200px 10px 0 -5px white, 280px 50px 0 -15px white;
+    opacity: 0.85;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background:
+      radial-gradient(ellipse at 20% 100%, var(--grass-deep) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, var(--grass-deep) 0%, transparent 50%),
+      linear-gradient(180deg, transparent 0%, var(--grass-mid) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === Header === */
+  header { text-align: center; margin-bottom: 22px; padding-top: 16px; }
+
+  .back-link {
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--grass-deep);
+    text-decoration: none;
+    margin-bottom: 12px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--grass-bright);
+    color: var(--grass-deep);
+    font-family: 'Caveat', cursive;
+    font-size: 21px;
+    padding: 4px 18px;
+    border-radius: 20px;
+    transform: rotate(-3deg);
+    box-shadow: 3px 3px 0 var(--earth);
+    margin-bottom: 12px;
+    border: 2px solid var(--earth);
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--earth);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .one-liner {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--earth-light);
+  }
+
+  /* === Tab 切換 === */
+  .tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 26px;
+    background: rgba(253, 252, 243, 0.95);
+    padding: 6px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid var(--earth);
+    box-shadow: 4px 4px 0 var(--earth);
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+  }
+
+  .tab {
+    padding: 14px 4px;
+    text-align: center;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--earth);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    line-height: 1.3;
+  }
+
+  .tab .icon { display: block; font-size: 26px; margin-bottom: 4px; }
+
+  .tab.active {
+    background: var(--grass-deep);
+    color: var(--cream);
+    transform: translateY(-2px);
+  }
+
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === 區塊卡片 === */
+  .block {
+    background: var(--cream);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 4px 4px 0 var(--earth);
+    position: relative;
+  }
+
+  .block-num {
+    position: absolute;
+    top: -16px;
+    left: 16px;
+    background: var(--sun);
+    border: 2px solid var(--earth);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--earth);
+  }
+
+  .block-title {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 900;
+    color: var(--earth);
+    margin-bottom: 14px;
+    padding-left: 30px;
+    line-height: 1.3;
+  }
+
+  .sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--grass-deep);
+    letter-spacing: 0.5px;
+    margin: 14px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sub::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--grass-mid);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sub:first-of-type { margin-top: 0; }
+
+  .block p { font-size: 16px; color: var(--earth); margin-bottom: 8px; }
+  .block p:last-child { margin-bottom: 0; }
+
+  .block ol, .block ul { margin: 4px 0 4px 4px; padding-left: 20px; }
+  .block li { font-size: 16px; color: var(--earth); margin-bottom: 5px; line-height: 1.6; }
+
+  .highlight {
+    background: rgba(255, 249, 160, 0.5);
+    border-left: 3px solid var(--grass-mid);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 15px;
+  }
+
+  .warn {
+    background: rgba(244, 168, 200, 0.25);
+    border-left: 3px solid var(--pink);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .warn b { color: #c14b7e; }
+
+  .keyword { color: var(--grass-deep); font-weight: 700; }
+
+  /* 三字訣大字 */
+  .creed {
+    display: flex;
+    gap: 10px;
+    margin: 6px 0 14px;
+  }
+  .creed-item {
+    flex: 1;
+    text-align: center;
+    background: var(--grass-light);
+    border: 2px solid var(--earth);
+    border-radius: 14px;
+    padding: 12px 6px;
+  }
+  .creed-item .big {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--earth);
+    line-height: 1;
+  }
+  .creed-item .small {
+    font-size: 12px;
+    color: var(--grass-deep);
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* === 小抄 === */
+  .cheat-intro {
+    text-align: center;
+    font-size: 15px;
+    color: var(--earth-light);
+    margin-bottom: 16px;
+  }
+
+  .print-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 22px;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--grass-bright) 0%, var(--sun) 100%);
+    color: var(--grass-deep);
+    font-size: 17px;
+    font-weight: 700;
+    border: 2px solid var(--earth);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--earth);
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .print-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--earth); }
+
+  .cheat-card {
+    background: var(--cream);
+    border: 2px solid var(--earth);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 3px 3px 0 var(--earth);
+  }
+
+  .cheat-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--earth);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--grass-mid);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .timeline-row {
+    display: flex;
+    gap: 10px;
+    padding: 4px 0;
+    font-size: 15px;
+    align-items: baseline;
+  }
+  .timeline-row .t {
+    flex-shrink: 0;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    color: var(--grass-deep);
+    min-width: 56px;
+  }
+  .timeline-row.key .t { color: #c14b7e; }
+  .timeline-row .d { color: var(--earth); }
+
+  .bell-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 15px;
+    border-bottom: 1px dotted var(--earth-light);
+  }
+  .bell-row:last-child { border-bottom: none; }
+  .bell-row .time { font-family: 'Fraunces', serif; font-weight: 900; color: var(--earth); }
+  .bell-row .ring { color: var(--grass-deep); font-weight: 700; }
+  .bell-row.stop .ring { color: #c14b7e; }
+
+  .nine-grid { display: flex; flex-direction: column; gap: 5px; }
+  .nine-item {
+    display: flex;
+    gap: 10px;
+    font-size: 15px;
+    align-items: baseline;
+  }
+  .nine-item .n {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: var(--grass-bright);
+    border: 1.5px solid var(--earth);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--grass-deep);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .chip-line { font-size: 15px; line-height: 1.9; }
+  .chip {
+    display: inline-block;
+    background: rgba(214, 240, 74, 0.4);
+    border: 1px solid var(--grass-mid);
+    border-radius: 8px;
+    padding: 2px 9px;
+    margin: 2px;
+    font-weight: 600;
+    color: var(--earth);
+  }
+  .chip.no { background: rgba(244, 168, 200, 0.3); border-color: var(--pink); color: #c14b7e; }
+
+  .quote-box {
+    background: var(--earth);
+    color: var(--cream);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    text-align: center;
+    line-height: 1.8;
+  }
+  .quote-box b { color: var(--sun); }
+
+  footer {
+    text-align: center;
+    margin-top: 36px;
+    padding: 18px;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--grass-deep);
+  }
+
+  /* === 列印：只印小抄,排成掌心大 === */
+  @media print {
+    @page { margin: 10mm; }
+    body { background: white; padding: 0; font-size: 11pt; }
+    body::before, body::after { display: none; }
+    .container { max-width: 100%; padding: 0; }
+    header, .tabs, footer, .print-btn, .cheat-intro, .back-link { display: none !important; }
+    #detail { display: none !important; }
+    #cheat { display: block !important; }
+    #cheatCards {
+      column-count: 2;
+      column-gap: 8mm;
+    }
+    .cheat-card {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 1.5px solid #333;
+      margin-bottom: 6mm;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+    .cheat-card h3 { font-size: 12pt; }
+    .timeline-row, .bell-row, .nine-item, .chip-line { font-size: 9.5pt; }
+    .quote-box { background: #eee; color: #000; border: 1px solid #999; }
+    .quote-box b { color: #000; text-decoration: underline; }
+    .chip { background: #f0f0f0; border-color: #999; }
+    .chip.no { background: #f5e0e8; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <a class="back-link" href="pr_board.html">← 回公關組看板</a>
+    <div class="badge">教育訓練 · 主席篇</div>
+    <h1>TM 主席須知</h1>
+    <div class="one-liner">從事前準備到當天場控,一份搞懂怎麼當主席</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-target="detail">
+      <span class="icon">📖</span>詳細 SOP
+    </button>
+    <button class="tab" data-target="cheat">
+      <span class="icon">🤚</span>當天小抄
+    </button>
+  </nav>
+
+  <!-- ===== 詳細 SOP ===== -->
+  <section class="section active" id="detail">
+
+    <div class="block">
+      <div class="block-num">1</div>
+      <div class="block-title">先搞懂:TM 和主席是什麼</div>
+      <div class="sub">概念</div>
+      <p>TM 是 Toastmasters 的縮寫,由美軍顧問團引進的教育訓練,目的是<span class="keyword">訓練口才、培養領導能力</span>。流程是:主席主持,讓 6 位講員各做 3 分鐘演講,講評針對講員內容給建議,最後總評為整場做總結。</p>
+      <p>一場 TM 共 12 人:主席 1、計時 1、總評 1、講評 3、講員 6。</p>
+      <div class="sub">主席的定位(一句話記住)</div>
+      <p>主席是一條<span class="keyword">珍珠線</span>,負責把整場串起來。可以適時綁上蝴蝶結增加趣味,但絕不搶走講員的風采。</p>
+      <div class="highlight">主席最重要的任務是「場控」,要在一小時內把 TM 結束,才不會耽誤下個課程。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-num">2</div>
+      <div class="block-title">主席心法:定、心、丸 三字訣</div>
+      <div class="creed">
+        <div class="creed-item"><div class="big">定</div><div class="small">定人·定時·定事</div></div>
+        <div class="creed-item"><div class="big">心</div><div class="small">掌心雷·會心一笑</div></div>
+        <div class="creed-item"><div class="big">丸</div><div class="small">小又精·玩心</div></div>
+      </div>
+      <div class="sub">定 = 定人、定時、定事</div>
+      <p><span class="keyword">定人</span>:事前訪問每位成員、提醒服裝與時間、邀請正副計時、掌握出席狀況。</p>
+      <p><span class="keyword">定時</span>:預備 18:30~18:50、暖場 18:50~18:55、TM 全程 18:55~19:45。</p>
+      <p><span class="keyword">定事</span>:事前訪問、預備抽籤寫板書、開場主席稿、串場送往迎來、控場掌握時間、圓場交棒給社長、頒獎時一起合照。</p>
+      <div class="sub">心 = 掌心雷 + 會心一笑</div>
+      <p><span class="keyword">掌心雷</span>:主席稿只有掌心大,做成小卡。共四種稿:主席稿、6 位講員介紹稿、3 位講評介紹稿、1 位總評介紹稿。</p>
+      <p><span class="keyword">會心一笑</span>:準備 15 到 30 秒的笑話或腦筋急轉彎,讓現場輕鬆。</p>
+      <div class="sub">丸 = 小又精、玩心、不搶風彩</div>
+      <p>介紹要小而精準,帶點玩心,但不搶講員的鋒頭。</p>
+    </div>
+
+    <div class="block">
+      <div class="block-num">3</div>
+      <div class="block-title">事前準備:電訪與寫介紹詞</div>
+      <div class="sub">概念</div>
+      <p>TM 開始前一週就要動起來。事前訪問做得好,當天介紹就會生動,被介紹的人也會覺得被理解、更安心上台。</p>
+      <div class="sub">步驟</div>
+      <ol>
+        <li>確認聯絡方式:檢查總評、講評、講員是否都加好 LINE,沒加到馬上處理。</li>
+        <li>約電訪時間並先告知長度:總評約 15 到 30 分鐘、講評或講員約 5 到 10 分鐘。</li>
+        <li>進行電訪(建議打電話,比文字更有溫度)。前社長一定要通話訪問。</li>
+        <li>撰寫介紹詞:濃縮成一段自然有感的話,大聲唸幾遍確保順暢,名字千萬不要唸錯。</li>
+        <li>做介紹詞卡:每人一張、掌心大、方便調整順序,關鍵字用粗字或色筆標示。</li>
+        <li>準備 2 到 3 個小笑話備用。</li>
+        <li>開場前再對一次 Checklist。</li>
+      </ol>
+      <div class="sub">電訪要問的六個問題</div>
+      <ol>
+        <li>第幾期加入健言社</li>
+        <li>工作的介紹</li>
+        <li>喜好興趣</li>
+        <li>座右銘</li>
+        <li>進入健言社的期望</li>
+        <li>想讓大家認識、增加印象的介紹</li>
+      </ol>
+      <div class="highlight">打電話先問「您現在方便講電話嗎?」,並報上「我是健言社的 OOO」。訪問要簡短,盡量三分鐘內,不要探問隱私、收入、感情。訪問總評時記得問:除了已知的頭銜,還有沒有要補充介紹的?</div>
+    </div>
+
+    <div class="block">
+      <div class="block-num">4</div>
+      <div class="block-title">當天時間軸(一般 TM)</div>
+      <div class="sub">流程</div>
+      <p>18:30 前　全體 TM 人員到教室預備</p>
+      <p>18:35　6 位講員抽籤決定出場順序(晚到者由主席代抽)</p>
+      <p>18:40 前　講員把海報交給社務組,背面寫大名與上台順序</p>
+      <p>18:45　主席書寫板書,確認場佈與講評單</p>
+      <p>18:50　活動組暖場</p>
+      <p>18:55　TM 主席正式開場</p>
+      <p>19:00　介紹第 1 位講員上台</p>
+      <p>約 19:40　總評點評,10 分鐘</p>
+      <p>最晚 19:50 前　主席把麥克風交給社長</p>
+      <p>19:51　頒獎(講員前三名、最佳講評、總評、主席)並介紹前社長</p>
+      <p>20:00　下課休息 5 分鐘</p>
+      <div class="warn">聽到鈴聲兩響(代表講員講滿 3 分鐘)時,<b>主席要站起來</b>準備。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-num">5</div>
+      <div class="block-title">主席稿九段(開場到結尾)</div>
+      <div class="sub">照順序走就不會漏</div>
+      <ol>
+        <li>問候(社長、輔導社長、各位健言家人,大家好)</li>
+        <li>請大家手機關機或靜音</li>
+        <li>簡介 TM 的由來</li>
+        <li>簡介總評與三位講評,請大家掌聲歡迎</li>
+        <li>說明上台規則</li>
+        <li>說明時間規定與鈴聲提示</li>
+        <li>公布今日題目</li>
+        <li>介紹第一位講員上台(之後每位依序串場)</li>
+        <li>感謝與祝福,把麥克風交回社長</li>
+      </ol>
+      <div class="warn">講員與講評講完後,主席先說<b>「計時請報時」</b>,聽到報時後複述「幾分幾秒」,再說「謝謝 OO 講員的分享」。整場切記<b>不要評論</b>講員或講評講得好不好,那是講評和總評的工作。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-num">6</div>
+      <div class="block-title">計時鈴聲規則</div>
+      <div class="sub">講員與講評(標準 3 分鐘)</div>
+      <ul>
+        <li>2 分 30 秒:鈴聲一響</li>
+        <li>2 分 59 秒、3 分整:鈴聲兩響</li>
+        <li>3 分 28、29、30 秒:鈴聲三響</li>
+        <li>3 分 45 秒:鈴聲長響,一律停止演說</li>
+        <li>未滿 2 分 30 秒或超過 3 分 30 秒,不計入名次</li>
+      </ul>
+      <div class="sub">總評(10 分鐘)</div>
+      <ul>
+        <li>9 分整:鈴聲一響</li>
+        <li>9 分 29、30 秒:鈴聲二響</li>
+        <li>9 分 58、59 秒、10 分整:鈴聲三響</li>
+        <li>超過 10 分鐘:鈴聲連按長響</li>
+      </ul>
+      <div class="highlight">計時員要確實按足「一足秒」;開始與結束計時時高舉計時器;報時後,書寫時間者要複述一次。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-num">7</div>
+      <div class="block-title">主席的三大禁忌</div>
+      <div class="sub">記住就能避開</div>
+      <ol>
+        <li><span class="keyword">鳩佔鵲巢</span>:不可評論講員或講評的內容。</li>
+        <li><span class="keyword">喧賓奪主</span>:不要講太多笑話佔用時間。</li>
+        <li><span class="keyword">丟三忘四</span>:不要忘了程序、忘了請計時員報時。</li>
+      </ol>
+      <div class="highlight">避免失敗的三個方法:沒準備就提前訪問、提前到場;不夠熟練就用小卡記程序;太緊張就把小卡編上順序號碼。</div>
+    </div>
+
+    <div class="block">
+      <div class="block-num">8</div>
+      <div class="block-title">特殊狀況與進階技巧</div>
+      <div class="sub">第三位講評後的「過場」</div>
+      <p>第三位講評點評完、介紹總評之前,準備約一分鐘的小過場(總評通常要從後排走到前面預備席)。內容不拘,可和題目相關。切記不要為了講完故事而超時。</p>
+      <div class="sub">救火隊安排</div>
+      <p>當天注意講員、講評是否到齊。有狀況立刻告訴教育組長,由教育組長請預備講員或講評上台。講員若 7:00 還沒到,就不能上台演講。</p>
+      <div class="sub">金口獎主席(和一般 TM 不同)</div>
+      <p>時間更短、有十位講員,所以:不講 TM 由來;講評(五位)只說第幾期社長;講員只說名字、簡單介紹;訪問只訪問總評;介紹總評可多給一點資訊;自選組主席還要介紹講員的演講題目(名字加題目)。</p>
+    </div>
+
+  </section>
+
+  <!-- ===== 當天小抄 ===== -->
+  <section class="section" id="cheat">
+
+    <p class="cheat-intro">這是上台帶在身上、瞄一眼用的版本</p>
+    <button class="print-btn" onclick="window.print()">🖨️ 列印小抄(掌心大可裁下)</button>
+
+    <div id="cheatCards">
+
+      <div class="cheat-card">
+        <h3>⏱️ 時間軸</h3>
+        <div class="timeline-row"><span class="t">18:30</span><span class="d">全員到齊</span></div>
+        <div class="timeline-row"><span class="t">18:35</span><span class="d">講員抽籤定順序</span></div>
+        <div class="timeline-row"><span class="t">18:40</span><span class="d">交海報(背面寫名+順序)</span></div>
+        <div class="timeline-row"><span class="t">18:45</span><span class="d">寫板書、確認講評單</span></div>
+        <div class="timeline-row"><span class="t">18:50</span><span class="d">活動組暖場</span></div>
+        <div class="timeline-row key"><span class="t">18:55</span><span class="d">我開場</span></div>
+        <div class="timeline-row"><span class="t">19:00</span><span class="d">介紹第1位講員</span></div>
+        <div class="timeline-row"><span class="t">19:40</span><span class="d">總評點評(10分)</span></div>
+        <div class="timeline-row key"><span class="t">19:50</span><span class="d">前 交麥給社長</span></div>
+        <div class="timeline-row"><span class="t">19:51</span><span class="d">頒獎+介紹前社長</span></div>
+        <div class="timeline-row"><span class="t">20:00</span><span class="d">下課</span></div>
+      </div>
+
+      <div class="cheat-card">
+        <h3>🔔 鈴聲:講員/講評(3分)</h3>
+        <div class="bell-row"><span class="time">2:30</span><span class="ring">一響</span></div>
+        <div class="bell-row key"><span class="time">2:59 · 3:00</span><span class="ring">兩響(我站起來)</span></div>
+        <div class="bell-row"><span class="time">3:28~3:30</span><span class="ring">三響</span></div>
+        <div class="bell-row stop"><span class="time">3:45</span><span class="ring">長響→一律停</span></div>
+      </div>
+
+      <div class="cheat-card">
+        <h3>🔔 鈴聲:總評(10分)</h3>
+        <div class="bell-row"><span class="time">9:00</span><span class="ring">一響</span></div>
+        <div class="bell-row"><span class="time">9:29~9:30</span><span class="ring">兩響</span></div>
+        <div class="bell-row"><span class="time">9:58~10:00</span><span class="ring">三響</span></div>
+        <div class="bell-row stop"><span class="time">超過</span><span class="ring">長響</span></div>
+      </div>
+
+      <div class="cheat-card">
+        <h3>📋 主席稿九段</h3>
+        <div class="nine-grid">
+          <div class="nine-item"><span class="n">1</span>問候</div>
+          <div class="nine-item"><span class="n">2</span>手機靜音</div>
+          <div class="nine-item"><span class="n">3</span>TM 由來</div>
+          <div class="nine-item"><span class="n">4</span>介紹總評、講評</div>
+          <div class="nine-item"><span class="n">5</span>上台規則</div>
+          <div class="nine-item"><span class="n">6</span>時間規定</div>
+          <div class="nine-item"><span class="n">7</span>今日題目</div>
+          <div class="nine-item"><span class="n">8</span>介紹第1位講員</div>
+          <div class="nine-item"><span class="n">9</span>感謝祝福、交麥給社長</div>
+        </div>
+      </div>
+
+      <div class="cheat-card">
+        <h3>🎙️ 每位講完的報時口訣</h3>
+        <div class="quote-box">
+          <b>「計時請報時」</b><br>→ 複述「X 分 X 秒」<br>→ 「謝謝 OO 講員的分享」
+        </div>
+      </div>
+
+      <div class="cheat-card">
+        <h3>🔄 過場提醒</h3>
+        <p style="font-size:15px;">第 3 位講評後、介紹總評前,過場約 1 分鐘(總評從後排走到前面)。</p>
+      </div>
+
+      <div class="cheat-card">
+        <h3>🚫 三大禁忌</h3>
+        <div class="chip-line">
+          <span class="chip no">不評論內容</span>
+          <span class="chip no">笑話別太長</span>
+          <span class="chip no">別忘了請報時</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>🌿 老幹新枝話家常 🌿</footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.target;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

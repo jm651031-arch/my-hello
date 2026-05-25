@@ -231,7 +231,7 @@
   /* === Tab Navigation === */
   .tabs {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 6px;
     margin-bottom: 24px;
     background: rgba(253, 252, 243, 0.95);
@@ -247,10 +247,10 @@
   }
 
   .tab {
-    padding: 16px 4px;
+    padding: 16px 2px;
     text-align: center;
     border-radius: 12px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--earth);
     cursor: pointer;
@@ -261,7 +261,7 @@
     line-height: 1.3;
   }
 
-  .tab .icon { display: block; font-size: 32px; margin-bottom: 6px; }
+  .tab .icon { display: block; font-size: 28px; margin-bottom: 5px; }
 
   .tab.active {
     background: var(--grass-deep);
@@ -954,6 +954,108 @@
     color: var(--earth-light);
     font-size: 14px;
   }
+
+  /* === 教材資源卡（新增） === */
+  .edu-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--cream);
+    border: 2px solid var(--earth);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 4px 4px 0 var(--earth);
+    text-decoration: none;
+    color: var(--earth);
+    transition: transform 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+
+  .edu-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--earth);
+  }
+
+  .edu-card.soon {
+    opacity: 0.6;
+    border-style: dashed;
+    box-shadow: 3px 3px 0 var(--earth-light);
+  }
+
+  .edu-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: var(--grass-light);
+    border: 2px solid var(--earth);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+
+  .edu-card.soon .edu-icon { background: #f0f0e8; }
+
+  .edu-body { flex: 1; min-width: 0; }
+
+  .edu-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--earth);
+    margin-bottom: 5px;
+    line-height: 1.4;
+  }
+
+  .edu-desc {
+    font-size: 14px;
+    color: var(--earth-light);
+    line-height: 1.6;
+  }
+
+  .edu-arrow {
+    flex-shrink: 0;
+    align-self: center;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--grass-mid);
+  }
+
+  .edu-soon-pill {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    background: #f0f0e8;
+    color: var(--earth-light);
+    padding: 2px 10px;
+    border-radius: 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .edu-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, var(--grass-bright) 0%, var(--sun) 100%);
+    color: var(--grass-deep);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 2px solid var(--earth);
+    box-shadow: 3px 3px 0 var(--earth);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .edu-dl:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--earth);
+  }
 </style>
 </head>
 <body>
@@ -989,6 +1091,9 @@
     <button class="tab" data-target="members">
       <span class="icon">👥</span>組員
     </button>
+    <button class="tab" data-target="edu">
+      <span class="icon">📚</span>教材
+    </button>
   </nav>
 
   <!-- 1. 課程 -->
@@ -1016,8 +1121,46 @@
     </div>
   </section>
 
+  <!-- 4. 教材（新增，靜態內容） -->
+  <section class="section" id="edu">
+    <h2 class="section-title">📚 教育訓練資源</h2>
+
+    <!-- TM 主席須知（可點 + 下載 PDF） -->
+    <a class="edu-card" href="tm-chairman.html">
+      <div class="edu-icon">🎤</div>
+      <div class="edu-body">
+        <span class="card-tag tag-tm">主席</span>
+        <div class="edu-title">TM 主席須知</div>
+        <div class="edu-desc">事前電訪、主席稿九段、當天流程與計時鈴聲，一份搞懂怎麼當主席。</div>
+        <span class="edu-dl" onclick="event.stopPropagation(); event.preventDefault(); window.open('tm-chair-guide.pdf','_blank');">🖨️ 下載列印版 PDF</span>
+      </div>
+      <span class="edu-arrow">→</span>
+    </a>
+
+    <!-- 講員須知（施工中） -->
+    <div class="edu-card soon">
+      <div class="edu-icon">🗣️</div>
+      <div class="edu-body">
+        <span class="card-tag tag-edu">講員</span><span class="edu-soon-pill">施工中</span>
+        <div class="edu-title">講員須知</div>
+        <div class="edu-desc">上台前該知道的事：服裝、時間、海報道具規則。</div>
+      </div>
+    </div>
+
+    <!-- 講評須知（施工中） -->
+    <div class="edu-card soon">
+      <div class="edu-icon">💬</div>
+      <div class="edu-body">
+        <span class="card-tag tag-special">講評</span><span class="edu-soon-pill">施工中</span>
+        <div class="edu-title">講評須知</div>
+        <div class="edu-desc">如何給出有溫度又有建設性的講評。</div>
+      </div>
+    </div>
+
+  </section>
+
   <footer>
-    🌿 90 期 · 公關組 · 一起留下美好瞬間 🌿
+    🌿 老幹新枝話家常 🌿
   </footer>
 
 </div>
