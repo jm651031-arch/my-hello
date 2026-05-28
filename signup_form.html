@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- 🪄 關閉手機瀏覽器的自動電話號碼偵測 -->
 <meta name="format-detection" content="telephone=no">
 <title>竹北社90期第一次會外會 報名表</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -770,14 +771,8 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// 🔧 設定區 — 這裡放你原本的 GAS URL
-// ══════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5DWuriGYQSiQqT1l_T4dyvunp1cA_UDGjtpQZcXtgV45jnQ/exec';
 
-// ══════════════════════════════════════════
-// 🪄 帳號一鍵複製小魔法
-// ══════════════════════════════════════════
 function copyAccount(text) {
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(showCopiedStatus);
@@ -836,11 +831,11 @@ function formatTimestamp(ts) {
 (function initDropdowns() {
   const ysel = document.getElementById('f-year');
   for (let y = 1940; y <= 2005; y++) {
-    ysel.innerHTML += `<option value="${y}">${y} 年</option>`;
+    ysel.add(new Option(y + ' 年', y));
   }
   const msel = document.getElementById('f-month');
   for (let m = 1; m <= 12; m++) {
-    msel.innerHTML += `<option value="${m}">${m} 月</option>`;
+    msel.add(new Option(m + ' 月', m));
   }
   updateDays();
 })();
@@ -851,9 +846,14 @@ function updateDays() {
   const maxDay = new Date(year, month, 0).getDate(); 
   const dsel = document.getElementById('f-day');
   const current = dsel.value;
-  dsel.innerHTML = '<option value="">── 日 ──</option>';
+  
+  dsel.options.length = 0;
+  dsel.add(new Option('── 日 ──', ''));
+  
   for (let d = 1; d <= maxDay; d++) {
-    dsel.innerHTML += `<option value="${d}"${d == current ? ' selected' : ''}>${d} 日</option>`;
+    let opt = new Option(d + ' 日', d);
+    if (d == current) opt.selected = true;
+    dsel.add(opt);
   }
 }
 
