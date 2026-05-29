@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<!-- 🪄 關閉手機瀏覽器的自動電話號碼偵測 -->
 <meta name="format-detection" content="telephone=no">
 <title>竹北社90期第一次會外會 報名表</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -292,9 +291,9 @@
     margin-left: auto;
   }
 
-  /* 轉帳專屬資訊動態展示區 (改為常態顯示) */
+  /* 轉帳專屬資訊動態展示區 (常態顯示) */
   .transfer-info-box {
-    display: block; /* 🪄 在這裡改成了常態顯示 */
+    display: block;
     background: var(--gold-pale);
     border: 1.5px dashed var(--gold);
     border-radius: 10px;
@@ -771,8 +770,14 @@
 </div>
 
 <script>
+// ══════════════════════════════════════════
+// 🔧 設定區 — 這裡放你原本的 GAS URL
+// ══════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxcCV98UnDL87tdcSx80gE5DWuriGYQSiQqT1l_T4dyvunp1cA_UDGjtpQZcXtgV45jnQ/exec';
 
+// ══════════════════════════════════════════
+// 🪄 帳號一鍵複製小魔法
+// ══════════════════════════════════════════
 function copyAccount(text) {
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(showCopiedStatus);
@@ -809,9 +814,21 @@ function copyAccount(text) {
   }
 }
 
+// 🪄 精準時區轉換：修正生日在查詢時少一天的問題
 function formatBirthday(dateStr) {
   if (!dateStr) return '無資料';
-  return dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+  
+  if (dateStr.includes('T')) {
+    const d = new Date(dateStr);
+    if (!isNaN(d.getTime())) {
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+  }
+  
+  return dateStr;
 }
 
 function formatTimestamp(ts) {
