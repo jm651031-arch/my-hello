@@ -187,7 +187,6 @@ select option { background:#0F1035; }
 <canvas id="stars"></canvas>
 
 <div class="wrap">
-  <!-- Hero -->
   <div class="hero">
     <div class="badge">愛玩AI讀書會 ✦ 論壇</div>
     <div class="title">AI Together</div>
@@ -195,7 +194,6 @@ select option { background:#0F1035; }
     <div class="tagline">跨界思維 × AI 應用，激盪無限可能</div>
   </div>
 
-  <!-- 活動資訊 -->
   <div class="info-row">
     <div class="info-card">
       <div class="info-icon">📅</div>
@@ -214,14 +212,12 @@ select option { background:#0F1035; }
     </div>
   </div>
 
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab on" onclick="showTab('signup',this)">✦ 活動報名</button>
     <button class="tab" onclick="showTab('query',this)">🔍 查詢報名</button>
     <button class="tab" onclick="showTab('staff',this)">🛡 工作人員</button>
   </div>
 
-  <!-- 報名頁 -->
   <div id="pg-signup" class="page on">
     <div class="card">
       <div class="card-title">✦ 填寫報名資訊</div>
@@ -249,7 +245,6 @@ select option { background:#0F1035; }
     </div>
   </div>
 
-  <!-- 查詢頁 -->
   <div id="pg-query" class="page">
     <div class="card">
       <div class="card-title">🔍 查詢報名狀態</div>
@@ -264,7 +259,6 @@ select option { background:#0F1035; }
     </div>
   </div>
 
-  <!-- 工作人員頁 -->
   <div id="pg-staff" class="page">
     <div id="staff-lock" class="card">
       <div class="card-title">🛡 工作人員專區</div>
@@ -360,6 +354,28 @@ function msg(el,type,text){
   el.innerHTML=text.replace(/\n/g,'<br>');
 }
 
+/* 現代化 Fetch 網路呼叫核心 (取代舊有易發生連線異常的 JSONP) */
+function sendRequest(url, params, cb) {
+  const p = new URLSearchParams(params);
+  const finalUrl = url.includes('?') ? `${url}&${p}` : `${url}?${p}`;
+
+  fetch(finalUrl, {
+    method: 'GET',
+    mode: 'cors'
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('網路連線異常');
+    return response.json();
+  })
+  .then(data => {
+    cb(data);
+  })
+  .catch(error => {
+    console.error('API 請求失敗:', error);
+    cb({ status: 'error' });
+  });
+}
+
 /* 報名 */
 function doSignup(){
   const name=document.getElementById('s-name').value.trim();
@@ -373,7 +389,8 @@ function doSignup(){
   btn.disabled=true;
   msg(m,'ld','⏳ 報名提交中...');
   const _name=name, _phone=phone, _job=job;
-  jsonp(GAS, {action:'signup',name,phone,job,fee:fee(job)}, function(d){
+  
+  sendRequest(GAS, {action:'signup',name,phone,job,fee:fee(job)}, function(d){
     if(d.status==='ok'){
       msg(m,'ok','✅ 報名成功！'+_name+' 您好！\n費用：'+fee(_job)+'\n請於活動當天 13:00 前至 hoco.cafe 2F 報到');
       document.getElementById('s-name').value='';
@@ -395,7 +412,8 @@ function doQuery(){
   const r=document.getElementById('qresult');
   if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼');r.innerHTML='';return;}
   msg(m,'ld','⏳ 查詢中...'); r.innerHTML='';
-  jsonp(GAS, {action:'query',phone}, function(d){
+  
+  sendRequest(GAS, {action:'query',phone}, function(d){
     if(d.status==='found'){
       m.style.display='none';
       const fc=isFree(d.job)?'color:#39FF14':'color:#FFD700';
@@ -431,7 +449,8 @@ function loadList(){
   const m=document.getElementById('listmsg');
   const tbody=document.getElementById('list-body');
   msg(m,'ld','⏳ 載入名單中...'); tbody.innerHTML='';
-  jsonp(GAS, {action:'list',pw:'0000'}, function(d){
+  
+  sendRequest(GAS, {action:'list',pw:'0000'}, function(d){
     if(d.status==='ok'){
       m.style.display='none';
       const rows=d.rows||[];
@@ -457,26 +476,6 @@ function loadList(){
       }
     }else msg(m,'err','資料載入失敗');
   });
-}
-
-/* JSONP 呼叫 */
-function jsonp(url, params, cb){
-  const cbName='_cb'+Date.now();
-  params.callback=cbName;
-  const p=new URLSearchParams(params);
-  const s=document.createElement('script');
-  window[cbName]=function(d){
-    cb(d);
-    delete window[cbName];
-    s.remove();
-  };
-  s.onerror=function(){
-    cb({status:'error'});
-    delete window[cbName];
-    s.remove();
-  };
-  s.src=url+'?'+p;
-  document.body.appendChild(s);
 }
 </script>
 </body>
