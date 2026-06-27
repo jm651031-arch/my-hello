@@ -361,7 +361,7 @@ function msg(el,type,text){
 }
 
 /* 報名 */
-async function doSignup(){
+function doSignup(){
   const name=document.getElementById('s-name').value.trim();
   const phone=document.getElementById('s-phone').value.trim().replace(/[\s\-\(\)]/g,'');
   const job=document.getElementById('s-job').value;
@@ -372,11 +372,10 @@ async function doSignup(){
   if(!job.trim()){msg(m,'err','請輸入職業 / 身份');return;}
   btn.disabled=true;
   msg(m,'ld','⏳ 報名提交中...');
-  try{
-    const p=new URLSearchParams({action:'signup',name,phone,job,fee:fee(job)});
-    const d=await(await fetch(GAS+'?'+p)).json();
+  const _name=name, _phone=phone, _job=job;
+  jsonp(GAS, {action:'signup',name,phone,job,fee:fee(job)}, function(d){
     if(d.status==='ok'){
-      msg(m,'ok',`✅ 報名成功！${name} 您好！\n費用：${fee(job)}\n請於活動當天 13:00 前至 hoco.cafe 2F 報到`);
+      msg(m,'ok','✅ 報名成功！'+_name+' 您好！\n費用：'+fee(_job)+'\n請於活動當天 13:00 前至 hoco.cafe 2F 報到');
       document.getElementById('s-name').value='';
       document.getElementById('s-phone').value='';
       document.getElementById('s-job').value='';
@@ -385,35 +384,33 @@ async function doSignup(){
     }else{
       msg(m,'err','❌ 系統異常，請稍後再試');
     }
-  }catch{msg(m,'err','❌ 網路連線異常，請稍後再試');}
-  btn.disabled=false;
+    btn.disabled=false;
+  });
 }
 
 /* 查詢 */
-async function doQuery(){
+function doQuery(){
   const phone=document.getElementById('q-phone').value.trim().replace(/[\s\-\(\)]/g,'');
   const m=document.getElementById('qmsg');
   const r=document.getElementById('qresult');
   if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼');r.innerHTML='';return;}
   msg(m,'ld','⏳ 查詢中...'); r.innerHTML='';
-  try{
-    const p=new URLSearchParams({action:'query',phone});
-    const d=await(await fetch(GAS+'?'+p)).json();
+  jsonp(GAS, {action:'query',phone}, function(d){
     if(d.status==='found'){
       m.style.display='none';
       const fc=isFree(d.job)?'color:#39FF14':'color:#FFD700';
-      r.innerHTML=`<div class="result-card">
-        <div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div>
-        <div class="rrow"><span class="rkey">姓名</span><span class="rval">${d.name}</span></div>
-        <div class="rrow"><span class="rkey">電話</span><span class="rval">${d.phone}</span></div>
-        <div class="rrow"><span class="rkey">職業</span><span class="rval">${d.job}</span></div>
-        <div class="rrow"><span class="rkey">費用</span><span class="rval" style="${fc}">${d.fee}</span></div>
-        <div class="rrow"><span class="rkey">報名時間</span><span class="rval" style="font-size:12px;color:#8890BB">${d.time}</span></div>
-      </div>`;
+      r.innerHTML='<div class="result-card">'+
+        '<div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div>'+
+        '<div class="rrow"><span class="rkey">姓名</span><span class="rval">'+d.name+'</span></div>'+
+        '<div class="rrow"><span class="rkey">電話</span><span class="rval">'+d.phone+'</span></div>'+
+        '<div class="rrow"><span class="rkey">職業</span><span class="rval">'+d.job+'</span></div>'+
+        '<div class="rrow"><span class="rkey">費用</span><span class="rval" style="'+fc+'">'+d.fee+'</span></div>'+
+        '<div class="rrow"><span class="rkey">報名時間</span><span class="rval" style="font-size:12px;color:#8890BB">'+d.time+'</span></div>'+
+        '</div>';
     }else{
       msg(m,'err','查無此電話的報名記錄，請確認號碼是否正確');
     }
-  }catch{msg(m,'err','❌ 網路連線異常');}
+  });
 }
 
 /* 工作人員驗證 */
@@ -430,28 +427,26 @@ function doVerify(){
 }
 
 /* 載入名單 */
-async function loadList(){
+function loadList(){
   const m=document.getElementById('listmsg');
   const tbody=document.getElementById('list-body');
   msg(m,'ld','⏳ 載入名單中...'); tbody.innerHTML='';
-  try{
-    const p=new URLSearchParams({action:'list',pw:'0000'});
-    const d=await(await fetch(GAS+'?'+p)).json();
+  jsonp(GAS, {action:'list',pw:'0000'}, function(d){
     if(d.status==='ok'){
       m.style.display='none';
       const rows=d.rows||[];
       let paid=0,free=0;
-      rows.forEach((r,i)=>{
+      rows.forEach(function(r,i){
         const f=isFree(r.job);
         if(f)free++;else paid++;
-        tbody.innerHTML+=`<tr>
-          <td style="color:#8890BB">${i+1}</td>
-          <td style="font-weight:600">${r.name}</td>
-          <td style="color:#8890BB">${r.phone}</td>
-          <td>${r.job}</td>
-          <td><span class="${f?'badge-free':'badge-paid'}">${f?'免費':'$200'}</span></td>
-          <td style="color:#8890BB;font-size:12px">${r.time}</td>
-        </tr>`;
+        tbody.innerHTML+='<tr>'+
+          '<td style="color:#8890BB">'+(i+1)+'</td>'+
+          '<td style="font-weight:600">'+r.name+'</td>'+
+          '<td style="color:#8890BB">'+r.phone+'</td>'+
+          '<td>'+r.job+'</td>'+
+          '<td><span class="'+(f?'badge-free':'badge-paid')+'">'+(f?'免費':'$200')+'</span></td>'+
+          '<td style="color:#8890BB;font-size:12px">'+r.time+'</td>'+
+          '</tr>';
       });
       document.getElementById('st-total').textContent=rows.length;
       document.getElementById('st-paid').textContent=paid;
@@ -461,7 +456,27 @@ async function loadList(){
         tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#8890BB;padding:20px">尚無資料</td></tr>';
       }
     }else msg(m,'err','資料載入失敗');
-  }catch{msg(m,'err','❌ 網路連線異常');}
+  });
+}
+
+/* JSONP 呼叫 */
+function jsonp(url, params, cb){
+  const cbName='_cb'+Date.now();
+  params.callback=cbName;
+  const p=new URLSearchParams(params);
+  const s=document.createElement('script');
+  window[cbName]=function(d){
+    cb(d);
+    delete window[cbName];
+    s.remove();
+  };
+  s.onerror=function(){
+    cb({status:'error'});
+    delete window[cbName];
+    s.remove();
+  };
+  s.src=url+'?'+p;
+  document.body.appendChild(s);
 }
 </script>
 </body>
