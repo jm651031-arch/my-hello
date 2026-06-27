@@ -1,0 +1,553 @@
+import { useState, useEffect, useRef } from "react";
+
+const GAS_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
+const COLORS = {
+  bg: "#0A0B1E",
+  bg2: "#0F1035",
+  purple: "#A855F7",
+  cyan: "#00D4FF",
+  pink: "#FF6B9D",
+  gold: "#FFD700",
+  green: "#39FF14",
+  text: "#E8EAFF",
+  muted: "#8890BB",
+};
+
+function StarCanvas() {
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    let raf;
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: Math.floor((canvas.width * canvas.height) / 3500) }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.2,
+        alpha: Math.random() * 0.5 + 0.15,
+        dir: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.25 + 0.05,
+      }));
+    }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach((s) => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(180,210,255,${s.alpha})`;
+        ctx.fill();
+        s.x += Math.cos(s.dir) * s.speed;
+        s.y += Math.sin(s.dir) * s.speed;
+        s.alpha += (Math.random() - 0.5) * 0.015;
+        s.alpha = Math.max(0.05, Math.min(0.75, s.alpha));
+        if (s.x < -5) s.x = canvas.width + 5;
+        if (s.x > canvas.width + 5) s.x = -5;
+        if (s.y < -5) s.y = canvas.height + 5;
+        if (s.y > canvas.height + 5) s.y = -5;
+      });
+      raf = requestAnimationFrame(draw);
+    }
+    window.addEventListener("resize", resize);
+    resize();
+    draw();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas ref={canvasRef} style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />;
+}
+
+function InfoCard({ icon, label, value }) {
+  return (
+    <div style={{
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(168,85,247,0.35)",
+      borderRadius: 12,
+      padding: "14px 10px",
+      textAlign: "center",
+      position: "relative",
+      overflow: "hidden",
+      flex: 1,
+    }}>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,#A855F7,#00D4FF)" }} />
+      <div style={{ fontSize: 20, marginBottom: 6 }}>{icon}</div>
+      <div style={{ fontSize: 10, color: COLORS.muted, letterSpacing: 1, marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.cyan, lineHeight: 1.4 }}>{value}</div>
+    </div>
+  );
+}
+
+function NeonInput({ id, type = "text", placeholder, value, onChange, onKeyDown }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <input
+      id={id}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      onKeyDown={onKeyDown}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        width: "100%",
+        background: focused ? "rgba(0,212,255,0.06)" : "rgba(255,255,255,0.05)",
+        border: `1px solid ${focused ? COLORS.cyan : "rgba(168,85,247,0.35)"}`,
+        borderRadius: 10,
+        color: COLORS.text,
+        fontFamily: "'Noto Sans TC', sans-serif",
+        fontSize: 16,
+        padding: "13px 16px",
+        outline: "none",
+        transition: "all 0.25s",
+        boxShadow: focused ? "0 0 0 3px rgba(0,212,255,0.12), 0 0 16px rgba(0,212,255,0.1)" : "none",
+        WebkitAppearance: "none",
+      }}
+    />
+  );
+}
+
+function NeonSelect({ value, onChange }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <select
+      value={value}
+      onChange={onChange}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        width: "100%",
+        background: focused ? "rgba(0,212,255,0.06)" : "#0F1035",
+        border: `1px solid ${focused ? COLORS.cyan : "rgba(168,85,247,0.35)"}`,
+        borderRadius: 10,
+        color: value ? COLORS.text : COLORS.muted,
+        fontFamily: "'Noto Sans TC', sans-serif",
+        fontSize: 16,
+        padding: "13px 16px",
+        outline: "none",
+        transition: "all 0.25s",
+        WebkitAppearance: "none",
+        cursor: "pointer",
+      }}
+    >
+      <option value="" style={{ background: "#0F1035" }}>— 請選擇 —</option>
+      {["上班族","創業者","自由工作者","學生","教師","講師","其他"].map(j => (
+        <option key={j} value={j} style={{ background: "#0F1035" }}>{j === "講師" ? "講師（本場次講師）" : j}</option>
+      ))}
+    </select>
+  );
+}
+
+function MsgBox({ type, text }) {
+  if (!text) return null;
+  const styles = {
+    success: { bg: "rgba(57,255,20,0.1)", border: "rgba(57,255,20,0.4)", color: COLORS.green },
+    error:   { bg: "rgba(255,107,157,0.1)", border: "rgba(255,107,157,0.4)", color: COLORS.pink },
+    loading: { bg: "rgba(0,212,255,0.1)", border: "rgba(0,212,255,0.3)", color: COLORS.cyan },
+  };
+  const s = styles[type];
+  return (
+    <div style={{
+      marginTop: 14,
+      padding: "13px 16px",
+      borderRadius: 10,
+      background: s.bg,
+      border: `1px solid ${s.border}`,
+      color: s.color,
+      fontSize: 14,
+      fontWeight: 500,
+      lineHeight: 1.65,
+      whiteSpace: "pre-wrap",
+    }}>{text}</div>
+  );
+}
+
+function PrimaryBtn({ onClick, disabled, children }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: "100%",
+        padding: 15,
+        background: "linear-gradient(135deg,#A855F7,#00D4FF)",
+        border: "none",
+        borderRadius: 12,
+        color: "#fff",
+        fontFamily: "'Noto Sans TC', sans-serif",
+        fontSize: 15,
+        fontWeight: 700,
+        letterSpacing: 2,
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.5 : 1,
+        marginTop: 8,
+        transform: hover && !disabled ? "translateY(-1px)" : "none",
+        boxShadow: hover && !disabled ? "0 8px 25px rgba(168,85,247,0.4)" : "none",
+        transition: "all 0.25s",
+      }}
+    >{children}</button>
+  );
+}
+
+function SecondaryBtn({ onClick, children }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: "100%",
+        padding: 13,
+        background: hover ? "rgba(0,212,255,0.18)" : "rgba(0,212,255,0.1)",
+        border: "1px solid rgba(0,212,255,0.4)",
+        borderRadius: 12,
+        color: COLORS.cyan,
+        fontFamily: "'Noto Sans TC', sans-serif",
+        fontSize: 14,
+        fontWeight: 600,
+        letterSpacing: 1,
+        cursor: "pointer",
+        marginTop: 8,
+        boxShadow: hover ? "0 0 16px rgba(0,212,255,0.2)" : "none",
+        transition: "all 0.25s",
+      }}
+    >{children}</button>
+  );
+}
+
+function Card({ children, topGradient = true }) {
+  return (
+    <div style={{
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(168,85,247,0.3)",
+      borderRadius: 16,
+      padding: "28px 24px",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {topGradient && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg,#A855F7,#00D4FF,#FF6B9D)" }} />}
+      {children}
+    </div>
+  );
+}
+
+function CardTitle({ children }) {
+  return (
+    <div style={{ fontSize: 15, fontWeight: 700, color: COLORS.purple, marginBottom: 20, display: "flex", alignItems: "center", gap: 8, letterSpacing: 1 }}>
+      {children}
+    </div>
+  );
+}
+
+function Label({ children }) {
+  return <div style={{ fontSize: 12, fontWeight: 500, color: COLORS.muted, letterSpacing: "1.5px", marginBottom: 8, textTransform: "uppercase" }}>{children}</div>;
+}
+
+// ===== 判斷費用 =====
+function calcFee(job) { return job === "講師" ? "免費（講師）" : "NT$ 200（現場交）"; }
+function isFree(job) { return job === "講師"; }
+
+// ===== 報名頁 =====
+function SignupPage() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [job, setJob] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState({ type: "", text: "" });
+
+  async function submit() {
+    if (!name.trim()) { setMsg({ type: "error", text: "請輸入姓名" }); return; }
+    if (!/^09\d{8}$/.test(phone.trim())) { setMsg({ type: "error", text: "請輸入正確的手機號碼（09開頭，共10碼）" }); return; }
+    if (!job) { setMsg({ type: "error", text: "請選擇職業 / 身份" }); return; }
+
+    setLoading(true);
+    setMsg({ type: "loading", text: "⏳ 報名提交中..." });
+    try {
+      const fee = calcFee(job);
+      const params = new URLSearchParams({ action: "signup", name: name.trim(), phone: phone.trim(), job, fee });
+      const res = await fetch(GAS_URL + "?" + params);
+      const data = await res.json();
+      if (data.status === "ok") {
+        setMsg({ type: "success", text: `✅ 報名成功！${name.trim()} 您好！\n費用：${fee}\n請於活動當天 13:00 前至 hoco.cafe 2F 報到` });
+        setName(""); setPhone(""); setJob("");
+      } else if (data.status === "dup") {
+        setMsg({ type: "error", text: "⚠️ 此電話號碼已報名，請勿重複填寫" });
+      } else {
+        setMsg({ type: "error", text: "❌ 系統異常，請稍後再試" });
+      }
+    } catch { setMsg({ type: "error", text: "❌ 網路連線異常，請稍後再試" }); }
+    setLoading(false);
+  }
+
+  return (
+    <Card>
+      <CardTitle>✦ 填寫報名資訊</CardTitle>
+      <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, lineHeight: 1.6 }}>
+        <div style={{ color: COLORS.gold, fontWeight: 700, marginBottom: 4, fontSize: 12, letterSpacing: 1 }}>💰 費用說明</div>
+        <span style={{ color: COLORS.green, fontWeight: 700 }}>講師：免費</span>
+        <span style={{ color: COLORS.muted }}> ｜ </span>
+        <span style={{ color: COLORS.pink, fontWeight: 700 }}>一般學員：NT$ 200 元</span>
+        <br /><span style={{ color: COLORS.muted, fontSize: 12 }}>現場交付・現場提供茶水咖啡</span>
+      </div>
+      <div style={{ marginBottom: 18 }}>
+        <Label>姓名</Label>
+        <NeonInput placeholder="請輸入真實姓名" value={name} onChange={e => setName(e.target.value)} />
+      </div>
+      <div style={{ marginBottom: 18 }}>
+        <Label>聯絡電話</Label>
+        <NeonInput type="tel" placeholder="09xxxxxxxx" value={phone} onChange={e => setPhone(e.target.value)} />
+      </div>
+      <div style={{ marginBottom: 18 }}>
+        <Label>職業 / 身份</Label>
+        <NeonSelect value={job} onChange={e => setJob(e.target.value)} />
+      </div>
+      <PrimaryBtn onClick={submit} disabled={loading}>立即報名 ✦</PrimaryBtn>
+      <MsgBox type={msg.type} text={msg.text} />
+    </Card>
+  );
+}
+
+// ===== 查詢頁 =====
+function QueryPage() {
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState({ type: "", text: "" });
+  const [result, setResult] = useState(null);
+
+  async function query() {
+    if (!/^09\d{8}$/.test(phone.trim())) { setMsg({ type: "error", text: "請輸入正確的手機號碼" }); setResult(null); return; }
+    setLoading(true);
+    setMsg({ type: "loading", text: "⏳ 查詢中..." });
+    setResult(null);
+    try {
+      const params = new URLSearchParams({ action: "query", phone: phone.trim() });
+      const res = await fetch(GAS_URL + "?" + params);
+      const data = await res.json();
+      if (data.status === "found") { setMsg({ type: "", text: "" }); setResult(data); }
+      else { setMsg({ type: "error", text: "查無此電話的報名記錄，請確認號碼是否正確" }); }
+    } catch { setMsg({ type: "error", text: "❌ 網路連線異常" }); }
+    setLoading(false);
+  }
+
+  return (
+    <Card>
+      <CardTitle>🔍 查詢報名狀態</CardTitle>
+      <p style={{ fontSize: 13, color: COLORS.muted, marginBottom: 20, lineHeight: 1.7 }}>輸入報名時填寫的手機號碼，即可查詢您的報名資訊。</p>
+      <div style={{ marginBottom: 18 }}>
+        <Label>手機號碼</Label>
+        <NeonInput type="tel" placeholder="09xxxxxxxx" value={phone} onChange={e => setPhone(e.target.value)} onKeyDown={e => e.key === "Enter" && query()} />
+      </div>
+      <SecondaryBtn onClick={query} disabled={loading}>查詢 →</SecondaryBtn>
+      <MsgBox type={msg.type} text={msg.text} />
+      {result && (
+        <div style={{ background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.35)", borderRadius: 12, padding: 20, marginTop: 16 }}>
+          <div style={{ fontSize: 12, color: COLORS.purple, letterSpacing: 2, marginBottom: 14 }}>✦ 報名資訊確認</div>
+          {[
+            ["姓名", result.name, COLORS.text],
+            ["電話", result.phone, COLORS.text],
+            ["職業", result.job, COLORS.text],
+            ["費用", result.fee, isFree(result.job) ? COLORS.green : COLORS.gold],
+            ["報名時間", result.time, COLORS.muted],
+          ].map(([k, v, c]) => (
+            <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 14 }}>
+              <span style={{ color: COLORS.muted, fontSize: 12, letterSpacing: 1 }}>{k}</span>
+              <span style={{ fontWeight: 600, color: c, fontSize: k === "報名時間" ? 12 : 14 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+// ===== 工作人員頁 =====
+function StaffPage() {
+  const [pw, setPw] = useState("");
+  const [unlocked, setUnlocked] = useState(false);
+  const [pwMsg, setPwMsg] = useState({ type: "", text: "" });
+  const [rows, setRows] = useState([]);
+  const [listMsg, setListMsg] = useState({ type: "", text: "" });
+
+  function verify() {
+    if (pw === "0000") { setUnlocked(true); loadData(); }
+    else { setPwMsg({ type: "error", text: "❌ 密碼錯誤，請重新輸入" }); setPw(""); }
+  }
+
+  async function loadData() {
+    setListMsg({ type: "loading", text: "⏳ 載入名單中..." });
+    try {
+      const params = new URLSearchParams({ action: "list", pw: "0000" });
+      const res = await fetch(GAS_URL + "?" + params);
+      const data = await res.json();
+      if (data.status === "ok") { setRows(data.rows || []); setListMsg({ type: "", text: "" }); }
+      else setListMsg({ type: "error", text: "資料載入失敗" });
+    } catch { setListMsg({ type: "error", text: "❌ 網路連線異常" }); }
+  }
+
+  const paid = rows.filter(r => !isFree(r.job)).length;
+  const free = rows.filter(r => isFree(r.job)).length;
+
+  if (!unlocked) return (
+    <Card>
+      <CardTitle>🛡 工作人員專區</CardTitle>
+      <p style={{ fontSize: 13, color: COLORS.muted, marginBottom: 20, lineHeight: 1.7 }}>此頁面僅供工作人員使用，請輸入密碼進入。</p>
+      <div style={{ marginBottom: 18 }}>
+        <Label>密碼</Label>
+        <NeonInput type="password" placeholder="請輸入密碼" value={pw} onChange={e => setPw(e.target.value)} onKeyDown={e => e.key === "Enter" && verify()} />
+      </div>
+      <PrimaryBtn onClick={verify}>驗證身份 →</PrimaryBtn>
+      <MsgBox type={pwMsg.type} text={pwMsg.text} />
+      <p style={{ fontSize: 12, color: COLORS.muted, textAlign: "center", marginTop: 10 }}>如忘記密碼，請聯絡活動主辦人</p>
+    </Card>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <Card>
+        <CardTitle>📊 報名統計</CardTitle>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 16 }}>
+          {[
+            ["總報名", rows.length, COLORS.cyan],
+            ["付費 $200", paid, COLORS.gold],
+            ["講師免費", free, COLORS.green],
+          ].map(([label, num, color]) => (
+            <div key={label} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 10, padding: "14px 10px", textAlign: "center" }}>
+              <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 24, fontWeight: 700, color }}>{num}</div>
+              <div style={{ fontSize: 11, color: COLORS.muted, marginTop: 4, letterSpacing: 1 }}>{label}</div>
+            </div>
+          ))}
+        </div>
+        <SecondaryBtn onClick={loadData}>重新整理 ↻</SecondaryBtn>
+      </Card>
+      <Card>
+        <CardTitle>📋 報名名單</CardTitle>
+        <MsgBox type={listMsg.type} text={listMsg.text} />
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr>{["#","姓名","電話","職業","費用","報名時間"].map(h => (
+                <th key={h} style={{ background: "rgba(168,85,247,0.2)", padding: "10px 10px", textAlign: "left", color: COLORS.purple, fontSize: 11, letterSpacing: 1.5, fontWeight: 700 }}>{h}</th>
+              ))}</tr>
+            </thead>
+            <tbody>
+              {rows.length === 0 && !listMsg.text && (
+                <tr><td colSpan={6} style={{ textAlign: "center", color: COLORS.muted, padding: 20 }}>尚無報名資料</td></tr>
+              )}
+              {rows.map((r, i) => (
+                <tr key={i}>
+                  <td style={{ padding: "10px", color: COLORS.muted, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{i + 1}</td>
+                  <td style={{ padding: "10px", fontWeight: 600, color: COLORS.text, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.name}</td>
+                  <td style={{ padding: "10px", color: COLORS.muted, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.phone}</td>
+                  <td style={{ padding: "10px", color: COLORS.text, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.job}</td>
+                  <td style={{ padding: "10px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                    <span style={{
+                      display: "inline-block", fontSize: 10, padding: "2px 8px", borderRadius: 20, fontWeight: 700,
+                      background: isFree(r.job) ? "rgba(57,255,20,0.15)" : "rgba(255,215,0,0.15)",
+                      color: isFree(r.job) ? COLORS.green : COLORS.gold,
+                      border: `1px solid ${isFree(r.job) ? "rgba(57,255,20,0.4)" : "rgba(255,215,0,0.4)"}`,
+                    }}>{isFree(r.job) ? "免費" : "$200"}</span>
+                  </td>
+                  <td style={{ padding: "10px", color: COLORS.muted, fontSize: 12, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// ===== 主頁面 =====
+export default function App() {
+  const [tab, setTab] = useState("signup");
+  const tabs = [
+    { id: "signup", label: "✦ 活動報名" },
+    { id: "query",  label: "🔍 查詢報名" },
+    { id: "staff",  label: "🛡 工作人員" },
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#0A0B1E", fontFamily: "'Noto Sans TC', sans-serif", position: "relative" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #0A0B1E !important; }
+        input::placeholder { color: #8890BB; }
+        select { cursor: pointer; }
+      `}</style>
+
+      <StarCanvas />
+
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 660, margin: "0 auto", padding: "0 16px 60px" }}>
+
+        {/* Hero */}
+        <div style={{ textAlign: "center", padding: "36px 0 24px" }}>
+          <div style={{
+            display: "inline-block", fontSize: 11, fontWeight: 500, letterSpacing: 3,
+            color: "#00D4FF", border: "1px solid #00D4FF", padding: "4px 14px",
+            borderRadius: 20, marginBottom: 16,
+          }}>愛玩AI讀書會 ✦ 論壇</div>
+
+          <div style={{
+            fontFamily: "'Orbitron', sans-serif",
+            fontSize: "clamp(38px, 10vw, 64px)",
+            fontWeight: 900, lineHeight: 1,
+            background: "linear-gradient(135deg,#A855F7 0%,#00D4FF 50%,#FF6B9D 100%)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            filter: "drop-shadow(0 0 20px rgba(168,85,247,0.5))",
+          }}>AI Together</div>
+
+          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(12px,3vw,17px)", color: "#00D4FF", letterSpacing: 6, marginTop: 6, opacity: 0.9 }}>
+            共學 · 共創 · 共享
+          </div>
+          <div style={{ fontSize: 13, color: "#8890BB", marginTop: 8, letterSpacing: 1 }}>
+            跨界思維 × AI 應用，激盪無限可能
+          </div>
+        </div>
+
+        {/* 活動資訊 */}
+        <div style={{ display: "flex", gap: 10, margin: "0 0 24px" }}>
+          <InfoCard icon="📅" label="日期" value={<>2026.7.12<br /><span style={{ fontSize: 11, color: "#8890BB" }}>(日)</span></>} />
+          <InfoCard icon="⏰" label="時間" value={<>13:00<br />— 16:00</>} />
+          <InfoCard icon="📍" label="地點" value={<>hoco.cafe<br /><span style={{ fontSize: 11, color: "#8890BB" }}>竹北縣政八街21號 2F</span></>} />
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 14, padding: 4, marginBottom: 20 }}>
+          {tabs.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{
+              flex: 1, padding: "10px 6px",
+              background: tab === t.id ? "linear-gradient(135deg,rgba(168,85,247,0.3),rgba(0,212,255,0.2))" : "none",
+              border: tab === t.id ? "1px solid rgba(0,212,255,0.4)" : "1px solid transparent",
+              borderRadius: 10,
+              color: tab === t.id ? "#00D4FF" : "#8890BB",
+              fontFamily: "'Noto Sans TC', sans-serif",
+              fontSize: 13, fontWeight: 500, cursor: "pointer",
+              textShadow: tab === t.id ? "0 0 8px rgba(0,212,255,0.6)" : "none",
+              transition: "all 0.25s",
+            }}>{t.label}</button>
+          ))}
+        </div>
+
+        {/* 頁面內容 */}
+        {tab === "signup" && <SignupPage />}
+        {tab === "query"  && <QueryPage />}
+        {tab === "staff"  && <StaffPage />}
+
+        {/* Footer */}
+        <div style={{ textAlign: "center", paddingTop: 36, fontSize: 11, color: "rgba(136,144,187,0.45)", letterSpacing: 1 }}>
+          <span style={{ color: "#A855F7" }}>愛玩AI讀書會</span> ✦ AI Together 論壇 ✦ 2026.7.12<br />
+          Powered by AI · Built with ✨
+        </div>
+      </div>
+    </div>
+  );
+}
