@@ -350,6 +350,17 @@ function showTab(id, btn){
   btn.classList.add('on');
 }
 
+/* 費用 */
+function fee(job){ return job.includes('講師')?'免費（講師）':'NT$ 200（現場交）'; }
+function isFree(job){ return job.includes('講師'); }
+
+/* 訊息 */
+function msg(el,type,text){
+  el.className='msg '+type;
+  el.innerHTML=text.replace(/
+/g,'<br>');
+}
+
 /* 統一請求函數 - POST 方式，相容所有裝置 */
 function callGAS(params, cb){
   fetch(GAS, {
