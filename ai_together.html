@@ -187,6 +187,7 @@ select option { background:#0F1035; }
 <canvas id="stars"></canvas>
 
 <div class="wrap">
+  <!-- Hero -->
   <div class="hero">
     <div class="badge">愛玩AI讀書會 ✦ 論壇</div>
     <div class="title">AI Together</div>
@@ -194,6 +195,7 @@ select option { background:#0F1035; }
     <div class="tagline">跨界思維 × AI 應用，激盪無限可能</div>
   </div>
 
+  <!-- 活動資訊 -->
   <div class="info-row">
     <div class="info-card">
       <div class="info-icon">📅</div>
@@ -212,12 +214,14 @@ select option { background:#0F1035; }
     </div>
   </div>
 
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab on" onclick="showTab('signup',this)">✦ 活動報名</button>
     <button class="tab" onclick="showTab('query',this)">🔍 查詢報名</button>
     <button class="tab" onclick="showTab('staff',this)">🛡 工作人員</button>
   </div>
 
+  <!-- 報名頁 -->
   <div id="pg-signup" class="page on">
     <div class="card">
       <div class="card-title">✦ 填寫報名資訊</div>
@@ -245,6 +249,7 @@ select option { background:#0F1035; }
     </div>
   </div>
 
+  <!-- 查詢頁 -->
   <div id="pg-query" class="page">
     <div class="card">
       <div class="card-title">🔍 查詢報名狀態</div>
@@ -259,6 +264,7 @@ select option { background:#0F1035; }
     </div>
   </div>
 
+  <!-- 工作人員頁 -->
   <div id="pg-staff" class="page">
     <div id="staff-lock" class="card">
       <div class="card-title">🛡 工作人員專區</div>
@@ -301,7 +307,7 @@ select option { background:#0F1035; }
 </div>
 
 <script>
-// ★ GAS 部署網址已為你保留
+// ★ 請將下方 YOUR_SCRIPT_ID 換成你的 GAS 部署網址
 const GAS = 'https://script.google.com/macros/s/AKfycbz75egmi_3t3_03Quk82peU5AIob5I_3np8y1Wl_QJkbGot1yVMb-jUTrigM8pyVw-b5g/exec';
 
 /* 星空 */
@@ -354,30 +360,6 @@ function msg(el,type,text){
   el.innerHTML=text.replace(/\n/g,'<br>');
 }
 
-/* 📱 已全面加強重導向適應力的傳輸核心 */
-function sendRequest(url, params, cb) {
-  const p = new URLSearchParams(params);
-  const finalUrl = url.includes('?') ? `${url}&${p}` : `${url}?${p}`;
-
-  fetch(finalUrl, {
-    method: 'GET',
-    mode: 'cors',
-    redirect: 'follow', // 💡 強制手機瀏覽器跟隨 Google 的重導向跳轉
-    cache: 'no-cache'   // 💡 防止手機快取錯誤的連線回應
-  })
-  .then(response => {
-    if (!response.ok) throw new Error('網路連線異常');
-    return response.json();
-  })
-  .then(data => {
-    cb(data);
-  })
-  .catch(error => {
-    console.error('API 請求失敗:', error);
-    cb({ status: 'error' });
-  });
-}
-
 /* 報名 */
 function doSignup(){
   const name=document.getElementById('s-name').value.trim();
@@ -391,8 +373,7 @@ function doSignup(){
   btn.disabled=true;
   msg(m,'ld','⏳ 報名提交中...');
   const _name=name, _phone=phone, _job=job;
-  
-  sendRequest(GAS, {action:'signup',name,phone,job,fee:fee(job)}, function(d){
+  jsonp(GAS, {action:'signup',name,phone,job,fee:fee(job)}, function(d){
     if(d.status==='ok'){
       msg(m,'ok','✅ 報名成功！'+_name+' 您好！\n費用：'+fee(_job)+'\n請於活動當天 13:00 前至 hoco.cafe 2F 報到');
       document.getElementById('s-name').value='';
@@ -400,8 +381,10 @@ function doSignup(){
       document.getElementById('s-job').value='';
     }else if(d.status==='dup'){
       msg(m,'err','⚠️ 此電話號碼已報名，請勿重複填寫');
+    }else if(d.status==='timeout'){
+      msg(m,'err','❌ 連線逾時，請稍後再試');
     }else{
-      msg(m,'err','❌ 系統異常，請稍後再試');
+      msg(m,'err','❌ 系統異常：'+JSON.stringify(d));
     }
     btn.disabled=false;
   });
@@ -414,8 +397,7 @@ function doQuery(){
   const r=document.getElementById('qresult');
   if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼');r.innerHTML='';return;}
   msg(m,'ld','⏳ 查詢中...'); r.innerHTML='';
-  
-  sendRequest(GAS, {action:'query',phone}, function(d){
+  jsonp(GAS, {action:'query',phone}, function(d){
     if(d.status==='found'){
       m.style.display='none';
       const fc=isFree(d.job)?'color:#39FF14':'color:#FFD700';
@@ -451,8 +433,7 @@ function loadList(){
   const m=document.getElementById('listmsg');
   const tbody=document.getElementById('list-body');
   msg(m,'ld','⏳ 載入名單中...'); tbody.innerHTML='';
-  
-  sendRequest(GAS, {action:'list',pw:'0000'}, function(d){
+  jsonp(GAS, {action:'list',pw:'0000'}, function(d){
     if(d.status==='ok'){
       m.style.display='none';
       const rows=d.rows||[];
@@ -478,6 +459,52 @@ function loadList(){
       }
     }else msg(m,'err','資料載入失敗');
   });
+}
+
+/* JSONP 呼叫 - 相容所有裝置 */
+function jsonp(url, params, cb){
+  const cbName='_cb'+Date.now();
+  params.callback=cbName;
+  const p=new URLSearchParams(params);
+  const fullUrl=url+'?'+p;
+
+  // 先嘗試 fetch（電腦）
+  // 再用 script tag（手機備援）
+  window[cbName]=function(d){
+    cb(d);
+    delete window[cbName];
+    try{ s && s.remove(); }catch(e){}
+  };
+
+  var s=document.createElement('script');
+  s.type='text/javascript';
+  s.charset='utf-8';
+  s.async=true;
+  s.defer=false;
+  s.src=fullUrl;
+  s.onerror=function(){
+    // script 失敗時改用 fetch
+    delete window[cbName];
+    s.remove();
+    fetch(fullUrl.replace('callback='+cbName,'').replace('&&','&').replace('?&','?'))
+      .then(function(r){ return r.json(); })
+      .then(function(d){ cb(d); })
+      .catch(function(){ cb({status:'error'}); });
+  };
+
+  // 加到 head 而非 body（iOS 更相容）
+  (document.head || document.body).appendChild(s);
+
+  // 15秒逾時
+  setTimeout(function(){
+    if(window[cbName]){
+      cb({status:'timeout'});
+      delete window[cbName];
+      try{ s.remove(); }catch(e){}
+    }
+  }, 15000);
+  s.src=url+'?'+p;
+  document.body.appendChild(s);
 }
 </script>
 </body>
