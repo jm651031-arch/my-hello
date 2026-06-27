@@ -1,553 +1,477 @@
-import { useState, useEffect, useRef } from "react";
-
-const GAS_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
-
-const COLORS = {
-  bg: "#0A0B1E",
-  bg2: "#0F1035",
-  purple: "#A855F7",
-  cyan: "#00D4FF",
-  pink: "#FF6B9D",
-  gold: "#FFD700",
-  green: "#39FF14",
-  text: "#E8EAFF",
-  muted: "#8890BB",
-};
-
-function StarCanvas() {
-  const canvasRef = useRef(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    let stars = [];
-    let raf;
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      stars = Array.from({ length: Math.floor((canvas.width * canvas.height) / 3500) }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.4 + 0.2,
-        alpha: Math.random() * 0.5 + 0.15,
-        dir: Math.random() * Math.PI * 2,
-        speed: Math.random() * 0.25 + 0.05,
-      }));
-    }
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      stars.forEach((s) => {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(180,210,255,${s.alpha})`;
-        ctx.fill();
-        s.x += Math.cos(s.dir) * s.speed;
-        s.y += Math.sin(s.dir) * s.speed;
-        s.alpha += (Math.random() - 0.5) * 0.015;
-        s.alpha = Math.max(0.05, Math.min(0.75, s.alpha));
-        if (s.x < -5) s.x = canvas.width + 5;
-        if (s.x > canvas.width + 5) s.x = -5;
-        if (s.y < -5) s.y = canvas.height + 5;
-        if (s.y > canvas.height + 5) s.y = -5;
-      });
-      raf = requestAnimationFrame(draw);
-    }
-    window.addEventListener("resize", resize);
-    resize();
-    draw();
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
-  }, []);
-  return <canvas ref={canvasRef} style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }} />;
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Together 論壇 ✦ 報名系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: #0A0B1E !important;
+  background-color: #0A0B1E !important;
+  color: #E8EAFF;
+  font-family: 'Noto Sans TC', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
+#stars {
+  position: fixed; top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none; z-index:0;
+  background: #0A0B1E;
+}
+.wrap {
+  position:relative; z-index:1;
+  max-width:660px; margin:0 auto;
+  padding:0 16px 60px;
+}
+/* Hero */
+.hero { text-align:center; padding:36px 0 24px; }
+.badge {
+  display:inline-block; font-size:11px; font-weight:500;
+  letter-spacing:3px; color:#00D4FF;
+  border:1px solid #00D4FF; padding:4px 14px;
+  border-radius:20px; margin-bottom:16px;
+}
+.title {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(36px,10vw,62px);
+  font-weight:900; line-height:1;
+  background:linear-gradient(135deg,#A855F7 0%,#00D4FF 50%,#FF6B9D 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(168,85,247,0.5));
+}
+.subtitle {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(12px,3vw,17px);
+  color:#00D4FF; letter-spacing:6px; margin-top:6px;
+}
+.tagline { font-size:13px; color:#8890BB; margin-top:8px; letter-spacing:1px; }
+/* Info cards */
+.info-row { display:flex; gap:10px; margin:0 0 24px; }
+.info-card {
+  flex:1; background:rgba(255,255,255,0.04);
+  border:1px solid rgba(168,85,247,0.35);
+  border-radius:12px; padding:14px 10px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.info-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,#A855F7,#00D4FF);
+}
+.info-icon { font-size:20px; margin-bottom:6px; }
+.info-label { font-size:10px; color:#8890BB; letter-spacing:1px; margin-bottom:4px; }
+.info-val { font-size:13px; font-weight:700; color:#00D4FF; line-height:1.4; }
+/* Tabs */
+.tabs {
+  display:flex; gap:4px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(168,85,247,0.2);
+  border-radius:14px; padding:4px; margin-bottom:20px;
+}
+.tab {
+  flex:1; padding:10px 6px; background:none;
+  border:1px solid transparent; border-radius:10px;
+  color:#8890BB; font-family:'Noto Sans TC',sans-serif;
+  font-size:13px; font-weight:500; cursor:pointer; transition:all .25s;
+}
+.tab.on {
+  background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,212,255,.2));
+  border-color:rgba(0,212,255,.4); color:#00D4FF;
+  text-shadow:0 0 8px rgba(0,212,255,.6);
+}
+/* Card */
+.card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(168,85,247,0.3);
+  border-radius:16px; padding:28px 24px;
+  position:relative; overflow:hidden; margin-bottom:16px;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#A855F7,#00D4FF,#FF6B9D);
+}
+.card-title {
+  font-size:15px; font-weight:700; color:#A855F7;
+  margin-bottom:20px; letter-spacing:1px;
+}
+/* Form */
+.fg { margin-bottom:18px; }
+label {
+  display:block; font-size:12px; font-weight:500;
+  color:#8890BB; letter-spacing:1.5px; margin-bottom:8px;
+  text-transform:uppercase;
+}
+input[type=text], input[type=tel], input[type=password], select {
+  width:100%; background:rgba(255,255,255,0.05);
+  border:1px solid rgba(168,85,247,0.35);
+  border-radius:10px; color:#E8EAFF;
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:16px; padding:13px 16px; outline:none;
+  transition:all .25s; -webkit-appearance:none;
+}
+input:focus, select:focus {
+  border-color:#00D4FF;
+  box-shadow:0 0 0 3px rgba(0,212,255,.12);
+  background:rgba(0,212,255,.05);
+}
+input::placeholder { color:#8890BB; }
+select option { background:#0F1035; }
+/* Fee note */
+.fee-box {
+  background:rgba(255,215,0,.08);
+  border:1px solid rgba(255,215,0,.3);
+  border-radius:10px; padding:12px 16px;
+  margin-bottom:20px; font-size:13px; line-height:1.6;
+}
+.fee-title { color:#FFD700; font-weight:700; margin-bottom:4px; font-size:12px; letter-spacing:1px; }
+/* Buttons */
+.btn-p {
+  width:100%; padding:15px;
+  background:linear-gradient(135deg,#A855F7,#00D4FF);
+  border:none; border-radius:12px; color:#fff;
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:15px; font-weight:700; letter-spacing:2px;
+  cursor:pointer; margin-top:8px; transition:all .25s;
+}
+.btn-p:hover { transform:translateY(-1px); box-shadow:0 8px 25px rgba(168,85,247,.4); }
+.btn-p:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.btn-s {
+  width:100%; padding:13px;
+  background:rgba(0,212,255,.1);
+  border:1px solid rgba(0,212,255,.4);
+  border-radius:12px; color:#00D4FF;
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:14px; font-weight:600; letter-spacing:1px;
+  cursor:pointer; margin-top:8px; transition:all .25s;
+}
+.btn-s:hover { background:rgba(0,212,255,.18); }
+/* Msg */
+.msg { margin-top:14px; padding:13px 16px; border-radius:10px; font-size:14px; font-weight:500; line-height:1.65; display:none; }
+.msg.ok  { background:rgba(57,255,20,.1);  border:1px solid rgba(57,255,20,.4);  color:#39FF14; display:block; }
+.msg.err { background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.4);color:#FF6B9D; display:block; }
+.msg.ld  { background:rgba(0,212,255,.1);  border:1px solid rgba(0,212,255,.3);  color:#00D4FF; display:block; }
+/* Result */
+.result-card { background:rgba(168,85,247,.08); border:1px solid rgba(168,85,247,.35); border-radius:12px; padding:20px; margin-top:16px; }
+.rrow { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:14px; }
+.rrow:last-child { border:none; }
+.rkey { color:#8890BB; font-size:12px; letter-spacing:1px; }
+.rval { font-weight:600; color:#E8EAFF; }
+/* Stats */
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+.stat { background:rgba(255,255,255,.04); border:1px solid rgba(168,85,247,.2); border-radius:10px; padding:14px 10px; text-align:center; }
+.stat-n { font-family:'Orbitron',sans-serif; font-size:24px; font-weight:700; color:#00D4FF; }
+.stat-l { font-size:11px; color:#8890BB; margin-top:4px; letter-spacing:1px; }
+/* Table */
+.stbl { width:100%; border-collapse:collapse; font-size:13px; }
+.stbl th { background:rgba(168,85,247,.2); padding:10px; text-align:left; color:#A855F7; font-size:11px; letter-spacing:1.5px; }
+.stbl td { padding:10px; border-bottom:1px solid rgba(255,255,255,.05); color:#E8EAFF; }
+.badge-free { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:700; background:rgba(57,255,20,.15); color:#39FF14; border:1px solid rgba(57,255,20,.4); }
+.badge-paid { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:700; background:rgba(255,215,0,.15); color:#FFD700; border:1px solid rgba(255,215,0,.4); }
+/* Pages */
+.page { display:none; }
+.page.on { display:block; }
+.pw-hint { font-size:12px; color:#8890BB; text-align:center; margin-top:10px; }
+.footer { text-align:center; padding-top:36px; font-size:11px; color:rgba(136,144,187,.45); letter-spacing:1px; }
+@media(max-width:400px){
+  .info-row { flex-wrap:wrap; }
+  .info-card:last-child { flex:1 1 100%; }
+  .card { padding:20px 16px; }
+}
+</style>
+</head>
+<body>
 
-function InfoCard({ icon, label, value }) {
-  return (
-    <div style={{
-      background: "rgba(255,255,255,0.04)",
-      border: "1px solid rgba(168,85,247,0.35)",
-      borderRadius: 12,
-      padding: "14px 10px",
-      textAlign: "center",
-      position: "relative",
-      overflow: "hidden",
-      flex: 1,
-    }}>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,#A855F7,#00D4FF)" }} />
-      <div style={{ fontSize: 20, marginBottom: 6 }}>{icon}</div>
-      <div style={{ fontSize: 10, color: COLORS.muted, letterSpacing: 1, marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.cyan, lineHeight: 1.4 }}>{value}</div>
+<canvas id="stars"></canvas>
+
+<div class="wrap">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="badge">愛玩AI讀書會 ✦ 論壇</div>
+    <div class="title">AI Together</div>
+    <div class="subtitle">共學 · 共創 · 共享</div>
+    <div class="tagline">跨界思維 × AI 應用，激盪無限可能</div>
+  </div>
+
+  <!-- 活動資訊 -->
+  <div class="info-row">
+    <div class="info-card">
+      <div class="info-icon">📅</div>
+      <div class="info-label">日期</div>
+      <div class="info-val">2026.7.12<br><span style="font-size:11px;color:#8890BB">(日)</span></div>
     </div>
-  );
-}
-
-function NeonInput({ id, type = "text", placeholder, value, onChange, onKeyDown }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <input
-      id={id}
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-      style={{
-        width: "100%",
-        background: focused ? "rgba(0,212,255,0.06)" : "rgba(255,255,255,0.05)",
-        border: `1px solid ${focused ? COLORS.cyan : "rgba(168,85,247,0.35)"}`,
-        borderRadius: 10,
-        color: COLORS.text,
-        fontFamily: "'Noto Sans TC', sans-serif",
-        fontSize: 16,
-        padding: "13px 16px",
-        outline: "none",
-        transition: "all 0.25s",
-        boxShadow: focused ? "0 0 0 3px rgba(0,212,255,0.12), 0 0 16px rgba(0,212,255,0.1)" : "none",
-        WebkitAppearance: "none",
-      }}
-    />
-  );
-}
-
-function NeonSelect({ value, onChange }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <select
-      value={value}
-      onChange={onChange}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-      style={{
-        width: "100%",
-        background: focused ? "rgba(0,212,255,0.06)" : "#0F1035",
-        border: `1px solid ${focused ? COLORS.cyan : "rgba(168,85,247,0.35)"}`,
-        borderRadius: 10,
-        color: value ? COLORS.text : COLORS.muted,
-        fontFamily: "'Noto Sans TC', sans-serif",
-        fontSize: 16,
-        padding: "13px 16px",
-        outline: "none",
-        transition: "all 0.25s",
-        WebkitAppearance: "none",
-        cursor: "pointer",
-      }}
-    >
-      <option value="" style={{ background: "#0F1035" }}>— 請選擇 —</option>
-      {["上班族","創業者","自由工作者","學生","教師","講師","其他"].map(j => (
-        <option key={j} value={j} style={{ background: "#0F1035" }}>{j === "講師" ? "講師（本場次講師）" : j}</option>
-      ))}
-    </select>
-  );
-}
-
-function MsgBox({ type, text }) {
-  if (!text) return null;
-  const styles = {
-    success: { bg: "rgba(57,255,20,0.1)", border: "rgba(57,255,20,0.4)", color: COLORS.green },
-    error:   { bg: "rgba(255,107,157,0.1)", border: "rgba(255,107,157,0.4)", color: COLORS.pink },
-    loading: { bg: "rgba(0,212,255,0.1)", border: "rgba(0,212,255,0.3)", color: COLORS.cyan },
-  };
-  const s = styles[type];
-  return (
-    <div style={{
-      marginTop: 14,
-      padding: "13px 16px",
-      borderRadius: 10,
-      background: s.bg,
-      border: `1px solid ${s.border}`,
-      color: s.color,
-      fontSize: 14,
-      fontWeight: 500,
-      lineHeight: 1.65,
-      whiteSpace: "pre-wrap",
-    }}>{text}</div>
-  );
-}
-
-function PrimaryBtn({ onClick, disabled, children }) {
-  const [hover, setHover] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        width: "100%",
-        padding: 15,
-        background: "linear-gradient(135deg,#A855F7,#00D4FF)",
-        border: "none",
-        borderRadius: 12,
-        color: "#fff",
-        fontFamily: "'Noto Sans TC', sans-serif",
-        fontSize: 15,
-        fontWeight: 700,
-        letterSpacing: 2,
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.5 : 1,
-        marginTop: 8,
-        transform: hover && !disabled ? "translateY(-1px)" : "none",
-        boxShadow: hover && !disabled ? "0 8px 25px rgba(168,85,247,0.4)" : "none",
-        transition: "all 0.25s",
-      }}
-    >{children}</button>
-  );
-}
-
-function SecondaryBtn({ onClick, children }) {
-  const [hover, setHover] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        width: "100%",
-        padding: 13,
-        background: hover ? "rgba(0,212,255,0.18)" : "rgba(0,212,255,0.1)",
-        border: "1px solid rgba(0,212,255,0.4)",
-        borderRadius: 12,
-        color: COLORS.cyan,
-        fontFamily: "'Noto Sans TC', sans-serif",
-        fontSize: 14,
-        fontWeight: 600,
-        letterSpacing: 1,
-        cursor: "pointer",
-        marginTop: 8,
-        boxShadow: hover ? "0 0 16px rgba(0,212,255,0.2)" : "none",
-        transition: "all 0.25s",
-      }}
-    >{children}</button>
-  );
-}
-
-function Card({ children, topGradient = true }) {
-  return (
-    <div style={{
-      background: "rgba(255,255,255,0.04)",
-      border: "1px solid rgba(168,85,247,0.3)",
-      borderRadius: 16,
-      padding: "28px 24px",
-      position: "relative",
-      overflow: "hidden",
-    }}>
-      {topGradient && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg,#A855F7,#00D4FF,#FF6B9D)" }} />}
-      {children}
+    <div class="info-card">
+      <div class="info-icon">⏰</div>
+      <div class="info-label">時間</div>
+      <div class="info-val">13:00<br>— 16:00</div>
     </div>
-  );
-}
-
-function CardTitle({ children }) {
-  return (
-    <div style={{ fontSize: 15, fontWeight: 700, color: COLORS.purple, marginBottom: 20, display: "flex", alignItems: "center", gap: 8, letterSpacing: 1 }}>
-      {children}
+    <div class="info-card">
+      <div class="info-icon">📍</div>
+      <div class="info-label">地點</div>
+      <div class="info-val">hoco.cafe<br><span style="font-size:11px;color:#8890BB">竹北縣政八街21號 2F</span></div>
     </div>
-  );
-}
+  </div>
 
-function Label({ children }) {
-  return <div style={{ fontSize: 12, fontWeight: 500, color: COLORS.muted, letterSpacing: "1.5px", marginBottom: 8, textTransform: "uppercase" }}>{children}</div>;
-}
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab on" onclick="showTab('signup',this)">✦ 活動報名</button>
+    <button class="tab" onclick="showTab('query',this)">🔍 查詢報名</button>
+    <button class="tab" onclick="showTab('staff',this)">🛡 工作人員</button>
+  </div>
 
-// ===== 判斷費用 =====
-function calcFee(job) { return job === "講師" ? "免費（講師）" : "NT$ 200（現場交）"; }
-function isFree(job) { return job === "講師"; }
-
-// ===== 報名頁 =====
-function SignupPage() {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [job, setJob] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState({ type: "", text: "" });
-
-  async function submit() {
-    if (!name.trim()) { setMsg({ type: "error", text: "請輸入姓名" }); return; }
-    if (!/^09\d{8}$/.test(phone.trim())) { setMsg({ type: "error", text: "請輸入正確的手機號碼（09開頭，共10碼）" }); return; }
-    if (!job) { setMsg({ type: "error", text: "請選擇職業 / 身份" }); return; }
-
-    setLoading(true);
-    setMsg({ type: "loading", text: "⏳ 報名提交中..." });
-    try {
-      const fee = calcFee(job);
-      const params = new URLSearchParams({ action: "signup", name: name.trim(), phone: phone.trim(), job, fee });
-      const res = await fetch(GAS_URL + "?" + params);
-      const data = await res.json();
-      if (data.status === "ok") {
-        setMsg({ type: "success", text: `✅ 報名成功！${name.trim()} 您好！\n費用：${fee}\n請於活動當天 13:00 前至 hoco.cafe 2F 報到` });
-        setName(""); setPhone(""); setJob("");
-      } else if (data.status === "dup") {
-        setMsg({ type: "error", text: "⚠️ 此電話號碼已報名，請勿重複填寫" });
-      } else {
-        setMsg({ type: "error", text: "❌ 系統異常，請稍後再試" });
-      }
-    } catch { setMsg({ type: "error", text: "❌ 網路連線異常，請稍後再試" }); }
-    setLoading(false);
-  }
-
-  return (
-    <Card>
-      <CardTitle>✦ 填寫報名資訊</CardTitle>
-      <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, lineHeight: 1.6 }}>
-        <div style={{ color: COLORS.gold, fontWeight: 700, marginBottom: 4, fontSize: 12, letterSpacing: 1 }}>💰 費用說明</div>
-        <span style={{ color: COLORS.green, fontWeight: 700 }}>講師：免費</span>
-        <span style={{ color: COLORS.muted }}> ｜ </span>
-        <span style={{ color: COLORS.pink, fontWeight: 700 }}>一般學員：NT$ 200 元</span>
-        <br /><span style={{ color: COLORS.muted, fontSize: 12 }}>現場交付・現場提供茶水咖啡</span>
+  <!-- 報名頁 -->
+  <div id="pg-signup" class="page on">
+    <div class="card">
+      <div class="card-title">✦ 填寫報名資訊</div>
+      <div class="fee-box">
+        <div class="fee-title">💰 費用說明</div>
+        <span style="color:#39FF14;font-weight:700">講師：免費</span>
+        <span style="color:#8890BB"> ｜ </span>
+        <span style="color:#FF6B9D;font-weight:700">一般學員：NT$ 200 元</span><br>
+        <span style="color:#8890BB;font-size:12px">現場交付・現場提供茶水咖啡</span>
       </div>
-      <div style={{ marginBottom: 18 }}>
-        <Label>姓名</Label>
-        <NeonInput placeholder="請輸入真實姓名" value={name} onChange={e => setName(e.target.value)} />
+      <div class="fg">
+        <label>姓名</label>
+        <input type="text" id="s-name" placeholder="請輸入真實姓名">
       </div>
-      <div style={{ marginBottom: 18 }}>
-        <Label>聯絡電話</Label>
-        <NeonInput type="tel" placeholder="09xxxxxxxx" value={phone} onChange={e => setPhone(e.target.value)} />
+      <div class="fg">
+        <label>聯絡電話</label>
+        <input type="tel" id="s-phone" placeholder="09xxxxxxxx">
       </div>
-      <div style={{ marginBottom: 18 }}>
-        <Label>職業 / 身份</Label>
-        <NeonSelect value={job} onChange={e => setJob(e.target.value)} />
+      <div class="fg">
+        <label>職業 / 身份</label>
+        <select id="s-job">
+          <option value="">— 請選擇 —</option>
+          <option value="上班族">上班族</option>
+          <option value="創業者">創業者</option>
+          <option value="自由工作者">自由工作者</option>
+          <option value="學生">學生</option>
+          <option value="教師">教師</option>
+          <option value="講師">講師（本場次講師）</option>
+          <option value="其他">其他</option>
+        </select>
       </div>
-      <PrimaryBtn onClick={submit} disabled={loading}>立即報名 ✦</PrimaryBtn>
-      <MsgBox type={msg.type} text={msg.text} />
-    </Card>
-  );
-}
+      <button class="btn-p" id="sbtn" onclick="doSignup()">立即報名 ✦</button>
+      <div id="smsg" class="msg"></div>
+    </div>
+  </div>
 
-// ===== 查詢頁 =====
-function QueryPage() {
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState({ type: "", text: "" });
-  const [result, setResult] = useState(null);
-
-  async function query() {
-    if (!/^09\d{8}$/.test(phone.trim())) { setMsg({ type: "error", text: "請輸入正確的手機號碼" }); setResult(null); return; }
-    setLoading(true);
-    setMsg({ type: "loading", text: "⏳ 查詢中..." });
-    setResult(null);
-    try {
-      const params = new URLSearchParams({ action: "query", phone: phone.trim() });
-      const res = await fetch(GAS_URL + "?" + params);
-      const data = await res.json();
-      if (data.status === "found") { setMsg({ type: "", text: "" }); setResult(data); }
-      else { setMsg({ type: "error", text: "查無此電話的報名記錄，請確認號碼是否正確" }); }
-    } catch { setMsg({ type: "error", text: "❌ 網路連線異常" }); }
-    setLoading(false);
-  }
-
-  return (
-    <Card>
-      <CardTitle>🔍 查詢報名狀態</CardTitle>
-      <p style={{ fontSize: 13, color: COLORS.muted, marginBottom: 20, lineHeight: 1.7 }}>輸入報名時填寫的手機號碼，即可查詢您的報名資訊。</p>
-      <div style={{ marginBottom: 18 }}>
-        <Label>手機號碼</Label>
-        <NeonInput type="tel" placeholder="09xxxxxxxx" value={phone} onChange={e => setPhone(e.target.value)} onKeyDown={e => e.key === "Enter" && query()} />
+  <!-- 查詢頁 -->
+  <div id="pg-query" class="page">
+    <div class="card">
+      <div class="card-title">🔍 查詢報名狀態</div>
+      <p style="font-size:13px;color:#8890BB;margin-bottom:20px;line-height:1.7">輸入報名時填寫的手機號碼，即可查詢您的報名資訊。</p>
+      <div class="fg">
+        <label>手機號碼</label>
+        <input type="tel" id="q-phone" placeholder="09xxxxxxxx" onkeydown="if(event.key==='Enter')doQuery()">
       </div>
-      <SecondaryBtn onClick={query} disabled={loading}>查詢 →</SecondaryBtn>
-      <MsgBox type={msg.type} text={msg.text} />
-      {result && (
-        <div style={{ background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.35)", borderRadius: 12, padding: 20, marginTop: 16 }}>
-          <div style={{ fontSize: 12, color: COLORS.purple, letterSpacing: 2, marginBottom: 14 }}>✦ 報名資訊確認</div>
-          {[
-            ["姓名", result.name, COLORS.text],
-            ["電話", result.phone, COLORS.text],
-            ["職業", result.job, COLORS.text],
-            ["費用", result.fee, isFree(result.job) ? COLORS.green : COLORS.gold],
-            ["報名時間", result.time, COLORS.muted],
-          ].map(([k, v, c]) => (
-            <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 14 }}>
-              <span style={{ color: COLORS.muted, fontSize: 12, letterSpacing: 1 }}>{k}</span>
-              <span style={{ fontWeight: 600, color: c, fontSize: k === "報名時間" ? 12 : 14 }}>{v}</span>
-            </div>
-          ))}
+      <button class="btn-s" onclick="doQuery()">查詢 →</button>
+      <div id="qmsg" class="msg"></div>
+      <div id="qresult"></div>
+    </div>
+  </div>
+
+  <!-- 工作人員頁 -->
+  <div id="pg-staff" class="page">
+    <div id="staff-lock" class="card">
+      <div class="card-title">🛡 工作人員專區</div>
+      <p style="font-size:13px;color:#8890BB;margin-bottom:20px;line-height:1.7">此頁面僅供工作人員使用，請輸入密碼進入。</p>
+      <div class="fg">
+        <label>密碼</label>
+        <input type="password" id="staff-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doVerify()">
+      </div>
+      <button class="btn-p" onclick="doVerify()">驗證身份 →</button>
+      <div id="pwmsg" class="msg"></div>
+      <p class="pw-hint">如忘記密碼，請聯絡活動主辦人</p>
+    </div>
+    <div id="staff-panel" style="display:none">
+      <div class="card">
+        <div class="card-title">📊 報名統計</div>
+        <div class="stats">
+          <div class="stat"><div class="stat-n" id="st-total">—</div><div class="stat-l">總報名人數</div></div>
+          <div class="stat"><div class="stat-n" id="st-paid" style="color:#FFD700">—</div><div class="stat-l">付費 $200</div></div>
+          <div class="stat"><div class="stat-n" id="st-free" style="color:#39FF14">—</div><div class="stat-l">講師免費</div></div>
         </div>
-      )}
-    </Card>
-  );
-}
-
-// ===== 工作人員頁 =====
-function StaffPage() {
-  const [pw, setPw] = useState("");
-  const [unlocked, setUnlocked] = useState(false);
-  const [pwMsg, setPwMsg] = useState({ type: "", text: "" });
-  const [rows, setRows] = useState([]);
-  const [listMsg, setListMsg] = useState({ type: "", text: "" });
-
-  function verify() {
-    if (pw === "0000") { setUnlocked(true); loadData(); }
-    else { setPwMsg({ type: "error", text: "❌ 密碼錯誤，請重新輸入" }); setPw(""); }
-  }
-
-  async function loadData() {
-    setListMsg({ type: "loading", text: "⏳ 載入名單中..." });
-    try {
-      const params = new URLSearchParams({ action: "list", pw: "0000" });
-      const res = await fetch(GAS_URL + "?" + params);
-      const data = await res.json();
-      if (data.status === "ok") { setRows(data.rows || []); setListMsg({ type: "", text: "" }); }
-      else setListMsg({ type: "error", text: "資料載入失敗" });
-    } catch { setListMsg({ type: "error", text: "❌ 網路連線異常" }); }
-  }
-
-  const paid = rows.filter(r => !isFree(r.job)).length;
-  const free = rows.filter(r => isFree(r.job)).length;
-
-  if (!unlocked) return (
-    <Card>
-      <CardTitle>🛡 工作人員專區</CardTitle>
-      <p style={{ fontSize: 13, color: COLORS.muted, marginBottom: 20, lineHeight: 1.7 }}>此頁面僅供工作人員使用，請輸入密碼進入。</p>
-      <div style={{ marginBottom: 18 }}>
-        <Label>密碼</Label>
-        <NeonInput type="password" placeholder="請輸入密碼" value={pw} onChange={e => setPw(e.target.value)} onKeyDown={e => e.key === "Enter" && verify()} />
+        <button class="btn-s" style="margin-top:0" onclick="loadList()">重新整理 ↻</button>
       </div>
-      <PrimaryBtn onClick={verify}>驗證身份 →</PrimaryBtn>
-      <MsgBox type={pwMsg.type} text={pwMsg.text} />
-      <p style={{ fontSize: 12, color: COLORS.muted, textAlign: "center", marginTop: 10 }}>如忘記密碼，請聯絡活動主辦人</p>
-    </Card>
-  );
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <Card>
-        <CardTitle>📊 報名統計</CardTitle>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 16 }}>
-          {[
-            ["總報名", rows.length, COLORS.cyan],
-            ["付費 $200", paid, COLORS.gold],
-            ["講師免費", free, COLORS.green],
-          ].map(([label, num, color]) => (
-            <div key={label} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 10, padding: "14px 10px", textAlign: "center" }}>
-              <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 24, fontWeight: 700, color }}>{num}</div>
-              <div style={{ fontSize: 11, color: COLORS.muted, marginTop: 4, letterSpacing: 1 }}>{label}</div>
-            </div>
-          ))}
-        </div>
-        <SecondaryBtn onClick={loadData}>重新整理 ↻</SecondaryBtn>
-      </Card>
-      <Card>
-        <CardTitle>📋 報名名單</CardTitle>
-        <MsgBox type={listMsg.type} text={listMsg.text} />
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-            <thead>
-              <tr>{["#","姓名","電話","職業","費用","報名時間"].map(h => (
-                <th key={h} style={{ background: "rgba(168,85,247,0.2)", padding: "10px 10px", textAlign: "left", color: COLORS.purple, fontSize: 11, letterSpacing: 1.5, fontWeight: 700 }}>{h}</th>
-              ))}</tr>
-            </thead>
-            <tbody>
-              {rows.length === 0 && !listMsg.text && (
-                <tr><td colSpan={6} style={{ textAlign: "center", color: COLORS.muted, padding: 20 }}>尚無報名資料</td></tr>
-              )}
-              {rows.map((r, i) => (
-                <tr key={i}>
-                  <td style={{ padding: "10px", color: COLORS.muted, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{i + 1}</td>
-                  <td style={{ padding: "10px", fontWeight: 600, color: COLORS.text, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.name}</td>
-                  <td style={{ padding: "10px", color: COLORS.muted, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.phone}</td>
-                  <td style={{ padding: "10px", color: COLORS.text, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.job}</td>
-                  <td style={{ padding: "10px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                    <span style={{
-                      display: "inline-block", fontSize: 10, padding: "2px 8px", borderRadius: 20, fontWeight: 700,
-                      background: isFree(r.job) ? "rgba(57,255,20,0.15)" : "rgba(255,215,0,0.15)",
-                      color: isFree(r.job) ? COLORS.green : COLORS.gold,
-                      border: `1px solid ${isFree(r.job) ? "rgba(57,255,20,0.4)" : "rgba(255,215,0,0.4)"}`,
-                    }}>{isFree(r.job) ? "免費" : "$200"}</span>
-                  </td>
-                  <td style={{ padding: "10px", color: COLORS.muted, fontSize: 12, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>{r.time}</td>
-                </tr>
-              ))}
-            </tbody>
+      <div class="card">
+        <div class="card-title">📋 報名名單</div>
+        <div id="listmsg" class="msg"></div>
+        <div style="overflow-x:auto">
+          <table class="stbl">
+            <thead><tr><th>#</th><th>姓名</th><th>電話</th><th>職業</th><th>費用</th><th>報名時間</th></tr></thead>
+            <tbody id="list-body"></tbody>
           </table>
         </div>
-      </Card>
-    </div>
-  );
-}
-
-// ===== 主頁面 =====
-export default function App() {
-  const [tab, setTab] = useState("signup");
-  const tabs = [
-    { id: "signup", label: "✦ 活動報名" },
-    { id: "query",  label: "🔍 查詢報名" },
-    { id: "staff",  label: "🛡 工作人員" },
-  ];
-
-  return (
-    <div style={{ minHeight: "100vh", background: "#0A0B1E", fontFamily: "'Noto Sans TC', sans-serif", position: "relative" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-        * { box-sizing: border-box; }
-        body { margin: 0; background: #0A0B1E !important; }
-        input::placeholder { color: #8890BB; }
-        select { cursor: pointer; }
-      `}</style>
-
-      <StarCanvas />
-
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 660, margin: "0 auto", padding: "0 16px 60px" }}>
-
-        {/* Hero */}
-        <div style={{ textAlign: "center", padding: "36px 0 24px" }}>
-          <div style={{
-            display: "inline-block", fontSize: 11, fontWeight: 500, letterSpacing: 3,
-            color: "#00D4FF", border: "1px solid #00D4FF", padding: "4px 14px",
-            borderRadius: 20, marginBottom: 16,
-          }}>愛玩AI讀書會 ✦ 論壇</div>
-
-          <div style={{
-            fontFamily: "'Orbitron', sans-serif",
-            fontSize: "clamp(38px, 10vw, 64px)",
-            fontWeight: 900, lineHeight: 1,
-            background: "linear-gradient(135deg,#A855F7 0%,#00D4FF 50%,#FF6B9D 100%)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            filter: "drop-shadow(0 0 20px rgba(168,85,247,0.5))",
-          }}>AI Together</div>
-
-          <div style={{ fontFamily: "'Orbitron', sans-serif", fontSize: "clamp(12px,3vw,17px)", color: "#00D4FF", letterSpacing: 6, marginTop: 6, opacity: 0.9 }}>
-            共學 · 共創 · 共享
-          </div>
-          <div style={{ fontSize: 13, color: "#8890BB", marginTop: 8, letterSpacing: 1 }}>
-            跨界思維 × AI 應用，激盪無限可能
-          </div>
-        </div>
-
-        {/* 活動資訊 */}
-        <div style={{ display: "flex", gap: 10, margin: "0 0 24px" }}>
-          <InfoCard icon="📅" label="日期" value={<>2026.7.12<br /><span style={{ fontSize: 11, color: "#8890BB" }}>(日)</span></>} />
-          <InfoCard icon="⏰" label="時間" value={<>13:00<br />— 16:00</>} />
-          <InfoCard icon="📍" label="地點" value={<>hoco.cafe<br /><span style={{ fontSize: 11, color: "#8890BB" }}>竹北縣政八街21號 2F</span></>} />
-        </div>
-
-        {/* Tabs */}
-        <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 14, padding: 4, marginBottom: 20 }}>
-          {tabs.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={{
-              flex: 1, padding: "10px 6px",
-              background: tab === t.id ? "linear-gradient(135deg,rgba(168,85,247,0.3),rgba(0,212,255,0.2))" : "none",
-              border: tab === t.id ? "1px solid rgba(0,212,255,0.4)" : "1px solid transparent",
-              borderRadius: 10,
-              color: tab === t.id ? "#00D4FF" : "#8890BB",
-              fontFamily: "'Noto Sans TC', sans-serif",
-              fontSize: 13, fontWeight: 500, cursor: "pointer",
-              textShadow: tab === t.id ? "0 0 8px rgba(0,212,255,0.6)" : "none",
-              transition: "all 0.25s",
-            }}>{t.label}</button>
-          ))}
-        </div>
-
-        {/* 頁面內容 */}
-        {tab === "signup" && <SignupPage />}
-        {tab === "query"  && <QueryPage />}
-        {tab === "staff"  && <StaffPage />}
-
-        {/* Footer */}
-        <div style={{ textAlign: "center", paddingTop: 36, fontSize: 11, color: "rgba(136,144,187,0.45)", letterSpacing: 1 }}>
-          <span style={{ color: "#A855F7" }}>愛玩AI讀書會</span> ✦ AI Together 論壇 ✦ 2026.7.12<br />
-          Powered by AI · Built with ✨
-        </div>
       </div>
     </div>
-  );
+  </div>
+
+  <div class="footer">
+    <span style="color:#A855F7">愛玩AI讀書會</span> ✦ AI Together 論壇 ✦ 2026.7.12<br>
+    Powered by AI · Built with ✨
+  </div>
+</div>
+
+<script>
+// ★ 請將下方 YOUR_SCRIPT_ID 換成你的 GAS 部署網址
+const GAS = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+/* 星空 */
+(function(){
+  const c = document.getElementById('stars');
+  const ctx = c.getContext('2d');
+  let stars=[], raf;
+  function resize(){
+    c.width=innerWidth; c.height=innerHeight;
+    stars=[];
+    const n=Math.floor(c.width*c.height/3500);
+    for(let i=0;i<n;i++) stars.push({
+      x:Math.random()*c.width, y:Math.random()*c.height,
+      r:Math.random()*1.4+0.2, a:Math.random()*0.5+0.15,
+      d:Math.random()*Math.PI*2, s:Math.random()*0.25+0.05
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(180,210,255,${s.a})`; ctx.fill();
+      s.x+=Math.cos(s.d)*s.s; s.y+=Math.sin(s.d)*s.s;
+      s.a+=(Math.random()-.5)*.015;
+      s.a=Math.max(.05,Math.min(.75,s.a));
+      if(s.x<-5)s.x=c.width+5; if(s.x>c.width+5)s.x=-5;
+      if(s.y<-5)s.y=c.height+5; if(s.y>c.height+5)s.y=-5;
+    });
+    raf=requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);
+  resize(); draw();
+})();
+
+/* Tabs */
+function showTab(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  btn.classList.add('on');
 }
+
+/* 費用 */
+function fee(job){ return job==='講師'?'免費（講師）':'NT$ 200（現場交）'; }
+function isFree(job){ return job==='講師'; }
+
+/* 訊息 */
+function msg(el,type,text){
+  el.className='msg '+type;
+  el.innerHTML=text.replace(/\n/g,'<br>');
+}
+
+/* 報名 */
+async function doSignup(){
+  const name=document.getElementById('s-name').value.trim();
+  const phone=document.getElementById('s-phone').value.trim();
+  const job=document.getElementById('s-job').value;
+  const btn=document.getElementById('sbtn');
+  const m=document.getElementById('smsg');
+  if(!name){msg(m,'err','請輸入姓名');return;}
+  if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼（09開頭，共10碼）');return;}
+  if(!job){msg(m,'err','請選擇職業 / 身份');return;}
+  btn.disabled=true;
+  msg(m,'ld','⏳ 報名提交中...');
+  try{
+    const p=new URLSearchParams({action:'signup',name,phone,job,fee:fee(job)});
+    const d=await(await fetch(GAS+'?'+p)).json();
+    if(d.status==='ok'){
+      msg(m,'ok',`✅ 報名成功！${name} 您好！\n費用：${fee(job)}\n請於活動當天 13:00 前至 hoco.cafe 2F 報到`);
+      document.getElementById('s-name').value='';
+      document.getElementById('s-phone').value='';
+      document.getElementById('s-job').value='';
+    }else if(d.status==='dup'){
+      msg(m,'err','⚠️ 此電話號碼已報名，請勿重複填寫');
+    }else{
+      msg(m,'err','❌ 系統異常，請稍後再試');
+    }
+  }catch{msg(m,'err','❌ 網路連線異常，請稍後再試');}
+  btn.disabled=false;
+}
+
+/* 查詢 */
+async function doQuery(){
+  const phone=document.getElementById('q-phone').value.trim();
+  const m=document.getElementById('qmsg');
+  const r=document.getElementById('qresult');
+  if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼');r.innerHTML='';return;}
+  msg(m,'ld','⏳ 查詢中...'); r.innerHTML='';
+  try{
+    const p=new URLSearchParams({action:'query',phone});
+    const d=await(await fetch(GAS+'?'+p)).json();
+    if(d.status==='found'){
+      m.style.display='none';
+      const fc=isFree(d.job)?'color:#39FF14':'color:#FFD700';
+      r.innerHTML=`<div class="result-card">
+        <div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div>
+        <div class="rrow"><span class="rkey">姓名</span><span class="rval">${d.name}</span></div>
+        <div class="rrow"><span class="rkey">電話</span><span class="rval">${d.phone}</span></div>
+        <div class="rrow"><span class="rkey">職業</span><span class="rval">${d.job}</span></div>
+        <div class="rrow"><span class="rkey">費用</span><span class="rval" style="${fc}">${d.fee}</span></div>
+        <div class="rrow"><span class="rkey">報名時間</span><span class="rval" style="font-size:12px;color:#8890BB">${d.time}</span></div>
+      </div>`;
+    }else{
+      msg(m,'err','查無此電話的報名記錄，請確認號碼是否正確');
+    }
+  }catch{msg(m,'err','❌ 網路連線異常');}
+}
+
+/* 工作人員驗證 */
+function doVerify(){
+  const pw=document.getElementById('staff-pw').value;
+  if(pw==='0000'){
+    document.getElementById('staff-lock').style.display='none';
+    document.getElementById('staff-panel').style.display='block';
+    loadList();
+  }else{
+    msg(document.getElementById('pwmsg'),'err','❌ 密碼錯誤');
+    document.getElementById('staff-pw').value='';
+  }
+}
+
+/* 載入名單 */
+async function loadList(){
+  const m=document.getElementById('listmsg');
+  const tbody=document.getElementById('list-body');
+  msg(m,'ld','⏳ 載入名單中...'); tbody.innerHTML='';
+  try{
+    const p=new URLSearchParams({action:'list',pw:'0000'});
+    const d=await(await fetch(GAS+'?'+p)).json();
+    if(d.status==='ok'){
+      m.style.display='none';
+      const rows=d.rows||[];
+      let paid=0,free=0;
+      rows.forEach((r,i)=>{
+        const f=isFree(r.job);
+        if(f)free++;else paid++;
+        tbody.innerHTML+=`<tr>
+          <td style="color:#8890BB">${i+1}</td>
+          <td style="font-weight:600">${r.name}</td>
+          <td style="color:#8890BB">${r.phone}</td>
+          <td>${r.job}</td>
+          <td><span class="${f?'badge-free':'badge-paid'}">${f?'免費':'$200'}</span></td>
+          <td style="color:#8890BB;font-size:12px">${r.time}</td>
+        </tr>`;
+      });
+      document.getElementById('st-total').textContent=rows.length;
+      document.getElementById('st-paid').textContent=paid;
+      document.getElementById('st-free').textContent=free;
+      if(!rows.length){
+        msg(m,'ld','目前尚無報名記錄');
+        tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#8890BB;padding:20px">尚無資料</td></tr>';
+      }
+    }else msg(m,'err','資料載入失敗');
+  }catch{msg(m,'err','❌ 網路連線異常');}
+}
+</script>
+</body>
+</html>
