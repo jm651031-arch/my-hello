@@ -301,7 +301,7 @@ select option { background:#0F1035; }
 </div>
 
 <script>
-// ★ 請將下方 YOUR_SCRIPT_ID 換成你的 GAS 部署網址
+// ★ GAS 部署網址已為你保留
 const GAS = 'https://script.google.com/macros/s/AKfycbz75egmi_3t3_03Quk82peU5AIob5I_3np8y1Wl_QJkbGot1yVMb-jUTrigM8pyVw-b5g/exec';
 
 /* 星空 */
@@ -354,14 +354,16 @@ function msg(el,type,text){
   el.innerHTML=text.replace(/\n/g,'<br>');
 }
 
-/* 現代化 Fetch 網路呼叫核心 (取代舊有易發生連線異常的 JSONP) */
+/* 📱 已全面加強重導向適應力的傳輸核心 */
 function sendRequest(url, params, cb) {
   const p = new URLSearchParams(params);
   const finalUrl = url.includes('?') ? `${url}&${p}` : `${url}?${p}`;
 
   fetch(finalUrl, {
     method: 'GET',
-    mode: 'cors'
+    mode: 'cors',
+    redirect: 'follow', // 💡 強制手機瀏覽器跟隨 Google 的重導向跳轉
+    cache: 'no-cache'   // 💡 防止手機快取錯誤的連線回應
   })
   .then(response => {
     if (!response.ok) throw new Error('網路連線異常');
