@@ -317,7 +317,7 @@ select option { background:#0F1035; }
 
 <script>
 // ★ 請將下方 YOUR_SCRIPT_ID 換成你的 GAS 部署網址
-const GAS = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const GAS = 'https://script.google.com/macros/s/AKfycbyVEsrgVibiQhsHfjA7XPPxw3foDvKwIJzbLJ8q2rUoG5JdoSejPyeAmfDQXxsEt5IacQ/exec';
 
 /* 星空 */
 (function(){
@@ -372,7 +372,7 @@ function msg(el,type,text){
 /* 報名 */
 async function doSignup(){
   const name=document.getElementById('s-name').value.trim();
-  const phone=document.getElementById('s-phone').value.trim();
+  const phone=document.getElementById('s-phone').value.trim().replace(/[\s\-\(\)]/g,'');
   const job=document.getElementById('s-job').value;
   const btn=document.getElementById('sbtn');
   const m=document.getElementById('smsg');
@@ -400,7 +400,7 @@ async function doSignup(){
 
 /* 查詢 */
 async function doQuery(){
-  const phone=document.getElementById('q-phone').value.trim();
+  const phone=document.getElementById('q-phone').value.trim().replace(/[\s\-\(\)]/g,'');
   const m=document.getElementById('qmsg');
   const r=document.getElementById('qresult');
   if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼');r.innerHTML='';return;}
