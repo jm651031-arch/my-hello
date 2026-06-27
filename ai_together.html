@@ -461,50 +461,31 @@ function loadList(){
   });
 }
 
-/* JSONP 呼叫 - 相容所有裝置 */
+/* JSONP 呼叫 */
 function jsonp(url, params, cb){
   const cbName='_cb'+Date.now();
   params.callback=cbName;
-  const p=new URLSearchParams(params);
-  const fullUrl=url+'?'+p;
-
-  // 先嘗試 fetch（電腦）
-  // 再用 script tag（手機備援）
+  const src=url+'?'+new URLSearchParams(params);
   window[cbName]=function(d){
     cb(d);
     delete window[cbName];
-    try{ s && s.remove(); }catch(e){}
+    if(s.parentNode) s.parentNode.removeChild(s);
   };
-
   var s=document.createElement('script');
-  s.type='text/javascript';
-  s.charset='utf-8';
-  s.async=true;
-  s.defer=false;
-  s.src=fullUrl;
+  s.src=src;
   s.onerror=function(){
-    // script 失敗時改用 fetch
+    cb({status:'error'});
     delete window[cbName];
-    s.remove();
-    fetch(fullUrl.replace('callback='+cbName,'').replace('&&','&').replace('?&','?'))
-      .then(function(r){ return r.json(); })
-      .then(function(d){ cb(d); })
-      .catch(function(){ cb({status:'error'}); });
+    if(s.parentNode) s.parentNode.removeChild(s);
   };
-
-  // 加到 head 而非 body（iOS 更相容）
-  (document.head || document.body).appendChild(s);
-
-  // 15秒逾時
+  document.head.appendChild(s);
   setTimeout(function(){
     if(window[cbName]){
       cb({status:'timeout'});
       delete window[cbName];
-      try{ s.remove(); }catch(e){}
+      if(s.parentNode) s.parentNode.removeChild(s);
     }
-  }, 15000);
-  s.src=url+'?'+p;
-  document.body.appendChild(s);
+  },15000);
 }
 </script>
 </body>
