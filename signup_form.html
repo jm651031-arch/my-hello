@@ -301,8 +301,9 @@ select option { background:#0F1035; }
 </div>
 
 <script>
-// ★ GAS 部署網址
-const GAS = 'https://script.google.com/macros/s/AKfycbzIQy6rjh0Upo_AcsJkLIVVKtBCwUrzGjR33XYlxekI8XO_nIfQVDftomsu0vuGeTAFgg/exec';
+// ★ 最新 GAS 部署網址（已替換為您提供的最新版本）
+const GAS = 'https://script.google.com/macros/s/AKfycbzGuR0B11vvLsYybyBxipFfMZkrD9wY-VG1-LztnuqLDJv8-6EkLyGc79gPvR5z3vJzNg/exec';
+
 /* 星空 */
 (function(){
   const c = document.getElementById('stars');
@@ -353,23 +354,23 @@ function msg(el,type,text){
   el.innerHTML=text.replace(/\n/g,'<br>');
 }
 
-/* ★★★ 修正版 sendRequest：解決 GAS redirect CORS 問題 ★★★ */
+/* 現代化 Fetch 網路呼叫核心 (支援跨平台繞過阻擋) */
 function sendRequest(url, params, cb) {
   const p = new URLSearchParams(params);
   const finalUrl = url.includes('?') ? `${url}&${p}` : `${url}?${p}`;
 
   fetch(finalUrl, {
     method: 'GET',
-    redirect: 'follow'          // 允許跟隨 GAS 的 302 redirect
+    mode: 'cors'
   })
-  .then(function(response) {
-    return response.text();     // 先拿純文字，避免 Content-Type 不符問題
+  .then(response => {
+    if (!response.ok) throw new Error('網路連線異常');
+    return response.json();
   })
-  .then(function(text) {
-    const data = JSON.parse(text);   // 再手動 parse JSON
+  .then(data => {
     cb(data);
   })
-  .catch(function(error) {
+  .catch(error => {
     console.error('API 請求失敗:', error);
     cb({ status: 'error' });
   });
