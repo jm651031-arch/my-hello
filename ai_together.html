@@ -7,143 +7,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  background: #0A0B1E !important;
-  background-color: #0A0B1E !important;
-  color: #E8EAFF;
-  font-family: 'Noto Sans TC', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-#stars {
-  position: fixed; top:0; left:0;
-  width:100%; height:100%;
-  pointer-events:none; z-index:0;
-  background: #0A0B1E;
-}
-.wrap {
-  position:relative; z-index:1;
-  max-width:660px; margin:0 auto;
-  padding:0 16px 60px;
-}
+html, body { background: #0A0B1E !important; background-color: #0A0B1E !important; color: #E8EAFF; font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; overflow-x: hidden; }
+#stars { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; background: #0A0B1E; }
+.wrap { position:relative; z-index:1; max-width:660px; margin:0 auto; padding:0 16px 60px; }
 .hero { text-align:center; padding:36px 0 24px; }
-.badge {
-  display:inline-block; font-size:11px; font-weight:500;
-  letter-spacing:3px; color:#00D4FF;
-  border:1px solid #00D4FF; padding:4px 14px;
-  border-radius:20px; margin-bottom:16px;
-}
-.title {
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(36px,10vw,62px);
-  font-weight:900; line-height:1;
-  background:linear-gradient(135deg,#A855F7 0%,#00D4FF 50%,#FF6B9D 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text;
-  filter:drop-shadow(0 0 20px rgba(168,85,247,0.5));
-}
-.subtitle {
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(12px,3vw,17px);
-  color:#00D4FF; letter-spacing:6px; margin-top:6px;
-}
+.badge { display:inline-block; font-size:11px; font-weight:500; letter-spacing:3px; color:#00D4FF; border:1px solid #00D4FF; padding:4px 14px; border-radius:20px; margin-bottom:16px; }
+.title { font-family:'Orbitron',sans-serif; font-size:clamp(36px,10vw,62px); font-weight:900; line-height:1; background:linear-gradient(135deg,#A855F7 0%,#00D4FF 50%,#FF6B9D 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 0 20px rgba(168,85,247,0.5)); }
+.subtitle { font-family:'Orbitron',sans-serif; font-size:clamp(12px,3vw,17px); color:#00D4FF; letter-spacing:6px; margin-top:6px; }
 .tagline { font-size:13px; color:#8890BB; margin-top:8px; letter-spacing:1px; }
 .info-row { display:flex; gap:10px; margin:0 0 24px; }
-.info-card {
-  flex:1; background:rgba(255,255,255,0.04);
-  border:1px solid rgba(168,85,247,0.35);
-  border-radius:12px; padding:14px 10px;
-  text-align:center; position:relative; overflow:hidden;
-}
-.info-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg,#A855F7,#00D4FF);
-}
+.info-card { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(168,85,247,0.35); border-radius:12px; padding:14px 10px; text-align:center; position:relative; overflow:hidden; }
+.info-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#A855F7,#00D4FF); }
 .info-icon { font-size:20px; margin-bottom:6px; }
 .info-label { font-size:10px; color:#8890BB; letter-spacing:1px; margin-bottom:4px; }
 .info-val { font-size:13px; font-weight:700; color:#00D4FF; line-height:1.4; }
-.tabs {
-  display:flex; gap:4px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(168,85,247,0.2);
-  border-radius:14px; padding:4px; margin-bottom:20px;
-}
-.tab {
-  flex:1; padding:10px 6px; background:none;
-  border:1px solid transparent; border-radius:10px;
-  color:#8890BB; font-family:'Noto Sans TC',sans-serif;
-  font-size:13px; font-weight:500; cursor:pointer; transition:all .25s;
-}
-.tab.on {
-  background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,212,255,.2));
-  border-color:rgba(0,212,255,.4); color:#00D4FF;
-  text-shadow:0 0 8px rgba(0,212,255,.6);
-}
-.card {
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(168,85,247,0.3);
-  border-radius:16px; padding:28px 24px;
-  position:relative; overflow:hidden; margin-bottom:16px;
-}
-.card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
-  background:linear-gradient(90deg,#A855F7,#00D4FF,#FF6B9D);
-}
-.card-title {
-  font-size:15px; font-weight:700; color:#A855F7;
-  margin-bottom:20px; letter-spacing:1px;
-}
+.tabs { display:flex; gap:4px; background:rgba(255,255,255,0.04); border:1px solid rgba(168,85,247,0.2); border-radius:14px; padding:4px; margin-bottom:20px; }
+.tab { flex:1; padding:10px 6px; background:none; border:1px solid transparent; border-radius:10px; color:#8890BB; font-family:'Noto Sans TC',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:all .25s; }
+.tab.on { background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,212,255,.2)); border-color:rgba(0,212,255,.4); color:#00D4FF; text-shadow:0 0 8px rgba(0,212,255,.6); }
+.card { background:rgba(255,255,255,0.04); border:1px solid rgba(168,85,247,0.3); border-radius:16px; padding:28px 24px; position:relative; overflow:hidden; margin-bottom:16px; }
+.card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#A855F7,#00D4FF,#FF6B9D); }
+.card-title { font-size:15px; font-weight:700; color:#A855F7; margin-bottom:20px; letter-spacing:1px; }
 .fg { margin-bottom:18px; }
-label {
-  display:block; font-size:12px; font-weight:500;
-  color:#8890BB; letter-spacing:1.5px; margin-bottom:8px;
-  text-transform:uppercase;
-}
-input[type=text], input[type=tel], input[type=password], select {
-  width:100%; background:rgba(255,255,255,0.05);
-  border:1px solid rgba(168,85,247,0.35);
-  border-radius:10px; color:#E8EAFF;
-  font-family:'Noto Sans TC',sans-serif;
-  font-size:16px; padding:13px 16px; outline:none;
-  transition:all .25s; -webkit-appearance:none;
-}
-input:focus, select:focus {
-  border-color:#00D4FF;
-  box-shadow:0 0 0 3px rgba(0,212,255,.12);
-  background:rgba(0,212,255,.05);
-}
+label { display:block; font-size:12px; font-weight:500; color:#8890BB; letter-spacing:1.5px; margin-bottom:8px; text-transform:uppercase; }
+input[type=text], input[type=tel], input[type=password] { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(168,85,247,0.35); border-radius:10px; color:#E8EAFF; font-family:'Noto Sans TC',sans-serif; font-size:16px; padding:13px 16px; outline:none; transition:all .25s; -webkit-appearance:none; }
+input:focus { border-color:#00D4FF; box-shadow:0 0 0 3px rgba(0,212,255,.12); background:rgba(0,212,255,.05); }
 input::placeholder { color:#8890BB; }
-select option { background:#0F1035; }
-.fee-box {
-  background:rgba(255,215,0,.08);
-  border:1px solid rgba(255,215,0,.3);
-  border-radius:10px; padding:12px 16px;
-  margin-bottom:20px; font-size:13px; line-height:1.6;
-}
+.fee-box { background:rgba(255,215,0,.08); border:1px solid rgba(255,215,0,.3); border-radius:10px; padding:12px 16px; margin-bottom:20px; font-size:13px; line-height:1.6; }
 .fee-title { color:#FFD700; font-weight:700; margin-bottom:4px; font-size:12px; letter-spacing:1px; }
-.btn-p {
-  width:100%; padding:15px;
-  background:linear-gradient(135deg,#A855F7,#00D4FF);
-  border:none; border-radius:12px; color:#fff;
-  font-family:'Noto Sans TC',sans-serif;
-  font-size:15px; font-weight:700; letter-spacing:2px;
-  cursor:pointer; margin-top:8px; transition:all .25s;
-}
+.btn-p { width:100%; padding:15px; background:linear-gradient(135deg,#A855F7,#00D4FF); border:none; border-radius:12px; color:#fff; font-family:'Noto Sans TC',sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; cursor:pointer; margin-top:8px; transition:all .25s; }
 .btn-p:hover { transform:translateY(-1px); box-shadow:0 8px 25px rgba(168,85,247,.4); }
 .btn-p:disabled { opacity:.5; cursor:not-allowed; transform:none; }
-.btn-s {
-  width:100%; padding:13px;
-  background:rgba(0,212,255,.1);
-  border:1px solid rgba(0,212,255,.4);
-  border-radius:12px; color:#00D4FF;
-  font-family:'Noto Sans TC',sans-serif;
-  font-size:14px; font-weight:600; letter-spacing:1px;
-  cursor:pointer; margin-top:8px; transition:all .25s;
-}
+.btn-s { width:100%; padding:13px; background:rgba(0,212,255,.1); border:1px solid rgba(0,212,255,.4); border-radius:12px; color:#00D4FF; font-family:'Noto Sans TC',sans-serif; font-size:14px; font-weight:600; letter-spacing:1px; cursor:pointer; margin-top:8px; transition:all .25s; }
 .btn-s:hover { background:rgba(0,212,255,.18); }
 .msg { margin-top:14px; padding:13px 16px; border-radius:10px; font-size:14px; font-weight:500; line-height:1.65; display:none; }
 .msg.ok  { background:rgba(57,255,20,.1);  border:1px solid rgba(57,255,20,.4);  color:#39FF14; display:block; }
-.msg.err { background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.4);color:#FF6B9D; display:block; }
+.msg.err { background:rgba(255,107,157,.1); border:1px solid rgba(255,107,157,.4); color:#FF6B9D; display:block; }
 .msg.ld  { background:rgba(0,212,255,.1);  border:1px solid rgba(0,212,255,.3);  color:#00D4FF; display:block; }
 .result-card { background:rgba(168,85,247,.08); border:1px solid rgba(168,85,247,.35); border-radius:12px; padding:20px; margin-top:16px; }
 .rrow { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:14px; }
@@ -154,21 +52,6 @@ select option { background:#0F1035; }
 .stat { background:rgba(255,255,255,.04); border:1px solid rgba(168,85,247,.2); border-radius:10px; padding:14px 10px; text-align:center; }
 .stat-n { font-family:'Orbitron',sans-serif; font-size:24px; font-weight:700; color:#00D4FF; }
 .stat-l { font-size:11px; color:#8890BB; margin-top:4px; letter-spacing:1px; }
-.income-box {
-  background:rgba(255,215,0,.06);
-  border:1px solid rgba(255,215,0,.25);
-  border-radius:12px; padding:16px 20px;
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:16px;
-}
-.income-label { font-size:12px; color:#8890BB; letter-spacing:1px; }
-.income-val { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:700; color:#FFD700; }
-.job-list { display:flex; flex-direction:column; gap:10px; }
-.job-row { display:flex; align-items:center; gap:10px; }
-.job-name { font-size:13px; color:#E8EAFF; min-width:80px; }
-.job-bar-wrap { flex:1; background:rgba(255,255,255,.06); border-radius:20px; height:10px; overflow:hidden; }
-.job-bar { height:100%; border-radius:20px; background:linear-gradient(90deg,#A855F7,#00D4FF); transition:width .6s ease; }
-.job-count { font-size:12px; color:#8890BB; min-width:30px; text-align:right; }
 .stbl { width:100%; border-collapse:collapse; font-size:13px; }
 .stbl th { background:rgba(168,85,247,.2); padding:10px; text-align:left; color:#A855F7; font-size:11px; letter-spacing:1.5px; }
 .stbl td { padding:10px; border-bottom:1px solid rgba(255,255,255,.05); color:#E8EAFF; }
@@ -178,17 +61,11 @@ select option { background:#0F1035; }
 .page.on { display:block; }
 .pw-hint { font-size:12px; color:#8890BB; text-align:center; margin-top:10px; }
 .footer { text-align:center; padding-top:36px; font-size:11px; color:rgba(136,144,187,.45); letter-spacing:1px; }
-@media(max-width:400px){
-  .info-row { flex-wrap:wrap; }
-  .info-card:last-child { flex:1 1 100%; }
-  .card { padding:20px 16px; }
-}
+@media(max-width:400px){ .info-row { flex-wrap:wrap; } .info-card:last-child { flex:1 1 100%; } .card { padding:20px 16px; } }
 </style>
 </head>
 <body>
-
 <canvas id="stars"></canvas>
-
 <div class="wrap">
   <div class="hero">
     <div class="badge">愛玩AI讀書會 ✦ 論壇</div>
@@ -196,117 +73,60 @@ select option { background:#0F1035; }
     <div class="subtitle">共學 · 共創 · 共享</div>
     <div class="tagline">跨界思維 × AI 應用，激盪無限可能</div>
   </div>
-
-  <!-- 活動資訊（動態從 Sheets 讀取） -->
   <div class="info-row">
-    <div class="info-card">
-      <div class="info-icon">📅</div>
-      <div class="info-label">日期</div>
-      <div class="info-val" id="cfg-date">載入中...</div>
-    </div>
-    <div class="info-card">
-      <div class="info-icon">⏰</div>
-      <div class="info-label">時間</div>
-      <div class="info-val" id="cfg-time">載入中...</div>
-    </div>
-    <div class="info-card">
-      <div class="info-icon">📍</div>
-      <div class="info-label">地點</div>
-      <div class="info-val" id="cfg-location">載入中...</div>
-    </div>
+    <div class="info-card"><div class="info-icon">📅</div><div class="info-label">日期</div><div class="info-val">2026.7.12<br><span style="font-size:11px;color:#8890BB">(日)</span></div></div>
+    <div class="info-card"><div class="info-icon">⏰</div><div class="info-label">時間</div><div class="info-val">13:00<br>— 16:00</div></div>
+    <div class="info-card"><div class="info-icon">📍</div><div class="info-label">地點</div><div class="info-val">hoco.cafe<br><span style="font-size:11px;color:#8890BB">竹北縣政八街21號 2F</span></div></div>
   </div>
-
   <div class="tabs">
     <button class="tab on" onclick="showTab('signup',this)">✦ 活動報名</button>
     <button class="tab" onclick="showTab('query',this)">🔍 查詢報名</button>
     <button class="tab" onclick="showTab('staff',this)">🛡 工作人員</button>
   </div>
-
-  <!-- 報名頁 -->
   <div id="pg-signup" class="page on">
     <div class="card">
       <div class="card-title">✦ 填寫報名資訊</div>
       <div class="fee-box">
         <div class="fee-title">💰 費用說明</div>
-        <span id="cfg-free-label" style="color:#39FF14;font-weight:700">載入中...</span>
-        <span style="color:#8890BB"> ｜ </span>
-        <span id="cfg-paid-label" style="color:#FF6B9D;font-weight:700">載入中...</span><br>
+        <span style="color:#39FF14;font-weight:700">講師：免費</span><span style="color:#8890BB"> ｜ </span><span style="color:#FF6B9D;font-weight:700">來賓學員：NT$ 200 元</span><br>
         <span style="color:#8890BB;font-size:12px">現場交付・現場提供茶水咖啡</span>
       </div>
-      <div class="fg">
-        <label>姓名</label>
-        <input type="text" id="s-name" placeholder="請輸入真實姓名">
-      </div>
-      <div class="fg">
-        <label>聯絡電話</label>
-        <input type="tel" id="s-phone" placeholder="09xxxxxxxx">
-      </div>
-      <div class="fg">
-        <label>職業 / 身份</label>
-        <input type="text" id="s-job" placeholder="例：工程師、設計師、講師、學生…">
-      </div>
+      <div class="fg"><label>姓名</label><input type="text" id="s-name" placeholder="請輸入真實姓名"></div>
+      <div class="fg"><label>聯絡電話</label><input type="tel" id="s-phone" placeholder="09xxxxxxxx"></div>
+      <div class="fg"><label>職業 / 身份</label><input type="text" id="s-job" placeholder="例：工程師、設計師、講師、學生…" autocomplete="off" name="job-title-field"></div>
       <button class="btn-p" id="sbtn" onclick="doSignup()">立即報名 ✦</button>
       <div id="smsg" class="msg"></div>
     </div>
   </div>
-
-  <!-- 查詢頁 -->
   <div id="pg-query" class="page">
     <div class="card">
       <div class="card-title">🔍 查詢報名狀態</div>
       <p style="font-size:13px;color:#8890BB;margin-bottom:20px;line-height:1.7">輸入報名時填寫的手機號碼，即可查詢您的報名資訊。</p>
-      <div class="fg">
-        <label>手機號碼</label>
-        <input type="tel" id="q-phone" placeholder="09xxxxxxxx" onkeydown="if(event.key==='Enter')doQuery()">
-      </div>
+      <div class="fg"><label>手機號碼</label><input type="tel" id="q-phone" placeholder="09xxxxxxxx" onkeydown="if(event.key==='Enter')doQuery()"></div>
       <button class="btn-s" onclick="doQuery()">查詢 →</button>
       <div id="qmsg" class="msg"></div>
       <div id="qresult"></div>
     </div>
   </div>
-
-  <!-- 工作人員頁 -->
   <div id="pg-staff" class="page">
     <div id="staff-lock" class="card">
       <div class="card-title">🛡 工作人員專區</div>
       <p style="font-size:13px;color:#8890BB;margin-bottom:20px;line-height:1.7">此頁面僅供工作人員使用，請輸入密碼進入。</p>
-      <div class="fg">
-        <label>密碼</label>
-        <input type="password" id="staff-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doVerify()">
-      </div>
+      <div class="fg"><label>密碼</label><input type="password" id="staff-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doVerify()"></div>
       <button class="btn-p" onclick="doVerify()">驗證身份 →</button>
       <div id="pwmsg" class="msg"></div>
       <p class="pw-hint">如忘記密碼，請聯絡活動主辦人</p>
     </div>
-
     <div id="staff-panel" style="display:none">
-      <!-- 人數統計 -->
       <div class="card">
         <div class="card-title">📊 報名統計</div>
         <div class="stats">
           <div class="stat"><div class="stat-n" id="st-total">—</div><div class="stat-l">總報名人數</div></div>
-          <div class="stat"><div class="stat-n" id="st-paid" style="color:#FFD700">—</div><div class="stat-l">付費學員</div></div>
-          <div class="stat"><div class="stat-n" id="st-free" style="color:#39FF14">—</div><div class="stat-l">免費講師</div></div>
-        </div>
-        <div class="income-box">
-          <div>
-            <div class="income-label">💰 預計現場收入</div>
-            <div style="font-size:11px;color:#8890BB;margin-top:2px" id="income-hint">付費人數 × NT$200</div>
-          </div>
-          <div class="income-val" id="st-income">—</div>
+          <div class="stat"><div class="stat-n" id="st-paid" style="color:#FFD700">—</div><div class="stat-l">付費 $200</div></div>
+          <div class="stat"><div class="stat-n" id="st-free" style="color:#39FF14">—</div><div class="stat-l">講師免費</div></div>
         </div>
         <button class="btn-s" style="margin-top:0" onclick="loadList()">重新整理 ↻</button>
       </div>
-
-      <!-- 職業分布 -->
-      <div class="card">
-        <div class="card-title">👥 職業分布</div>
-        <div id="job-chart" class="job-list">
-          <div style="color:#8890BB;font-size:13px">載入中...</div>
-        </div>
-      </div>
-
-      <!-- 報名名單 -->
       <div class="card">
         <div class="card-title">📋 報名名單</div>
         <div id="listmsg" class="msg"></div>
@@ -319,127 +139,31 @@ select option { background:#0F1035; }
       </div>
     </div>
   </div>
-
-  <div class="footer">
-    <span style="color:#A855F7">愛玩AI讀書會</span> ✦ AI Together 論壇 ✦ <span id="footer-date">2026.7.12</span><br>
-    Powered by AI · Built with ✨
-  </div>
+  <div class="footer"><span style="color:#A855F7">愛玩AI讀書會</span> ✦ AI Together 論壇 ✦ 2026.7.12<br>Powered by AI · Built with ✨</div>
 </div>
-
 <script>
-const GAS = 'https://script.google.com/macros/s/AKfycbzGuR0B11vvLsYybyBxipFfMZkrD9wY-VG1-LztnuqLDJv8-6EkLyGc79gPvR5z3vJzNg/exec';
+const GAS = 'https://script.google.com/macros/s/AKfycbz75egmi_3t3_03Quk82peU5AIob5I_3np8y1Wl_QJkbGot1yVMb-jUTrigM8pyVw-b5g/exec';
 
-// 全域設定（從 Sheets 載入後更新）
-var CFG = {
-  date:     '2026/7/12',
-  time:     '13:00 - 16:00',
-  price:    200,
-  freeKey:  '講師',
-  location: 'hoco.cafe｜竹北縣政八街21號 2F'
-};
-
-/* 星空 */
 (function(){
-  const c = document.getElementById('stars');
-  const ctx = c.getContext('2d');
+  const c=document.getElementById('stars'),ctx=c.getContext('2d');
   let stars=[];
-  function resize(){
-    c.width=innerWidth; c.height=innerHeight; stars=[];
-    const n=Math.floor(c.width*c.height/3500);
-    for(let i=0;i<n;i++) stars.push({
-      x:Math.random()*c.width, y:Math.random()*c.height,
-      r:Math.random()*1.4+0.2, a:Math.random()*0.5+0.15,
-      d:Math.random()*Math.PI*2, s:Math.random()*0.25+0.05
-    });
-  }
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(s=>{
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(180,210,255,${s.a})`; ctx.fill();
-      s.x+=Math.cos(s.d)*s.s; s.y+=Math.sin(s.d)*s.s;
-      s.a+=(Math.random()-.5)*.015;
-      s.a=Math.max(.05,Math.min(.75,s.a));
-      if(s.x<-5)s.x=c.width+5; if(s.x>c.width+5)s.x=-5;
-      if(s.y<-5)s.y=c.height+5; if(s.y>c.height+5)s.y=-5;
-    });
-    requestAnimationFrame(draw);
-  }
-  window.addEventListener('resize',resize);
-  resize(); draw();
+  function resize(){ c.width=innerWidth; c.height=innerHeight; stars=[]; const n=Math.floor(c.width*c.height/3500); for(let i=0;i<n;i++) stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+0.2,a:Math.random()*0.5+0.15,d:Math.random()*Math.PI*2,s:Math.random()*0.25+0.05}); }
+  function draw(){ ctx.clearRect(0,0,c.width,c.height); stars.forEach(s=>{ ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle='rgba(180,210,255,'+s.a+')'; ctx.fill(); s.x+=Math.cos(s.d)*s.s; s.y+=Math.sin(s.d)*s.s; s.a+=(Math.random()-.5)*.015; s.a=Math.max(.05,Math.min(.75,s.a)); if(s.x<-5)s.x=c.width+5; if(s.x>c.width+5)s.x=-5; if(s.y<-5)s.y=c.height+5; if(s.y>c.height+5)s.y=-5; }); requestAnimationFrame(draw); }
+  window.addEventListener('resize',resize); resize(); draw();
 })();
 
-/* Tabs */
-function showTab(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-  document.getElementById('pg-'+id).classList.add('on');
-  btn.classList.add('on');
+function showTab(id,btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('on')); document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on')); document.getElementById('pg-'+id).classList.add('on'); btn.classList.add('on'); }
+function fee(job){ return job.includes('講師')?'免費（講師）':'NT$ 200（現場交）'; }
+function isFree(job){ return job.includes('講師'); }
+function msg(el,type,text){ el.className='msg '+type; el.innerHTML=text.replace(/\n/g,'<br>'); }
+
+function callGAS(params,cb){
+  fetch(GAS,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},redirect:'follow',body:JSON.stringify(params)})
+  .then(function(r){return r.json();})
+  .then(function(d){cb(d);})
+  .catch(function(e){console.error(e);cb({status:'error'});});
 }
 
-/* sendRequest */
-function sendRequest(url,params,cb){
-  const p=new URLSearchParams(params);
-  const finalUrl=url.includes('?')?`${url}&${p}`:`${url}?${p}`;
-  fetch(finalUrl,{method:'GET',redirect:'follow'})
-  .then(r=>r.text())
-  .then(t=>cb(JSON.parse(t)))
-  .catch(err=>{console.error(err);cb({status:'error'});});
-}
-
-/* 費用邏輯（依設定） */
-function isFree(job){
-  if(!CFG.freeKey||CFG.freeKey.trim()==='') return false;
-  return job.includes(CFG.freeKey);
-}
-function feeText(job){
-  return isFree(job)?'免費（'+CFG.freeKey+'）':'NT$ '+CFG.price+'（現場交）';
-}
-
-/* 更新畫面上的設定顯示 */
-function applyConfig(){
-  // 日期時間地點
-  document.getElementById('cfg-date').innerHTML = CFG.date;
-  document.getElementById('cfg-time').textContent = CFG.time;
-  // 地點分兩行
-  var loc = CFG.location.split('｜');
-  document.getElementById('cfg-location').innerHTML =
-    loc[0]+(loc[1]?'<br><span style="font-size:11px;color:#8890BB">'+loc[1]+'</span>':'');
-  // 費用說明
-  if(CFG.freeKey && CFG.freeKey.trim()!==''){
-    document.getElementById('cfg-free-label').textContent = CFG.freeKey+'：免費';
-  } else {
-    document.getElementById('cfg-free-label').textContent = '（無免費身份）';
-  }
-  document.getElementById('cfg-paid-label').textContent = '一般學員：NT$ '+CFG.price+' 元';
-  // footer 日期
-  document.getElementById('footer-date').textContent = CFG.date;
-  // 收入提示
-  document.getElementById('income-hint').textContent = '付費人數 × NT$'+CFG.price;
-}
-
-/* 啟動時載入設定 */
-function loadConfig(){
-  sendRequest(GAS,{action:'config'},function(d){
-    if(d.status==='ok'&&d.config){
-      var c=d.config;
-      if(c['活動日期'])     CFG.date     = c['活動日期'];
-      if(c['活動時間'])     CFG.time     = c['活動時間'];
-      if(c['付費金額'])     CFG.price    = parseInt(c['付費金額'])||200;
-      if(c['免費身份關鍵字']!==undefined) CFG.freeKey = c['免費身份關鍵字'];
-      if(c['地點'])         CFG.location = c['地點'];
-    }
-    applyConfig();
-  });
-}
-
-/* 訊息 */
-function msg(el,type,text){
-  el.className='msg '+type;
-  el.innerHTML=text.replace(/\n/g,'<br>');
-}
-
-/* 報名 */
 function doSignup(){
   const name=document.getElementById('s-name').value.trim();
   const phone=document.getElementById('s-phone').value.trim().replace(/[\s\-\(\)]/g,'');
@@ -451,10 +175,9 @@ function doSignup(){
   if(!job){msg(m,'err','請輸入職業 / 身份');return;}
   btn.disabled=true;
   msg(m,'ld','⏳ 報名提交中...');
-  const _name=name,_phone=phone,_job=job;
-  sendRequest(GAS,{action:'signup',name,phone,job,fee:feeText(job)},function(d){
+  callGAS({action:'signup',name:name,phone:phone,job:job,fee:fee(job)},function(d){
     if(d.status==='ok'){
-      msg(m,'ok','✅ 報名成功！'+_name+' 您好！\n費用：'+feeText(_job)+'\n請於活動當天準時至現場報到');
+      msg(m,'ok','✅ 報名成功！'+name+' 您好！\n費用：'+fee(job)+'\n請於活動當天 13:00 前至 hoco.cafe 2F 報到');
       document.getElementById('s-name').value='';
       document.getElementById('s-phone').value='';
       document.getElementById('s-job').value='';
@@ -467,107 +190,49 @@ function doSignup(){
   });
 }
 
-/* 查詢 */
 function doQuery(){
   const phone=document.getElementById('q-phone').value.trim().replace(/[\s\-\(\)]/g,'');
   const m=document.getElementById('qmsg');
   const r=document.getElementById('qresult');
   if(!/^09\d{8}$/.test(phone)){msg(m,'err','請輸入正確的手機號碼');r.innerHTML='';return;}
   msg(m,'ld','⏳ 查詢中...'); r.innerHTML='';
-  sendRequest(GAS,{action:'query',phone},function(d){
+  callGAS({action:'query',phone:phone},function(d){
     if(d.status==='found'){
       m.style.display='none';
       const fc=isFree(d.job)?'color:#39FF14':'color:#FFD700';
-      r.innerHTML='<div class="result-card">'+
-        '<div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div>'+
-        '<div class="rrow"><span class="rkey">姓名</span><span class="rval">'+d.name+'</span></div>'+
-        '<div class="rrow"><span class="rkey">電話</span><span class="rval">'+d.phone+'</span></div>'+
-        '<div class="rrow"><span class="rkey">職業</span><span class="rval">'+d.job+'</span></div>'+
-        '<div class="rrow"><span class="rkey">費用</span><span class="rval" style="'+fc+'">'+d.fee+'</span></div>'+
-        '<div class="rrow"><span class="rkey">報名時間</span><span class="rval" style="font-size:12px;color:#8890BB">'+d.time+'</span></div>'+
-        '</div>';
+      r.innerHTML='<div class="result-card"><div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div><div class="rrow"><span class="rkey">姓名</span><span class="rval">'+d.name+'</span></div><div class="rrow"><span class="rkey">電話</span><span class="rval">'+d.phone+'</span></div><div class="rrow"><span class="rkey">職業</span><span class="rval">'+d.job+'</span></div><div class="rrow"><span class="rkey">費用</span><span class="rval" style="'+fc+'">'+d.fee+'</span></div><div class="rrow"><span class="rkey">報名時間</span><span class="rval" style="font-size:12px;color:#8890BB">'+d.time+'</span></div></div>';
     }else{
-      msg(m,'err','查無此電話的報名記錄，請確認號碼是否正確');
+      msg(m,'err','查無此電話的報名記錄');
     }
   });
 }
 
-/* 工作人員驗證 */
 function doVerify(){
   const pw=document.getElementById('staff-pw').value;
-  if(pw==='0000'){
-    document.getElementById('staff-lock').style.display='none';
-    document.getElementById('staff-panel').style.display='block';
-    loadList();
-  }else{
-    msg(document.getElementById('pwmsg'),'err','❌ 密碼錯誤');
-    document.getElementById('staff-pw').value='';
-  }
+  if(pw==='0000'){ document.getElementById('staff-lock').style.display='none'; document.getElementById('staff-panel').style.display='block'; loadList(); }
+  else{ msg(document.getElementById('pwmsg'),'err','❌ 密碼錯誤'); document.getElementById('staff-pw').value=''; }
 }
 
-/* 職業分布圖 */
-function renderJobChart(rows){
-  const map={};
-  rows.forEach(function(r){
-    const j=r.job||'未填寫';
-    map[j]=(map[j]||0)+1;
-  });
-  const sorted=Object.entries(map).sort((a,b)=>b[1]-a[1]);
-  const chart=document.getElementById('job-chart');
-  if(!sorted.length){chart.innerHTML='<div style="color:#8890BB;font-size:13px">尚無資料</div>';return;}
-  const max=sorted[0][1];
-  chart.innerHTML=sorted.map(function(item){
-    const pct=Math.round(item[1]/max*100);
-    return '<div class="job-row">'+
-      '<div class="job-name">'+item[0]+'</div>'+
-      '<div class="job-bar-wrap"><div class="job-bar" style="width:'+pct+'%"></div></div>'+
-      '<div class="job-count">'+item[1]+'人</div>'+
-    '</div>';
-  }).join('');
-}
-
-/* 載入名單 */
 function loadList(){
   const m=document.getElementById('listmsg');
   const tbody=document.getElementById('list-body');
   msg(m,'ld','⏳ 載入名單中...'); tbody.innerHTML='';
-  document.getElementById('job-chart').innerHTML='<div style="color:#8890BB;font-size:13px">載入中...</div>';
-
-  sendRequest(GAS,{action:'list',pw:'0000'},function(d){
+  callGAS({action:'list',pw:'0000'},function(d){
     if(d.status==='ok'){
       m.style.display='none';
       const rows=d.rows||[];
       let paid=0,free=0;
       rows.forEach(function(r,i){
-        const f=isFree(r.job);
-        if(f)free++;else paid++;
-        tbody.innerHTML+='<tr>'+
-          '<td style="color:#8890BB">'+(i+1)+'</td>'+
-          '<td style="font-weight:600">'+r.name+'</td>'+
-          '<td style="color:#8890BB">'+r.phone+'</td>'+
-          '<td>'+r.job+'</td>'+
-          '<td><span class="'+(f?'badge-free':'badge-paid')+'">'+(f?'免費':'$'+CFG.price)+'</span></td>'+
-          '<td style="color:#8890BB;font-size:12px">'+r.time+'</td>'+
-        '</tr>';
+        const f=isFree(r.job); if(f)free++;else paid++;
+        tbody.innerHTML+='<tr><td style="color:#8890BB">'+(i+1)+'</td><td style="font-weight:600">'+r.name+'</td><td style="color:#8890BB">'+r.phone+'</td><td>'+r.job+'</td><td><span class="'+(f?'badge-free':'badge-paid')+'">'+(f?'免費':'$200')+'</span></td><td style="color:#8890BB;font-size:12px">'+r.time+'</td></tr>';
       });
       document.getElementById('st-total').textContent=rows.length;
       document.getElementById('st-paid').textContent=paid;
       document.getElementById('st-free').textContent=free;
-      document.getElementById('st-income').textContent='NT$ '+(paid*CFG.price).toLocaleString();
-      renderJobChart(rows);
-      if(!rows.length){
-        msg(m,'ld','目前尚無報名記錄');
-        tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#8890BB;padding:20px">尚無資料</td></tr>';
-        document.getElementById('st-income').textContent='NT$ 0';
-      }
-    }else{
-      msg(m,'err','資料載入失敗');
-    }
+      if(!rows.length){ msg(m,'ld','目前尚無報名記錄'); tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#8890BB;padding:20px">尚無資料</td></tr>'; }
+    }else msg(m,'err','資料載入失敗');
   });
 }
-
-// ★ 啟動：先載入設定
-loadConfig();
 </script>
 </body>
 </html>
