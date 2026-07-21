@@ -74,9 +74,9 @@ input::placeholder { color:#8890BB; }
     <div class="tagline">跨界思維 × AI 應用，激盪無限可能</div>
   </div>
   <div class="info-row">
-    <div class="info-card"><div class="info-icon">📅</div><div class="info-label">日期</div><div class="info-val">2026.7.12<br><span style="font-size:11px;color:#8890BB">(日)</span></div></div>
-    <div class="info-card"><div class="info-icon">⏰</div><div class="info-label">時間</div><div class="info-val">13:00<br>— 16:00</div></div>
-    <div class="info-card"><div class="info-icon">📍</div><div class="info-label">地點</div><div class="info-val">hoco.cafe<br><span style="font-size:11px;color:#8890BB">竹北縣政八街21號 2F</span></div></div>
+    <div class="info-card"><div class="info-icon">📅</div><div class="info-label">日期</div><div class="info-val" id="cfg-date">載入中…</div></div>
+    <div class="info-card"><div class="info-icon">⏰</div><div class="info-label">時間</div><div class="info-val" id="cfg-time">載入中…</div></div>
+    <div class="info-card"><div class="info-icon">📍</div><div class="info-label">地點</div><div class="info-val" id="cfg-place">載入中…</div></div>
   </div>
   <div class="tabs">
     <button class="tab on" onclick="showTab('signup',this)">✦ 活動報名</button>
@@ -88,7 +88,7 @@ input::placeholder { color:#8890BB; }
       <div class="card-title">✦ 填寫報名資訊</div>
       <div class="fee-box">
         <div class="fee-title">💰 費用說明</div>
-        <span style="color:#39FF14;font-weight:700">講師：免費</span><span style="color:#8890BB"> ｜ </span><span style="color:#FF6B9D;font-weight:700">來賓學員：NT$ 200 元</span><br>
+        <div id="cfg-fee-line">載入中…</div>
         <span style="color:#8890BB;font-size:12px">現場交付・現場提供茶水咖啡</span>
       </div>
       <div class="fg"><label>姓名</label><input type="text" id="s-name" placeholder="請輸入真實姓名"></div>
@@ -122,8 +122,8 @@ input::placeholder { color:#8890BB; }
         <div class="card-title">📊 報名統計</div>
         <div class="stats">
           <div class="stat"><div class="stat-n" id="st-total">—</div><div class="stat-l">總報名人數</div></div>
-          <div class="stat"><div class="stat-n" id="st-paid" style="color:#FFD700">—</div><div class="stat-l">付費 $200</div></div>
-          <div class="stat"><div class="stat-n" id="st-free" style="color:#39FF14">—</div><div class="stat-l">講師免費</div></div>
+          <div class="stat"><div class="stat-n" id="st-paid" style="color:#FFD700">—</div><div class="stat-l">付費</div></div>
+          <div class="stat"><div class="stat-n" id="st-free" style="color:#39FF14">—</div><div class="stat-l">免費</div></div>
         </div>
         <button class="btn-s" style="margin-top:0" onclick="loadList()">重新整理 ↻</button>
       </div>
@@ -139,10 +139,16 @@ input::placeholder { color:#8890BB; }
       </div>
     </div>
   </div>
-  <div class="footer"><span style="color:#A855F7">愛玩AI讀書會</span> ✦ AI Together 論壇 ✦ 2026.7.12<br>Powered by AI · Built with ✨</div>
+  <div class="footer"><span style="color:#A855F7">愛玩AI讀書會</span> ✦ AI Together 論壇<br>Powered by AI · Built with ✨</div>
 </div>
 <script>
 const GAS = 'https://script.google.com/macros/s/AKfycbz75egmi_3t3_03Quk82peU5AIob5I_3np8y1Wl_QJkbGot1yVMb-jUTrigM8pyVw-b5g/exec';
+
+// ★ 全域設定，開頁時從 Sheets 讀取後填入
+var CONFIG = {
+  payAmount: '200',
+  freeKeyword: '講師'
+};
 
 (function(){
   const c=document.getElementById('stars'),ctx=c.getContext('2d');
@@ -153,8 +159,10 @@ const GAS = 'https://script.google.com/macros/s/AKfycbz75egmi_3t3_03Quk82peU5AIo
 })();
 
 function showTab(id,btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('on')); document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on')); document.getElementById('pg-'+id).classList.add('on'); btn.classList.add('on'); }
-function fee(job){ return job.includes('講師')?'免費（講師）':'NT$ 200（現場交）'; }
-function isFree(job){ return job.includes('講師'); }
+
+// ★ 費用判斷改為讀取 CONFIG（來自 Sheets）
+function isFree(job){ var kw=(CONFIG.freeKeyword||'').trim(); return kw!=='' && job.indexOf(kw)!==-1; }
+function fee(job){ return isFree(job) ? ('免費（'+CONFIG.freeKeyword+'）') : ('NT$ '+CONFIG.payAmount+'（現場交）'); }
 function msg(el,type,text){ el.className='msg '+type; el.innerHTML=text.replace(/\n/g,'<br>'); }
 
 function callGAS(params,cb){
@@ -163,6 +171,43 @@ function callGAS(params,cb){
   .then(function(d){cb(d);})
   .catch(function(e){console.error(e);cb({status:'error'});});
 }
+
+// ★ 開頁時讀取活動設定（日期/時間/地點/費用/免費關鍵字）
+function loadConfig(){
+  callGAS({action:'config'},function(d){
+    if(d.status==='ok' && d.config){
+      var cf=d.config;
+      // 日期：把 2026/8/16 顯示成 2026.8.16
+      var dateStr=(cf['活動日期']||'').replace(/\//g,'.');
+      document.getElementById('cfg-date').innerHTML = dateStr || '—';
+      // 時間
+      document.getElementById('cfg-time').textContent = cf['活動時間'] || '—';
+      // 地點：格式「hoco.cafe｜竹北縣政八街21號 2F」→ 前段粗體、後段小字
+      var placeRaw = cf['地點'] || '';
+      var parts = placeRaw.split(/[｜|]/);
+      if(parts.length>=2){
+        document.getElementById('cfg-place').innerHTML = parts[0].trim()+'<br><span style="font-size:11px;color:#8890BB">'+parts[1].trim()+'</span>';
+      }else{
+        document.getElementById('cfg-place').textContent = placeRaw || '—';
+      }
+      // 費用設定存入全域
+      if(cf['付費金額']) CONFIG.payAmount = String(cf['付費金額']).trim();
+      if(typeof cf['免費身份關鍵字']!=='undefined') CONFIG.freeKeyword = String(cf['免費身份關鍵字']).trim();
+      // 費用說明列
+      var feeLine='<span style="color:#FF6B9D;font-weight:700">來賓學員：NT$ '+CONFIG.payAmount+' 元</span>';
+      if(CONFIG.freeKeyword){
+        feeLine='<span style="color:#39FF14;font-weight:700">'+CONFIG.freeKeyword+'：免費</span><span style="color:#8890BB"> ｜ </span>'+feeLine;
+      }
+      document.getElementById('cfg-fee-line').innerHTML=feeLine;
+    }else{
+      document.getElementById('cfg-date').textContent='—';
+      document.getElementById('cfg-time').textContent='—';
+      document.getElementById('cfg-place').textContent='—';
+      document.getElementById('cfg-fee-line').innerHTML='<span style="color:#FF6B9D;font-weight:700">來賓學員：NT$ '+CONFIG.payAmount+' 元</span>';
+    }
+  });
+}
+loadConfig();
 
 function doSignup(){
   const name=document.getElementById('s-name').value.trim();
@@ -177,7 +222,7 @@ function doSignup(){
   msg(m,'ld','⏳ 報名提交中...');
   callGAS({action:'signup',name:name,phone:phone,job:job,fee:fee(job)},function(d){
     if(d.status==='ok'){
-      msg(m,'ok','✅ 報名成功！'+name+' 您好！\n費用：'+fee(job)+'\n請於活動當天 13:00 前至 hoco.cafe 2F 報到');
+      msg(m,'ok','✅ 報名成功！'+name+' 您好！\n費用：'+fee(job)+'\n請於活動當天報到');
       document.getElementById('s-name').value='';
       document.getElementById('s-phone').value='';
       document.getElementById('s-job').value='';
@@ -224,7 +269,7 @@ function loadList(){
       let paid=0,free=0;
       rows.forEach(function(r,i){
         const f=isFree(r.job); if(f)free++;else paid++;
-        tbody.innerHTML+='<tr><td style="color:#8890BB">'+(i+1)+'</td><td style="font-weight:600">'+r.name+'</td><td style="color:#8890BB">'+r.phone+'</td><td>'+r.job+'</td><td><span class="'+(f?'badge-free':'badge-paid')+'">'+(f?'免費':'$200')+'</span></td><td style="color:#8890BB;font-size:12px">'+r.time+'</td></tr>';
+        tbody.innerHTML+='<tr><td style="color:#8890BB">'+(i+1)+'</td><td style="font-weight:600">'+r.name+'</td><td style="color:#8890BB">'+r.phone+'</td><td>'+r.job+'</td><td><span class="'+(f?'badge-free':'badge-paid')+'">'+(f?'免費':'$'+CONFIG.payAmount)+'</span></td><td style="color:#8890BB;font-size:12px">'+r.time+'</td></tr>';
       });
       document.getElementById('st-total').textContent=rows.length;
       document.getElementById('st-paid').textContent=paid;
