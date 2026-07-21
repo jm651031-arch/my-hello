@@ -20,7 +20,7 @@ html, body { background: #0A0B1E !important; background-color: #0A0B1E !importan
 .info-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#A855F7,#00D4FF); }
 .info-icon { font-size:20px; margin-bottom:6px; }
 .info-label { font-size:10px; color:#8890BB; letter-spacing:1px; margin-bottom:4px; }
-.info-val { font-size:13px; font-weight:700; color:#00D4FF; line-height:1.4; }
+.info-val { font-size:15px; font-weight:700; color:#00D4FF; line-height:1.4; }
 .tabs { display:flex; gap:4px; background:rgba(255,255,255,0.04); border:1px solid rgba(168,85,247,0.2); border-radius:14px; padding:4px; margin-bottom:20px; }
 .tab { flex:1; padding:10px 6px; background:none; border:1px solid transparent; border-radius:10px; color:#8890BB; font-family:'Noto Sans TC',sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:all .25s; }
 .tab.on { background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,212,255,.2)); border-color:rgba(0,212,255,.4); color:#00D4FF; text-shadow:0 0 8px rgba(0,212,255,.6); }
@@ -161,7 +161,7 @@ var CONFIG = {
 function showTab(id,btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('on')); document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on')); document.getElementById('pg-'+id).classList.add('on'); btn.classList.add('on'); }
 
 // ★ 費用判斷改為讀取 CONFIG（來自 Sheets）
-function isFree(job){ var kw=(CONFIG.freeKeyword||'').trim(); return kw!=='' && job.indexOf(kw)!==-1; }
+function isFree(job){ var kw=(CONFIG.freeKeyword||'').trim(); return kw!=='' && job.trim()===kw; }
 function fee(job){ return isFree(job) ? ('免費（'+CONFIG.freeKeyword+'）') : ('NT$ '+CONFIG.payAmount+'（現場交）'); }
 function msg(el,type,text){ el.className='msg '+type; el.innerHTML=text.replace(/\n/g,'<br>'); }
 
