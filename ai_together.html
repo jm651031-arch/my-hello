@@ -29,7 +29,7 @@ html, body { background: #0A0B1E !important; background-color: #0A0B1E !importan
 .card-title { font-size:15px; font-weight:700; color:#A855F7; margin-bottom:20px; letter-spacing:1px; }
 .fg { margin-bottom:18px; }
 label { display:block; font-size:12px; font-weight:500; color:#8890BB; letter-spacing:1.5px; margin-bottom:8px; text-transform:uppercase; }
-input[type=text], input[type=tel], input[type=password] { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(168,85,247,0.35); border-radius:10px; color:#E8EAFF; font-family:'Noto Sans TC',sans-serif; font-size:16px; padding:13px 16px; outline:none; transition:all .25s; -webkit-appearance:none; }
+input[type=text], input[type=tel] { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(168,85,247,0.35); border-radius:10px; color:#E8EAFF; font-family:'Noto Sans TC',sans-serif; font-size:16px; padding:13px 16px; outline:none; transition:all .25s; -webkit-appearance:none; }
 input:focus { border-color:#00D4FF; box-shadow:0 0 0 3px rgba(0,212,255,.12); background:rgba(0,212,255,.05); }
 input::placeholder { color:#8890BB; }
 .fee-box { background:rgba(255,215,0,.08); border:1px solid rgba(255,215,0,.3); border-radius:10px; padding:12px 16px; margin-bottom:20px; font-size:13px; line-height:1.6; }
@@ -48,18 +48,8 @@ input::placeholder { color:#8890BB; }
 .rrow:last-child { border:none; }
 .rkey { color:#8890BB; font-size:12px; letter-spacing:1px; }
 .rval { font-weight:600; color:#E8EAFF; }
-.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
-.stat { background:rgba(255,255,255,.04); border:1px solid rgba(168,85,247,.2); border-radius:10px; padding:14px 10px; text-align:center; }
-.stat-n { font-family:'Orbitron',sans-serif; font-size:24px; font-weight:700; color:#00D4FF; }
-.stat-l { font-size:11px; color:#8890BB; margin-top:4px; letter-spacing:1px; }
-.stbl { width:100%; border-collapse:collapse; font-size:13px; }
-.stbl th { background:rgba(168,85,247,.2); padding:10px; text-align:left; color:#A855F7; font-size:11px; letter-spacing:1.5px; }
-.stbl td { padding:10px; border-bottom:1px solid rgba(255,255,255,.05); color:#E8EAFF; }
-.badge-free { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:700; background:rgba(57,255,20,.15); color:#39FF14; border:1px solid rgba(57,255,20,.4); }
-.badge-paid { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:700; background:rgba(255,215,0,.15); color:#FFD700; border:1px solid rgba(255,215,0,.4); }
 .page { display:none; }
 .page.on { display:block; }
-.pw-hint { font-size:12px; color:#8890BB; text-align:center; margin-top:10px; }
 .footer { text-align:center; padding-top:36px; font-size:11px; color:rgba(136,144,187,.45); letter-spacing:1px; }
 @media(max-width:400px){ .info-row { flex-wrap:wrap; } .info-card:last-child { flex:1 1 100%; } .card { padding:20px 16px; } }
 </style>
@@ -81,7 +71,6 @@ input::placeholder { color:#8890BB; }
   <div class="tabs">
     <button class="tab on" onclick="showTab('signup',this)">✦ 活動報名</button>
     <button class="tab" onclick="showTab('query',this)">🔍 查詢報名</button>
-    <button class="tab" onclick="showTab('staff',this)">🛡 工作人員</button>
   </div>
   <div id="pg-signup" class="page on">
     <div class="card">
@@ -108,43 +97,11 @@ input::placeholder { color:#8890BB; }
       <div id="qresult"></div>
     </div>
   </div>
-  <div id="pg-staff" class="page">
-    <div id="staff-lock" class="card">
-      <div class="card-title">🛡 工作人員專區</div>
-      <p style="font-size:13px;color:#8890BB;margin-bottom:20px;line-height:1.7">此頁面僅供工作人員使用，請輸入密碼進入。</p>
-      <div class="fg"><label>密碼</label><input type="password" id="staff-pw" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter')doVerify()"></div>
-      <button class="btn-p" onclick="doVerify()">驗證身份 →</button>
-      <div id="pwmsg" class="msg"></div>
-      <p class="pw-hint">如忘記密碼，請聯絡活動主辦人</p>
-    </div>
-    <div id="staff-panel" style="display:none">
-      <div class="card">
-        <div class="card-title">📊 報名統計</div>
-        <div class="stats">
-          <div class="stat"><div class="stat-n" id="st-total">—</div><div class="stat-l">總報名人數</div></div>
-          <div class="stat"><div class="stat-n" id="st-paid" style="color:#FFD700">—</div><div class="stat-l">付費</div></div>
-          <div class="stat"><div class="stat-n" id="st-free" style="color:#39FF14">—</div><div class="stat-l">免費</div></div>
-        </div>
-        <button class="btn-s" style="margin-top:0" onclick="loadList()">重新整理 ↻</button>
-      </div>
-      <div class="card">
-        <div class="card-title">📋 報名名單</div>
-        <div id="listmsg" class="msg"></div>
-        <div style="overflow-x:auto">
-          <table class="stbl">
-            <thead><tr><th>#</th><th>姓名</th><th>電話</th><th>職業</th><th>費用</th><th>報名時間</th></tr></thead>
-            <tbody id="list-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="footer"><span style="color:#A855F7">愛玩AI讀書會</span> ✦ AI Together 論壇<br>Powered by AI · Built with ✨</div>
 </div>
 <script>
 const GAS = 'https://script.google.com/macros/s/AKfycbzGuR0B11vvLsYybyBxipFfMZkrD9wY-VG1-LztnuqLDJv8-6EkLyGc79gPvR5z3vJzNg/exec';
 
-// ★ 全域設定，開頁時從 Sheets 讀取後填入
 var CONFIG = {
   payAmount: '200',
   freeKeyword: '講師'
@@ -160,7 +117,6 @@ var CONFIG = {
 
 function showTab(id,btn){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('on')); document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on')); document.getElementById('pg-'+id).classList.add('on'); btn.classList.add('on'); }
 
-// ★ 費用判斷改為讀取 CONFIG（來自 Sheets）
 function isFree(job){ var kw=(CONFIG.freeKeyword||'').trim(); return kw!=='' && job.trim()===kw; }
 function fee(job){ return isFree(job) ? ('免費（'+CONFIG.freeKeyword+'）') : ('NT$ '+CONFIG.payAmount+'（現場交）'); }
 function msg(el,type,text){ el.className='msg '+type; el.innerHTML=text.replace(/\n/g,'<br>'); }
@@ -172,17 +128,13 @@ function callGAS(params,cb){
   .catch(function(e){console.error(e);cb({status:'error'});});
 }
 
-// ★ 開頁時讀取活動設定（日期/時間/地點/費用/免費關鍵字）
 function loadConfig(){
   callGAS({action:'config'},function(d){
     if(d.status==='ok' && d.config){
       var cf=d.config;
-      // 日期：把 2026/8/16 顯示成 2026.8.16
       var dateStr=(cf['活動日期']||'').replace(/\//g,'.');
       document.getElementById('cfg-date').innerHTML = dateStr || '—';
-      // 時間
       document.getElementById('cfg-time').textContent = cf['活動時間'] || '—';
-      // 地點：格式「hoco.cafe｜竹北縣政八街21號 2F」→ 前段粗體、後段小字
       var placeRaw = cf['地點'] || '';
       var parts = placeRaw.split(/[｜|]/);
       if(parts.length>=2){
@@ -190,10 +142,8 @@ function loadConfig(){
       }else{
         document.getElementById('cfg-place').textContent = placeRaw || '—';
       }
-      // 費用設定存入全域
       if(cf['付費金額']) CONFIG.payAmount = String(cf['付費金額']).trim();
       if(typeof cf['免費身份關鍵字']!=='undefined') CONFIG.freeKeyword = String(cf['免費身份關鍵字']).trim();
-      // 費用說明列
       var feeLine='<span style="color:#FF6B9D;font-weight:700">來賓學員：NT$ '+CONFIG.payAmount+' 元</span>';
       if(CONFIG.freeKeyword){
         feeLine='<span style="color:#39FF14;font-weight:700">'+CONFIG.freeKeyword+'：免費</span><span style="color:#8890BB"> ｜ </span>'+feeLine;
@@ -235,6 +185,19 @@ function doSignup(){
   });
 }
 
+function maskName(n){
+  if(!n) return '';
+  if(n.length<=1) return n;
+  if(n.length===2) return n[0]+'○';
+  return n[0]+'○'.repeat(n.length-2)+n[n.length-1];
+}
+function maskPhone(p){
+  if(!p) return '';
+  var s=String(p);
+  if(s.length<7) return s;
+  return s.slice(0,4)+'***'+s.slice(-3);
+}
+
 function doQuery(){
   const phone=document.getElementById('q-phone').value.trim().replace(/[\s\-\(\)]/g,'');
   const m=document.getElementById('qmsg');
@@ -245,37 +208,10 @@ function doQuery(){
     if(d.status==='found'){
       m.style.display='none';
       const fc=isFree(d.job)?'color:#39FF14':'color:#FFD700';
-      r.innerHTML='<div class="result-card"><div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div><div class="rrow"><span class="rkey">姓名</span><span class="rval">'+d.name+'</span></div><div class="rrow"><span class="rkey">電話</span><span class="rval">'+d.phone+'</span></div><div class="rrow"><span class="rkey">職業</span><span class="rval">'+d.job+'</span></div><div class="rrow"><span class="rkey">費用</span><span class="rval" style="'+fc+'">'+d.fee+'</span></div><div class="rrow"><span class="rkey">報名時間</span><span class="rval" style="font-size:12px;color:#8890BB">'+d.time+'</span></div></div>';
+      r.innerHTML='<div class="result-card"><div style="font-size:12px;color:#A855F7;letter-spacing:2px;margin-bottom:14px">✦ 報名資訊確認</div><div class="rrow"><span class="rkey">姓名</span><span class="rval">'+maskName(d.name)+'</span></div><div class="rrow"><span class="rkey">電話</span><span class="rval">'+maskPhone(d.phone)+'</span></div><div class="rrow"><span class="rkey">費用</span><span class="rval" style="'+fc+'">'+d.fee+'</span></div></div>';
     }else{
       msg(m,'err','查無此電話的報名記錄');
     }
-  });
-}
-
-function doVerify(){
-  const pw=document.getElementById('staff-pw').value;
-  if(pw==='0000'){ document.getElementById('staff-lock').style.display='none'; document.getElementById('staff-panel').style.display='block'; loadList(); }
-  else{ msg(document.getElementById('pwmsg'),'err','❌ 密碼錯誤'); document.getElementById('staff-pw').value=''; }
-}
-
-function loadList(){
-  const m=document.getElementById('listmsg');
-  const tbody=document.getElementById('list-body');
-  msg(m,'ld','⏳ 載入名單中...'); tbody.innerHTML='';
-  callGAS({action:'list',pw:'0000'},function(d){
-    if(d.status==='ok'){
-      m.style.display='none';
-      const rows=d.rows||[];
-      let paid=0,free=0;
-      rows.forEach(function(r,i){
-        const f=isFree(r.job); if(f)free++;else paid++;
-        tbody.innerHTML+='<tr><td style="color:#8890BB">'+(i+1)+'</td><td style="font-weight:600">'+r.name+'</td><td style="color:#8890BB">'+r.phone+'</td><td>'+r.job+'</td><td><span class="'+(f?'badge-free':'badge-paid')+'">'+(f?'免費':'$'+CONFIG.payAmount)+'</span></td><td style="color:#8890BB;font-size:12px">'+r.time+'</td></tr>';
-      });
-      document.getElementById('st-total').textContent=rows.length;
-      document.getElementById('st-paid').textContent=paid;
-      document.getElementById('st-free').textContent=free;
-      if(!rows.length){ msg(m,'ld','目前尚無報名記錄'); tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#8890BB;padding:20px">尚無資料</td></tr>'; }
-    }else msg(m,'err','資料載入失敗');
   });
 }
 </script>
